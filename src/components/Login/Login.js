@@ -1,3 +1,4 @@
-export function Login() {
-  return <div>Login</div>
+export function Login({ signInWithGoogle }) {
+  console.log(signInWithGoogle)
+  return <button onClick={() => signInWithGoogle()}>Login</button>
 }
