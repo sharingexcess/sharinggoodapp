@@ -12,7 +12,7 @@ export function Header() {
       <section id="Header-profile">
         <div id="Header-user-info">
           <h4>{user.name}</h4>
-          <aside>{user.email}</aside>
+          <h3>{user.email}</h3>
         </div>
         <img src={user.image} />
       </section>
