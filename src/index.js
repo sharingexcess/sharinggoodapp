@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import { Auth } from './providers'
+import './styles/index.css'
 
 ReactDOM.render(
   <React.StrictMode>
@@ -19,7 +20,7 @@ ReactDOM.render(
 // import { Auth } from 'providers'
 // import React from 'react'
 // import ReactDOM from 'react-dom'
-// import './styles/index.css'
+
 
 // function SharingGoodApp() {
 //   return (

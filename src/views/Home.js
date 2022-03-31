@@ -5,7 +5,8 @@ import { Header } from '../components/Header/Header';
 
 const Home = () => {
   const {user, setUser} = useAuth();
-
+  
+  // FIX: make 2 components
   return (
     <div>
       {user && <Header />}

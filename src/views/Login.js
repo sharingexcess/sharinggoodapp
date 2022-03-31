@@ -1,15 +1,29 @@
-import React, { useEffect } from 'react';
-import { catchLoginLink } from '../helpers/functions';
+import React from 'react';
+import { sendLoginLink } from 'helpers';
+import { useNavigate } from 'react-router-dom';
 
-const LoginUrl = () => {
-  useEffect(() => {
-    // calls function that catches login
-    catchLoginLink(window.location.href);
-  }, [])
-  
+const Login = () => {
+  const navigate = useNavigate();
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    const email = e.target.email.value;
+    sendLoginLink(email);
+    window.localStorage.setItem('email', email);
+    navigate("/success");
+  }
   return (
-    <div>Loading...</div>
+    <div>
+      <h1>Login</h1>
+      <form onSubmit={handleSubmit}>
+        <label htmlFor="email">
+          Email:
+          <input type="email" name="email" id="email" />
+          <button type="submit">Login</button>
+        </label>
+      </form>
+    </div>
   )
 }
 
-export default LoginUrl
+export default Login
