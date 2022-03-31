@@ -11,10 +11,10 @@ export function Header() {
       </section>
       <section id="Header-profile">
         <div id="Header-user-info">
-          <h4>{user.name}</h4>
-          <h3>{user.email}</h3>
+          <h4>{user.displayName}</h4>
+          <aside>{user.email}</aside>
         </div>
-        <img src={user.image} />
+        <img src={user.photoURL} />
       </section>
     </header>
   )
