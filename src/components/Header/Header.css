@@ -7,6 +7,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  z-index: 1;
 }
 
 @media (max-width: 600px) {
@@ -51,4 +52,13 @@
 
 #Header-user-info aside {
   font-size: 10px;
+}
+
+#Header-user-info button {
+  border: none;
+  background: none;
+  font-size: 10px;
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
 }
