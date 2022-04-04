@@ -13,3 +13,5 @@ export function parseUserFromFirebaseResponse(firebaseUser) {
 export function logOut() {
   signOut(auth)
 }
+
+export const createTimestamp = d => (d ? new Date(d) : new Date())
