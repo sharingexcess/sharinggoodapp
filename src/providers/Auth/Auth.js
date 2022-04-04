@@ -1,53 +1,30 @@
-import React, { createContext, useState, useMemo, useContext } from "react";
+import { Loading } from 'components'
+import { onAuthStateChanged } from 'firebase/auth'
+import { auth, parseUserFromFirebaseResponse } from 'helpers'
+import React, { createContext, useEffect, useState } from 'react'
 
-export const AuthContext = createContext();
+export const AuthContext = createContext()
 
-export function Auth({children}) {
-  const [user, setUser] = useState(null);
-  const providerValue = useMemo(() => ({ user, setUser }), [user]);
+export function Auth({ children }) {
+  const [user, setUser] = useState()
+
+  useEffect(() => {
+    onAuthStateChanged(auth, currentUser => {
+      if (currentUser) {
+        setUser(parseUserFromFirebaseResponse(currentUser))
+      } else {
+        setUser(null)
+      }
+    })
+  }, [])
+
+  // render a loading state until we can confirm
+  // whether a user is signed in or not
+  if (user === undefined) return <Loading text={'Signing in...'} />
+
   return (
-    <AuthContext.Provider value={providerValue}>
+    <AuthContext.Provider value={{ user, setUser }}>
       {children}
     </AuthContext.Provider>
   )
 }
-
-// import { createContext } from 'react'
-// import { Loading, Error, Login } from 'components'
-// import { useSignInWithGoogle } from 'react-firebase-hooks/auth'
-// import { getAuth, signOut } from 'firebase/auth'
-// import { firebase } from 'helpers'
-
-// const auth = getAuth(firebase)
-
-// export const AuthContext = createContext()
-
-// export function Auth({ children }) {
-//   const [signInWithGoogle, auth_record, loading, error] =
-//     useSignInWithGoogle(auth)
-
-//   if (loading) return <Loading text="Signing in..." />
-//   if (error)
-//     return (
-//       <Error message="Unable to sign in with Google Firebase Authenication." />
-//     )
-//   if (auth_record) {
-//     const user = auth_record.user
-//     return (
-//       <AuthContext.Provider
-//         value={{
-//           user: {
-//             name: user.displayName,
-//             email: user.email,
-//             image: user.photoURL,
-//           },
-//           signOut,
-//         }}
-//       >
-//         {children}
-//       </AuthContext.Provider>
-//     )
-//   }
-
-//   return <Login signInWithGoogle={signInWithGoogle} />
-// }
