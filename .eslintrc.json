@@ -1,22 +1,17 @@
 {
-  // "parser": "babel-eslint",
-  "plugins": [
-    // "prettier", "react-hooks"
-  ],
+  "parser": "babel-eslint",
+  "plugins": ["prettier", "react-hooks"],
   "rules": {
-    // "prettier/prettier": [
-    //   "warn",
-    //   {
-    //     "endOfLine": "auto"
-    //   }
-    // ],
-    // "react-hooks/rules-of-hooks": "warn",
-    // "no-var": "warn",
-    // "prefer-const": "warn",
-    // "no-duplicate-imports": "error"
+    "prettier/prettier": [
+      "warn",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "react-hooks/rules-of-hooks": "warn",
+    "no-var": "warn",
+    "prefer-const": "warn",
+    "no-duplicate-imports": "error"
   },
-  "extends": [
-    // "react-app"
-    // "plugin:prettier/recommended", "prettier"
-  ]
+  "extends": ["react-app", "plugin:prettier/recommended", "prettier"]
 }
