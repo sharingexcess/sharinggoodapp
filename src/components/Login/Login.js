@@ -1,11 +1,47 @@
-import { useState } from 'react'
-import { sendSignInLinkToEmail } from 'firebase/auth'
+import { useState, useEffect } from 'react'
+import {
+  isSignInWithEmailLink,
+  sendSignInLinkToEmail,
+  signInWithEmailLink,
+} from 'firebase/auth'
 import isEmail from 'validator/lib/isEmail'
 import { auth } from 'helpers'
+import { useNavigate } from 'react-router'
+import { useAuth } from 'hooks'
 
 export function Login() {
   const [submitted, setSubmitted] = useState(false)
   const [email, setEmail] = useState('')
+  const navigate = useNavigate()
+  const { setUser } = useAuth()
+
+  useEffect(() => {
+    const url = window.location.href
+    const email = window.localStorage.getItem('firebase_auth_email')
+
+    if (!isSignInWithEmailLink(auth, url)) {
+      // handle if login redirect url is invalid
+      return
+    }
+    if (!email) {
+      // handle if no email is stored in local storage
+      console.error('Unable to login with redirect: no email in localstorage.')
+      navigate('/error')
+    } else {
+      signInWithEmailLink(auth, email, url)
+        .then(() => {
+          // clear the temp storage with the signin email address
+          window.localStorage.removeItem('firebase_auth_email')
+        })
+        .catch(error => {
+          console.error(
+            'Unable to login with redirect: invalid response from firebase auth,',
+            error
+          )
+          navigate('/error')
+        })
+    }
+  }, [navigate, setUser])
 
   function handleSubmit() {
     // handle if the user input is not a valid email
@@ -17,7 +53,7 @@ export function Login() {
       // use Google Firebase Auth to send an email to the user
       // containing a link with a authentication key in the URL
       sendSignInLinkToEmail(auth, email, {
-        url: window.location.origin + '/login-redirect',
+        url: window.location.origin,
         handleCodeInApp: true,
       })
         // once the email is sent, update the state to change the UI

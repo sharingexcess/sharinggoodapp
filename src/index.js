@@ -6,9 +6,9 @@ import { Auth, Firestore } from './providers'
 import './styles/index.css'
 
 ReactDOM.render(
-  <Auth>
-    <Firestore>
-      <BrowserRouter>
+  <BrowserRouter>
+    <Auth>
+      <Firestore>
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -16,8 +16,8 @@ ReactDOM.render(
           <Route path="/login-redirect" element={<LoginRedirect />} />
           <Route path="/error" element={<Error />} />
         </Routes>
-      </BrowserRouter>
-    </Firestore>
-  </Auth>,
+      </Firestore>
+    </Auth>
+  </BrowserRouter>,
   document.getElementById('root')
 )
