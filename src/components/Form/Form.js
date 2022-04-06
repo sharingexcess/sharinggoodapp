@@ -124,7 +124,7 @@ export function Form() {
         />
         <br />
 
-        <div className="tags-container">
+        {/* <div className="tags-container">
           {inputTags.map((tag, index) => (
             <div key={index} className="tag">
               {tag}
@@ -143,7 +143,7 @@ export function Form() {
             label="tags"
             onChange={onChange}
           />
-        </div>
+        </div> */}
 
         <button onClick={handleSubmit}>Submit</button>
       </form>
