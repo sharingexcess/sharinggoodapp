@@ -1,14 +1,14 @@
-import { Loading, Login } from 'components'
+import { Loading, Login, EditProfile } from 'components'
 import { onAuthStateChanged } from 'firebase/auth'
 import { auth, parseUserFromFirebaseResponse } from 'helpers'
-// import { useFirestore } from 'hooks'
+import { useFirestore } from 'hooks'
 import React, { createContext, useEffect, useState } from 'react'
 
 export const AuthContext = createContext()
 
 export function Auth({ children }) {
   const [user, setUser] = useState()
-  // const profile = useFirestore('profiles', user ? user.uid : null)
+  const profile = useFirestore('profiles', user ? user.id : null)
 
   useEffect(() => {
     onAuthStateChanged(auth, currentUser => {
@@ -26,7 +26,7 @@ export function Auth({ children }) {
 
   if (!user) return <Login />
 
-  // if (!profile) return <EditProfile />
+  if (!profile) return <EditProfile />
 
   return (
     <AuthContext.Provider value={{ user, setUser }}>

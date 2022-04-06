@@ -1,12 +1,10 @@
 import React, { useState } from 'react'
 import { createTimestamp } from 'helpers'
 import { nanoid } from 'nanoid'
-import { addDoc, collection, getFirestore } from 'firebase/firestore'
+import { collection, getFirestore, setDoc } from 'firebase/firestore'
 import { useAuth } from 'hooks'
 
 const initialValues = {
-  id: '',
-  owner_id: '',
   title: '',
   description: '',
   status: 'open',
@@ -32,7 +30,7 @@ export function Form() {
         timestamp_created: createTimestamp(),
         timestamp_updated: createTimestamp(),
       }
-      await addDoc(collection(getFirestore(), 'requests'), payload)
+      await setDoc(collection(getFirestore(), 'requests'), payload)
       setValues(initialValues)
       setInputTags([])
     } catch (error) {
