@@ -8,9 +8,10 @@ FirestoreContext.displayName = 'Firestore'
 
 function Firestore({ children }) {
   const [requests] = useCollectionData(collection(firestore, 'requests'))
+  const [profiles] = useCollectionData(collection(firestore, 'profiles'))
 
   return (
-    <FirestoreContext.Provider value={{ requests }}>
+    <FirestoreContext.Provider value={{ requests, profiles }}>
       {children}
     </FirestoreContext.Provider>
   )

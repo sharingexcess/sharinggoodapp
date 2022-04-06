@@ -19,7 +19,7 @@ export const useFirestore = (collection, filter) => {
         setFiltered(updated)
       }
     }
-  }, [data[collection], filter])
+  }, [collection, data, filter])
 
   if (!collection) {
     return data

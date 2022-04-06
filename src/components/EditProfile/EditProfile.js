@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { createTimestamp } from 'helpers'
-import { collection, getFirestore, setDoc } from 'firebase/firestore'
+import { addDoc, collection, getFirestore, setDoc } from 'firebase/firestore'
 import { useAuth } from 'hooks'
 
 const initialValues = {
@@ -23,9 +23,9 @@ export function EditProfile() {
         timestamp_created: createTimestamp(),
         timestamp_updated: createTimestamp(),
       }
-      await setDoc(collection(getFirestore(), 'requests'), payload)
+      await addDoc(collection(getFirestore(), 'profiles'), payload)
     } catch (error) {
-      console.log('Error writing new request to Firestore Database', error)
+      console.log('Error writing new profile to Firestore Database', error)
     }
     console.log(values)
   }
