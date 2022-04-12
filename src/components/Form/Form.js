@@ -17,7 +17,7 @@ export function Form() {
   const [inputTag, setInputTag] = useState('')
   const [inputTags, setInputTags] = useState([])
   const [isKeyReleased, setIsKeyReleased] = useState(false)
-  const { user } = useAuth()
+  const { profile } = useAuth()
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -26,7 +26,7 @@ export function Form() {
       const payload = {
         ...values,
         id,
-        owner_id: user.id,
+        owner_id: profile.id,
         timestamp_created: createTimestamp(),
         timestamp_updated: createTimestamp(),
       }

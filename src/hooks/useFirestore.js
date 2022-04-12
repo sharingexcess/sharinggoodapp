@@ -6,6 +6,7 @@ export const useFirestore = (collection, filter) => {
   const [filtered, setFiltered] = useState(
     !filter || Array.isArray(filter) || typeof filter === 'function' ? [] : null
   )
+  console.log(data)
   useEffect(() => {
     if (data[collection]) {
       const updated = Array.isArray(filter)
@@ -19,7 +20,7 @@ export const useFirestore = (collection, filter) => {
         setFiltered(updated)
       }
     }
-  }, [collection, data, filter])
+  }, [data[collection], filter])
 
   if (!collection) {
     return data

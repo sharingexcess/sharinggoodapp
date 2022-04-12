@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { createTimestamp } from 'helpers'
-import { addDoc, collection, getFirestore, setDoc } from 'firebase/firestore'
+import { createTimestamp, firestore } from 'helpers'
+import { collection, doc, getFirestore, setDoc } from 'firebase/firestore'
 import { useAuth } from 'hooks'
 
 const initialValues = {
@@ -18,15 +18,17 @@ export function EditProfile() {
     try {
       const payload = {
         ...values,
-        id: user.id,
+        id: user.uid,
         email: user.email,
         timestamp_created: createTimestamp(),
         timestamp_updated: createTimestamp(),
       }
-      await addDoc(collection(getFirestore(), 'profiles'), payload)
+      const profileRef = doc(collection(firestore, 'profiles'), user.uid)
+      await setDoc(profileRef, payload)
     } catch (error) {
       console.log('Error writing new profile to Firestore Database', error)
     }
+    console.log(user)
     console.log(values)
   }
 
@@ -52,6 +54,7 @@ export function EditProfile() {
           onChange={handleInputChange}
         />
         <br />
+        <label>School: </label>
         <input
           type="text"
           name="school"

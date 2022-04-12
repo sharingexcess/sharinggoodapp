@@ -3,11 +3,11 @@ import { Form } from 'components/Form/Form'
 import { Requests } from 'components/Requests/Requests'
 
 export function Home() {
-  const { user } = useAuth()
+  const { profile } = useAuth()
 
   return (
     <div id="Home" className="page">
-      <h2>Sucessfully logged in {user.name} </h2>
+      <h2>Sucessfully logged in {profile.name} </h2>
       <Requests />
       <Form />
     </div>
