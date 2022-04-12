@@ -7,13 +7,11 @@ import {
 import isEmail from 'validator/lib/isEmail'
 import { auth } from 'helpers'
 import { useNavigate } from 'react-router'
-import { useAuth } from 'hooks'
 
 export function Login() {
   const [submitted, setSubmitted] = useState(false)
   const [email, setEmail] = useState('')
   const navigate = useNavigate()
-  const { setUser } = useAuth()
 
   useEffect(() => {
     const url = window.location.href
@@ -41,7 +39,7 @@ export function Login() {
           navigate('/error')
         })
     }
-  }, [navigate, setUser])
+  }, [navigate])
 
   function handleSubmit() {
     // handle if the user input is not a valid email
@@ -75,9 +73,15 @@ export function Login() {
   function LoginConfirmation() {
     return (
       <main id="Login" className="page">
-        <h2>Sent!</h2>
-        <p>Check your email ({email}) for a link to finish logging in.</p>
-        <button onClick={handleReset}>use a different email</button>
+        <button onClick={handleReset}>Resend link</button>
+        <h1>Check your email!</h1>
+        <p>
+          We sent a magic link to <b>{email}.</b>
+        </p>
+        <p>Click the link to log in or sign up.</p>
+        <p>
+          Want to try again? <button onClick={handleReset}>Resend link</button>
+        </p>
       </main>
     )
   }

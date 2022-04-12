@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { Home, Login, LoginRedirect, Header, Error } from 'components'
+import { Home, Header } from 'components'
 import { Auth, Firestore } from './providers'
-import './styles/index.css'
+import './styles/index.scss'
 
 ReactDOM.render(
   <BrowserRouter>
@@ -12,9 +12,6 @@ ReactDOM.render(
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/login-redirect" element={<LoginRedirect />} />
-          <Route path="/error" element={<Error />} />
         </Routes>
       </Firestore>
     </Auth>
