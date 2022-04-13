@@ -7,6 +7,8 @@ import {
 import isEmail from 'validator/lib/isEmail'
 import { auth } from 'helpers'
 import { useNavigate } from 'react-router'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
 export function Login() {
   const [submitted, setSubmitted] = useState(false)
@@ -73,15 +75,36 @@ export function Login() {
   function LoginConfirmation() {
     return (
       <main id="Login" className="page">
-        <button onClick={handleReset}>Resend link</button>
-        <h1>Check your email!</h1>
-        <p>
-          We sent a magic link to <b>{email}.</b>
-        </p>
-        <p>Click the link to log in or sign up.</p>
-        <p>
-          Want to try again? <button onClick={handleReset}>Resend link</button>
-        </p>
+        <div id="login-confirmation">
+          <br />
+          <section id="row-1">
+            <FontAwesomeIcon
+              icon={faArrowLeft}
+              size="2x"
+              onClick={handleReset}
+              id="green"
+            />
+          </section>
+          <section id="row-2">
+            <h1>Check your email!</h1>
+          </section>
+          <section id="row-3">
+            <p>
+              We sent a magic link to <b>{email}.</b>
+            </p>
+            <p>Click the link to log in or sign up.</p>
+          </section>
+        </div>
+        <footer>
+          <p>
+            Want to try again?{' '}
+            <b>
+              <a href="login" id="green" onClick={handleReset}>
+                Resend link.
+              </a>
+            </b>
+          </p>
+        </footer>
       </main>
     )
   }
@@ -90,13 +113,26 @@ export function Login() {
   else
     return (
       <main id="Login" className="page">
-        <h1>Login</h1>
-        <input
-          type="email"
-          value={email}
-          onChange={event => setEmail(event.target.value)}
-        />
-        <button onClick={handleSubmit}>Login</button>
+        <div id="login-container">
+          <div id="greeting">
+            <h1>Login</h1>
+            <p>Enter your email to receive a sign in link.</p>
+          </div>
+
+          <div id="form-field">
+            <label htmlFor="email">EMAIL </label>
+            <input
+              type="email"
+              name="email"
+              value={email}
+              onChange={event => setEmail(event.target.value)}
+            />
+          </div>
+
+          <button onClick={handleSubmit}>
+            <h2>Login</h2>
+          </button>
+        </div>
       </main>
     )
 }

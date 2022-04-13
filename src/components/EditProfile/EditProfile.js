@@ -28,8 +28,8 @@ export function EditProfile() {
     } catch (error) {
       console.log('Error writing new profile to Firestore Database', error)
     }
-    console.log(user)
-    console.log(values)
+    // console.log(user)
+    // console.log(values)
   }
 
   function handleInputChange(event) {
@@ -38,43 +38,52 @@ export function EditProfile() {
       ...values,
       [name]: value,
     })
+    console.log(user)
   }
 
   return (
-    <div className="profile-creation">
-      <h2>Profile Creation</h2>
+    <div className="profile-creation page">
+      <h2>Edit Profile</h2>
+      <h3>{user.email}</h3>
+      <img src={user.photoURL} alt={user.email} />
       <form id="profile-form">
-        <label>Name: </label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          value={values.name}
-          label="name"
-          onChange={handleInputChange}
-        />
-        <br />
-        <label>School: </label>
-        <input
-          type="text"
-          name="school"
-          id="school"
-          value={values.school}
-          label="school"
-          onChange={handleInputChange}
-        />
-        <br />
-        <label>Bio: </label>
-        <input
-          type="text"
-          name="bio"
-          id="bio"
-          value={values.bio}
-          label="bio"
-          onChange={handleInputChange}
-        />
-        <br />
-        <button onClick={handleSubmit}>Submit</button>
+        <div id="form-field">
+          <label htmlFor="name">NAME </label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            value={values.name}
+            label="name"
+            onChange={handleInputChange}
+          />
+        </div>
+        <div id="form-field">
+          <label htmlFor="school">SCHOOL </label>
+          <input
+            type="text"
+            name="school"
+            id="school"
+            value={values.school}
+            label="school"
+            onChange={handleInputChange}
+          />
+        </div>
+        <div id="form-field">
+          <label htmlFor="bio">BIO </label>
+          <input
+            type="text"
+            name="bio"
+            id="bio"
+            value={values.bio}
+            label="bio"
+            onChange={handleInputChange}
+          />
+        </div>
+        <button onClick={handleSubmit}>
+          {/* {' '} */}
+          <h2>Save Changes</h2>
+        </button>
       </form>
     </div>
   )

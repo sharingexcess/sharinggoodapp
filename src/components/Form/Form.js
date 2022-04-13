@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { createTimestamp } from 'helpers'
 import { nanoid } from 'nanoid'
-import { collection, getFirestore, setDoc } from 'firebase/firestore'
+import { collection, doc, getFirestore, setDoc } from 'firebase/firestore'
 import { useAuth } from 'hooks'
 
 const initialValues = {
@@ -30,13 +30,14 @@ export function Form() {
         timestamp_created: createTimestamp(),
         timestamp_updated: createTimestamp(),
       }
-      await setDoc(collection(getFirestore(), 'requests'), payload)
+      // await setDoc(collection(getFirestore(), 'requests'), payload)
+      await setDoc(doc(getFirestore(), 'requests', id), payload)
       setValues(initialValues)
       setInputTags([])
     } catch (error) {
       console.log('Error writing new request to Firestore Database', error)
     }
-    console.log(values)
+    // console.log(values)
   }
 
   function handleInputChange(event) {

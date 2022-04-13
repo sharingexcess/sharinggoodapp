@@ -1,4 +1,4 @@
-import { Loading, Login, EditProfile } from 'components'
+import { Loading, Login, EditProfile, Header } from 'components'
 import { onAuthStateChanged } from 'firebase/auth'
 import { collection, doc, onSnapshot } from 'firebase/firestore'
 import {
@@ -42,8 +42,6 @@ export function Auth({ children }) {
     })
   }, [])
 
-  // render a loading state until we can confirm
-  // whether a user is signed in or not
   if (user === undefined) return <Loading text={'Signing in...'} />
 
   if (!user) return <Login />
@@ -51,6 +49,7 @@ export function Auth({ children }) {
   if (!profile)
     return (
       <AuthContext.Provider value={{ user }}>
+        <Header />
         <EditProfile />
       </AuthContext.Provider>
     )

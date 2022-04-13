@@ -8,8 +8,9 @@ export function Header() {
   return (
     <header id="Header">
       <section id="Header-banner">
-        <h2>Sharing Good</h2>
-        <aside>powered by Free Store 15104 x Sharing Excess</aside>
+        <h2>
+          Sharing <span id="green">Good</span>
+        </h2>
       </section>
       {profile && (
         <section id="Header-profile">

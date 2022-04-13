@@ -1,6 +1,7 @@
 :root {
   --color-blue: #251f5f;
   --color-orange: #ffb30e;
+  --color-green: #00ad9f;
   box-sizing: border-box;
 }
 
@@ -26,15 +27,11 @@ body {
   justify-content: center;
   align-items: center;
   padding: 96px 64px;
+  border: 3px solid black;
 }
 
 @media (max-width: 600px) {
   .page {
     padding: 48px 16px;
   }
-}
-
-/* login, auth waiting, edit profile v4 */
-button {
-  /* primary */
 }
