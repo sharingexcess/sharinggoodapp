@@ -18,7 +18,7 @@ textarea {
   width: 80%;
 }
 
-.profile-edit-form-field {
+.profile-creation-form-field {
   display: flex;
   padding: 32px 0;
   justify-content: space-between;
@@ -29,25 +29,4 @@ textarea {
     border-bottom: 1px solid black;
     width: 80%;
   }
-}
-
-#edit-header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-
-.edit-header-col {
-  width: 33%;
-}
-
-img {
-  width: 64px;
-  height: 64px;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-h1 {
-  font-size: xx-large;
 }

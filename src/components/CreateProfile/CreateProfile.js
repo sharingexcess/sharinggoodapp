@@ -2,30 +2,29 @@ import { useState } from 'react'
 import { createTimestamp, firestore } from 'helpers'
 import { collection, doc, setDoc } from 'firebase/firestore'
 import { useAuth } from 'hooks'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
-import { Link } from 'react-router-dom'
 
-export function EditProfile() {
-  const { profile } = useAuth()
-
-  const initialValues = {
-    name: profile.name,
-    school: profile.school,
-    bio: profile.bio,
-  }
-
+const initialValues = {
+  name: '',
+  school: '',
+  bio: '',
+}
+export function CreateProfile() {
   const [values, setValues] = useState(initialValues)
+  const { user } = useAuth()
 
   async function handleSubmit(event) {
     event.preventDefault()
     try {
       const payload = {
         ...values,
+        id: user.uid,
+        email: user.email,
+        photoURL: user.photoURL,
+        timestamp_created: createTimestamp(),
         timestamp_updated: createTimestamp(),
       }
-      const profileRef = doc(collection(firestore, 'profiles'), profile.id)
-      await setDoc(profileRef, payload, { merge: true })
+      const profileRef = doc(collection(firestore, 'profiles'), user.uid)
+      await setDoc(profileRef, payload)
     } catch (error) {
       console.log('Error writing new profile to Firestore Database', error)
     }
@@ -40,23 +39,13 @@ export function EditProfile() {
   }
 
   return (
-    <div className="profile-edit page">
-      <div id="edit-header">
-        <div className="edit-header-col-1">
-          <Link to="/">
-            <FontAwesomeIcon icon={faArrowLeft} size="2x" id="green" />
-          </Link>
-        </div>
-        <div className="edit-header-col-2">
-          <h1>Edit Profile</h1>
-        </div>
-        <div className="edit-header-col-3"></div>
-      </div>
-      <img src={'/profile_placeholder.png'} alt={profile.name} />
-      <aside>{profile.email}</aside>
-      <form id="edit-profile-form">
-        <div className="profile-edit-form-field">
-          <label htmlFor="name">NAME</label>
+    <div className="profile-creation page">
+      <h2>Create Profile</h2>
+      <h3>{user.email}</h3>
+      <img src={user.photoURL} alt={user.displayName} />
+      <form id="profile-form">
+        <div className="profile-creation-form-field">
+          <label htmlFor="name">NAME </label>
           <input
             type="text"
             name="name"
@@ -66,8 +55,8 @@ export function EditProfile() {
             onChange={handleInputChange}
           />
         </div>
-        <div className="profile-edit-form-field">
-          <label htmlFor="school">SCHOOL</label>
+        <div className="profile-creation-form-field">
+          <label htmlFor="school">SCHOOL </label>
           <input
             type="text"
             name="school"
@@ -77,7 +66,7 @@ export function EditProfile() {
             onChange={handleInputChange}
           />
         </div>
-        <div className="profile-edit-form-field">
+        <div className="profile-creation-form-field">
           <label htmlFor="bio" style={{ textAlign: 'end' }}>
             ABOUT
           </label>

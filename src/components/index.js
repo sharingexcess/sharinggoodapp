@@ -1,5 +1,6 @@
 export * from './Loading/Loading'
 export * from './EditProfile/EditProfile'
+export * from './CreateProfile/CreateProfile'
 export * from './Error/Error'
 export * from './Login/Login'
 export * from './Ellipsis/Ellipsis'

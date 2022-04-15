@@ -120,7 +120,7 @@ export function Login() {
           </div>
 
           <div id="form-field">
-            <label htmlFor="email">EMAIL </label>
+            <label htmlFor="email">EMAIL</label>
             <input
               type="email"
               name="email"

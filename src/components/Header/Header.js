@@ -12,7 +12,7 @@ export function Header() {
           Sharing <span id="green">Good</span>
         </h2>
       </section>
-      {profile && (
+      {/* {profile && (
         <section id="Header-profile">
           <div id="Header-profile-info">
             <h4>{profile.name}</h4>
@@ -21,7 +21,7 @@ export function Header() {
           </div>
           <img src={profile.image} alt="profile" />
         </section>
-      )}
+      )} */}
     </header>
   )
 }

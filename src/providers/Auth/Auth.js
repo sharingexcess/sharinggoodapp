@@ -1,34 +1,21 @@
-import { Loading, Login, EditProfile, Header } from 'components'
+import { Loading, Login, Header, CreateProfile } from 'components'
 import { onAuthStateChanged } from 'firebase/auth'
 import { collection, doc, onSnapshot } from 'firebase/firestore'
-import {
-  auth,
-  createTimestamp,
-  firestore,
-  parseUserFromFirebaseResponse,
-} from 'helpers'
+import { auth, firestore } from 'helpers'
 import React, { createContext, useEffect, useState } from 'react'
-import { useDocumentData } from 'react-firebase-hooks/firestore'
 
 export const AuthContext = createContext()
 
 export function Auth({ children }) {
   const [user, setUser] = useState()
   const [profile, setProfile] = useState()
-  // const [profile] = useDocumentData(
-  //   doc(collection(firestore, 'profiles'), user ? user.id : null)
-  // )
 
   useEffect(() => {
     if (user) {
       const userRef = doc(collection(firestore, 'profiles'), user.uid)
-      console.log(userRef)
-      // userRef.onSnapshot(doc => setProfile(doc.data()))
       onSnapshot(userRef, doc => {
         setProfile(doc.data())
       })
-      // .update({ timestamp_last_active: createTimestamp() })
-      // .then(() => userRef.onSnapshot(doc => setProfile(doc.data())))
     }
   }, [user])
 
@@ -50,7 +37,7 @@ export function Auth({ children }) {
     return (
       <AuthContext.Provider value={{ user }}>
         <Header />
-        <EditProfile />
+        <CreateProfile />
       </AuthContext.Provider>
     )
 
