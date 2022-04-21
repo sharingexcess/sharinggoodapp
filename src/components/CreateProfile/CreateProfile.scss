@@ -1,32 +1,36 @@
-button {
-  width: 90vw;
-  border-radius: 45px;
-  color: white;
-  border: none;
-  background-color: #00ad9f;
-}
+#profile-creation {
+  font-family: 'Montserrat', sans-serif;
 
-textarea {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-
-  border: none;
-  outline: none;
-  resize: none;
-  border-bottom: 1px solid black;
-  width: 80%;
-}
-
-.profile-creation-form-field {
-  display: flex;
-  padding: 32px 0;
-  justify-content: space-between;
-  text-align: end;
-
-  input {
+  button {
+    width: 90vw;
+    border-radius: 45px;
+    color: white;
     border: none;
+    background-color: #00ad9f;
+  }
+
+  textarea {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    border: none;
+    outline: none;
+    resize: none;
     border-bottom: 1px solid black;
     width: 80%;
+  }
+
+  .profile-creation-form-field {
+    display: flex;
+    padding: 32px 0;
+    justify-content: space-between;
+    text-align: end;
+
+    input {
+      border: none;
+      border-bottom: 1px solid black;
+      width: 80%;
+    }
   }
 }

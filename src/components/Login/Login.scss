@@ -1,51 +1,73 @@
 #Login {
+  font-family: 'Montserrat', sans-serif;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-}
+  justify-content: flex-start;
+  align-items: flex-start;
 
-#login-container {
-  width: 90vw;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-#form-field {
-  display: flex;
-  padding: 32px 0;
-  justify-content: space-around;
-
-  input {
-    border: none;
-    border-bottom: 1px solid black;
+  #form-field {
+    display: flex;
     width: 100%;
+    padding: 64px 0;
+    label {
+      font-family: 'Poppins', sans-serif;
+      padding-right: 32px;
+      color: #4a4a4a;
+    }
+    input {
+      font-family: 'Montserrat', sans-serif;
+      border: none;
+      border-bottom: 1px solid #b4b4b4;
+      width: 100%;
+    }
+  }
+
+  button {
+    font-family: 'Montserrat', sans-serif;
+    width: 90vw;
+    border-radius: 45px;
+    color: white;
+    border: none;
+    background-color: #27aa9f; // for good accent
+  }
+
+  a {
+    text-decoration: none;
+    cursor: pointer;
+  }
+  h1 {
+    padding-top: 64px;
+    color: #4a4a4a; // se-grey
+  }
+  p {
+    color: #b4b4b4; // grey
+    margin-top: 0;
+  }
+  aside {
+    color: #4a4a4a; // se-grey
   }
 }
 
-button {
-  width: 90vw;
-  border-radius: 45px;
-  color: white;
-  border: none;
-  background-color: #00ad9f;
-}
-
-#login-confirmation {
-  width: 90vw;
+#Login-Confirmation {
+  font-family: 'Montserrat', sans-serif;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  justify-content: flex-start;
+  align-items: flex-start;
 
   h1 {
-    font-size: 300%;
+    // padding-bottom: 64px;
+    font-size: 3rem;
+    color: #4a4a4a; // se-grey
   }
 
-  section {
-    width: 100%;
+  p {
+    position: absolute;
+    bottom: 32px;
   }
-}
 
-a {
-  text-decoration: none;
+  a {
+    text-decoration: none;
+    cursor: pointer;
+  }
 }

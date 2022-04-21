@@ -1,6 +1,8 @@
 import { signOut } from 'firebase/auth'
 import { auth } from 'helpers'
 import { useAuth } from 'hooks'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faBars } from '@fortawesome/free-solid-svg-icons'
 
 export function Header() {
   const { profile } = useAuth()
@@ -12,16 +14,17 @@ export function Header() {
           Sharing <span id="green">Good</span>
         </h2>
       </section>
-      {/* {profile && (
+      {profile && (
         <section id="Header-profile">
           <div id="Header-profile-info">
-            <h4>{profile.name}</h4>
+            <FontAwesomeIcon icon={faBars} size="2x" className="menu" />
+            {/* <h4>{profile.name}</h4>
             <aside>{profile.email}</aside>
             <button onClick={() => signOut(auth)}>sign out</button>
+            <img src={profile.image} alt="profile" /> */}
           </div>
-          <img src={profile.image} alt="profile" />
         </section>
-      )} */}
+      )}
     </header>
   )
 }

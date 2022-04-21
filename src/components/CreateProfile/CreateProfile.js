@@ -39,7 +39,7 @@ export function CreateProfile() {
   }
 
   return (
-    <div className="profile-creation page">
+    <div id="profile-creation" className="page">
       <h2>Create Profile</h2>
       <h3>{user.email}</h3>
       <img src={user.photoURL} alt={user.displayName} />

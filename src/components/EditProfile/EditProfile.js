@@ -3,7 +3,7 @@ import { createTimestamp, firestore } from 'helpers'
 import { collection, doc, setDoc } from 'firebase/firestore'
 import { useAuth } from 'hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faPen } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 
 export function EditProfile() {
@@ -40,19 +40,26 @@ export function EditProfile() {
   }
 
   return (
-    <div className="profile-edit page">
+    <div id="profile-edit" className="page">
       <div id="edit-header">
-        <div className="edit-header-col-1">
-          <Link to="/">
-            <FontAwesomeIcon icon={faArrowLeft} size="2x" id="green" />
-          </Link>
-        </div>
-        <div className="edit-header-col-2">
-          <h1>Edit Profile</h1>
-        </div>
-        <div className="edit-header-col-3"></div>
+        <Link to="/">
+          <FontAwesomeIcon icon={faArrowLeft} size="2x" id="green" />
+        </Link>
+        <h2>Edit Profile</h2>
       </div>
-      <img src={'/profile_placeholder.png'} alt={profile.name} />
+      <div className="profile-image-container">
+        <img
+          src={'/profile_placeholder.png'}
+          alt={profile.name}
+          className="rightbarProfileImg"
+        />
+        <FontAwesomeIcon
+          icon={faPen}
+          size="2x"
+          id="green"
+          className="profile-image-edit-button"
+        />
+      </div>
       <aside>{profile.email}</aside>
       <form id="edit-profile-form">
         <div className="profile-edit-form-field">
@@ -87,12 +94,12 @@ export function EditProfile() {
             id="bio"
             value={values.bio}
             label="bio"
-            rows={3}
+            rows={7}
             onChange={handleInputChange}
           />
         </div>
         <button onClick={handleSubmit}>
-          <h2>Save Changes</h2>
+          <h3>Save Changes</h3>
         </button>
       </form>
     </div>

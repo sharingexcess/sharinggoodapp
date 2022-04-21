@@ -30,14 +30,12 @@ export function Form() {
         timestamp_created: createTimestamp(),
         timestamp_updated: createTimestamp(),
       }
-      // await setDoc(collection(getFirestore(), 'requests'), payload)
       await setDoc(doc(getFirestore(), 'requests', id), payload)
       setValues(initialValues)
       setInputTags([])
     } catch (error) {
       console.log('Error writing new request to Firestore Database', error)
     }
-    // console.log(values)
   }
 
   function handleInputChange(event) {
@@ -96,9 +94,9 @@ export function Form() {
     setInputTags(prevState => prevState.filter((tag, i) => i !== index))
   }
 
-  // run setfirestoredata
   return (
     <div className="request-creation">
+      <hr />
       <h2>Request Creation</h2>
       <form id="request-creation-form">
         <div className="request-creation-form-field">

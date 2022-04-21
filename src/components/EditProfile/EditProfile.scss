@@ -1,53 +1,83 @@
-button {
-  width: 90vw;
-  border-radius: 45px;
-  color: white;
-  border: none;
-  background-color: #00ad9f;
-}
+#profile-edit {
+  * {
+    font-family: 'Montserrat', sans-serif;
+  }
 
-textarea {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
-
-  border: none;
-  outline: none;
-  resize: none;
-  border-bottom: 1px solid black;
-  width: 80%;
-}
-
-.profile-edit-form-field {
-  display: flex;
-  padding: 32px 0;
-  justify-content: space-between;
-  text-align: end;
-
-  input {
+  button {
+    width: 90vw;
+    border-radius: 45px;
+    color: white;
     border: none;
-    border-bottom: 1px solid black;
+    background-color: #27aa9f;
+  }
+
+  textarea {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+
+    border: none;
+    outline: none;
+    resize: none;
+    border-bottom: 1px solid #cdcdcd;
     width: 80%;
   }
-}
 
-#edit-header {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
+  .profile-edit-form-field {
+    display: flex;
+    padding-bottom: 32px;
+    justify-content: space-between;
+    text-align: end;
 
-.edit-header-col {
-  width: 33%;
-}
+    label {
+      color: #4a4a4a;
+    }
 
-img {
-  width: 64px;
-  height: 64px;
-  object-fit: cover;
-  border-radius: 50%;
-}
+    input {
+      border: none;
+      border-bottom: 1px solid #cdcdcd;
+      width: 80%;
+    }
+  }
 
-h1 {
-  font-size: xx-large;
+  #edit-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-top: 32px;
+  }
+
+  .profile-image-container {
+    position: relative;
+    img {
+      width: 128px;
+      height: 128px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .profile-image-edit-button {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      padding: 8px;
+      bottom: -4px;
+      right: -8px;
+      background-color: #27aa9f;
+      color: white;
+      position: absolute;
+      border: 4px solid white;
+      cursor: pointer;
+    }
+  }
+
+  h2 {
+    margin-left: 64px;
+    color: #4a4a4a;
+  }
+
+  aside {
+    color: #b4b4b4;
+    margin-top: 16px;
+    margin-bottom: 32px;
+  }
 }
