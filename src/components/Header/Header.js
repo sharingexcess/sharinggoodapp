@@ -10,9 +10,11 @@ export function Header() {
   return (
     <header id="Header">
       <section id="Header-banner">
-        <h2>
-          Sharing <span id="green">Good</span>
-        </h2>
+        <a href="/">
+          <h2>
+            Sharing <span id="green">Good</span>
+          </h2>
+        </a>
       </section>
       {profile && (
         <section id="Header-profile">

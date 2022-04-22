@@ -27,6 +27,7 @@ export function Form() {
         ...values,
         id,
         owner_id: profile.id,
+        school: profile.school,
         timestamp_created: createTimestamp(),
         timestamp_updated: createTimestamp(),
       }
@@ -96,7 +97,6 @@ export function Form() {
 
   return (
     <div className="request-creation">
-      <hr />
       <h2>Request Creation</h2>
       <form id="request-creation-form">
         <div className="request-creation-form-field">

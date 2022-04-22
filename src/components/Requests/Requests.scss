@@ -1,4 +1,10 @@
 #requests-container {
-  width: 90vw;
-  overflow-y: auto;
+  overflow: scroll;
+
+  h2 {
+    color: #4a4a4a;
+    width: 100%;
+    text-align: left;
+    padding-top: 32px;
+  }
 }
