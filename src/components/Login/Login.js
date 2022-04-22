@@ -7,6 +7,10 @@ import {
 import isEmail from 'validator/lib/isEmail'
 import { auth } from 'helpers'
 import { useNavigate } from 'react-router'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { Header } from 'components/Header/Header'
+import { Link } from 'react-router-dom'
 
 export function Login() {
   const [submitted, setSubmitted] = useState(false)
@@ -72,15 +76,29 @@ export function Login() {
 
   function LoginConfirmation() {
     return (
-      <main id="Login" className="page">
-        <button onClick={handleReset}>Resend link</button>
+      <main id="Login-Confirmation" className="page">
+        <Header />
+        <Link to="/">
+          <FontAwesomeIcon
+            icon={faArrowLeft}
+            size="2x"
+            onClick={handleReset}
+            id="green"
+            style={{ marginTop: '32px' }}
+          />
+        </Link>
         <h1>Check your email!</h1>
+        <aside>
+          We sent a magic link to <b>{email}.</b> <br />
+          Click the link to log in or sign up.
+        </aside>
         <p>
-          We sent a magic link to <b>{email}.</b>
-        </p>
-        <p>Click the link to log in or sign up.</p>
-        <p>
-          Want to try again? <button onClick={handleReset}>Resend link</button>
+          Want to try again?{' '}
+          <b>
+            <a href="login" id="green" onClick={handleReset}>
+              Resend link.
+            </a>
+          </b>
         </p>
       </main>
     )
@@ -90,13 +108,23 @@ export function Login() {
   else
     return (
       <main id="Login" className="page">
+        <Header />
         <h1>Login</h1>
-        <input
-          type="email"
-          value={email}
-          onChange={event => setEmail(event.target.value)}
-        />
-        <button onClick={handleSubmit}>Login</button>
+        <p>Enter your email to receive a sign in link.</p>
+
+        <div id="form-field">
+          <label htmlFor="email">EMAIL</label>
+          <input
+            type="email"
+            name="email"
+            value={email}
+            onChange={event => setEmail(event.target.value)}
+          />
+        </div>
+
+        <button onClick={handleSubmit}>
+          <h2>Login</h2>
+        </button>
       </main>
     )
 }

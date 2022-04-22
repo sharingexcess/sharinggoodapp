@@ -1,0 +1,34 @@
+#request-creation-form {
+  .request-creation-form-field {
+    display: flex;
+    justify-content: space-between;
+
+    input {
+      border: none;
+      border-bottom: 1px solid black;
+      margin-bottom: 10px;
+      width: 60%;
+    }
+
+    textarea {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+
+      border: none;
+      outline: none;
+      resize: none;
+      border-bottom: 1px solid black;
+      width: 60%;
+      margin-bottom: 10px;
+    }
+  }
+
+  button {
+    width: 90vw;
+    border-radius: 45px;
+    color: white;
+    border: none;
+    background-color: #27aa9f;
+  }
+}

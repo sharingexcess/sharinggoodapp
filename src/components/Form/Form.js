@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { createTimestamp } from 'helpers'
 import { nanoid } from 'nanoid'
-import { collection, getFirestore, setDoc } from 'firebase/firestore'
+import { collection, doc, getFirestore, setDoc } from 'firebase/firestore'
 import { useAuth } from 'hooks'
 
 const initialValues = {
@@ -30,13 +30,12 @@ export function Form() {
         timestamp_created: createTimestamp(),
         timestamp_updated: createTimestamp(),
       }
-      await setDoc(collection(getFirestore(), 'requests'), payload)
+      await setDoc(doc(getFirestore(), 'requests', id), payload)
       setValues(initialValues)
       setInputTags([])
     } catch (error) {
       console.log('Error writing new request to Firestore Database', error)
     }
-    console.log(values)
   }
 
   function handleInputChange(event) {
@@ -95,32 +94,34 @@ export function Form() {
     setInputTags(prevState => prevState.filter((tag, i) => i !== index))
   }
 
-  // run setfirestoredata
   return (
     <div className="request-creation">
+      <hr />
       <h2>Request Creation</h2>
-
-      <form id="request-form">
-        <label>Title: </label>
-        <input
-          type="text"
-          name="title"
-          id="title"
-          value={values.title}
-          label="title"
-          onChange={handleInputChange}
-        />
-        <br />
-        <label>Description: </label>
-        <input
-          type="text"
-          name="description"
-          id="description"
-          value={values.description}
-          label="description"
-          onChange={handleInputChange}
-        />
-        <br />
+      <form id="request-creation-form">
+        <div className="request-creation-form-field">
+          <label>Title: </label>
+          <input
+            type="text"
+            name="title"
+            id="title"
+            value={values.title}
+            label="title"
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="request-creation-form-field">
+          <label>Description: </label>
+          <textarea
+            type="text"
+            name="description"
+            id="description"
+            value={values.description}
+            label="description"
+            rows={3}
+            onChange={handleInputChange}
+          />
+        </div>
 
         {/* <div className="tags-container">
           {inputTags.map((tag, index) => (
@@ -143,7 +144,9 @@ export function Form() {
           />
         </div> */}
 
-        <button onClick={handleSubmit}>Submit</button>
+        <button onClick={handleSubmit}>
+          <h2>Submit</h2>
+        </button>
       </form>
     </div>
   )

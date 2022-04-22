@@ -8,6 +8,11 @@
   justify-content: space-between;
   align-items: center;
   z-index: 1;
+  color: #4a4a4a;
+}
+
+#green {
+  color: #27aa9f;
 }
 
 @media (max-width: 600px) {
@@ -16,27 +21,34 @@
   }
 }
 
-#Header-banner h2 {
-  margin: 2px 0;
-  color: #00ad9f;
-}
+#Header-banner {
+  align-items: center;
+  h2 {
+    margin: 2px 0;
+    padding-top: 16px;
+  }
 
-#Header-banner aside {
-  font-size: 8px;
-  opacity: 0.6;
+  aside {
+    font-size: 8px;
+    opacity: 0.6;
+  }
 }
 
 #Header-profile {
   display: flex;
   justify-content: flex-end;
   align-items: center;
-}
 
-#Header-profile img {
-  width: 48px;
-  height: 48px;
-  object-fit: cover;
-  border-radius: 50%;
+  img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+
+  .menu {
+    cursor: pointer;
+  }
 }
 
 #Header-user-info {
@@ -44,22 +56,22 @@
   flex-direction: column;
   justify-content: center;
   align-items: flex-end;
-}
 
-#Header-user-info * {
-  margin: 0;
-  padding: 2px 8px;
-}
+  * {
+    margin: 0;
+    padding: 2px 8px;
+  }
 
-#Header-user-info aside {
-  font-size: 10px;
-}
+  aside {
+    font-size: 10px;
+  }
 
-#Header-user-info button {
-  border: none;
-  background: none;
-  font-size: 10px;
-  color: blue;
-  text-decoration: underline;
-  cursor: pointer;
+  button {
+    border: none;
+    background: none;
+    font-size: 10px;
+    color: blue;
+    text-decoration: underline;
+    cursor: pointer;
+  }
 }

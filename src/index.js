@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { Home, Header } from 'components'
+import { Home, Header, EditProfile } from 'components'
 import { Auth, Firestore } from './providers'
 import './styles/index.scss'
 
@@ -12,6 +12,7 @@ ReactDOM.render(
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<EditProfile />} />
         </Routes>
       </Firestore>
     </Auth>
