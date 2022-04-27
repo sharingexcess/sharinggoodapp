@@ -15,6 +15,11 @@ import { Link } from 'react-router-dom'
 
 export function GetProfile({ r }) {
   const p = useFirestore('profiles', r.owner_id)
+  return <>{!p ? <Loading /> : <span>{p.name.split(' ')[0]}</span>}</>
+}
+
+export function GetProfileFullName({ r }) {
+  const p = useFirestore('profiles', r.owner_id)
   return (
     <main>
       {!p ? (
@@ -62,9 +67,7 @@ export function Request() {
                 <FontAwesomeIcon icon={faArrowLeft} id="green" />
               </Link>
               <Spacer />
-              <Text type="small-header" bold>
-                {r.status}
-              </Text>
+              <Text>{r.status}</Text>
               <Spacer />
               <Spacer />
             </FlexContainer>
@@ -88,7 +91,7 @@ export function Request() {
               {/* <GetProfilePhoto r={r} /> */}
               <Spacer />
               <FlexContainer direction="vertical" secondaryAlign="start">
-                <GetProfile r={r} />
+                <GetProfileFullName r={r} />
                 <Text>{r.school}</Text>
               </FlexContainer>
             </FlexContainer>
@@ -103,7 +106,11 @@ export function Request() {
             </Button>
             <Spacer height={16} />
             <Button type="secondary" fullWidth>
-              <Text align="center">Message</Text> <GetProfile r={r} />
+              <FlexContainer direction="horizontal">
+                <Text bold>
+                  Message <GetProfile r={r} />
+                </Text>
+              </FlexContainer>
             </Button>
           </FlexContainer>
         </FlexContainer>
