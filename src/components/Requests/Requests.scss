@@ -1,10 +1,14 @@
 #requests-container {
-  overflow: scroll;
+  height: max(100%, 100vw);
+  overflow: auto;
+}
 
-  h2 {
-    color: #4a4a4a;
-    width: 100%;
-    text-align: left;
-    padding-top: 32px;
+#request-container {
+  border-bottom: 1px solid black;
+  margin-bottom: 5px;
+  padding: 5px;
+
+  a {
+    text-decoration: none;
   }
 }

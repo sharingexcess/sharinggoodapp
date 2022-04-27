@@ -3,6 +3,7 @@ import { createTimestamp } from 'helpers'
 import { nanoid } from 'nanoid'
 import { collection, doc, getFirestore, setDoc } from 'firebase/firestore'
 import { useAuth } from 'hooks'
+import { Button } from '@sharingexcess/designsystem'
 
 const initialValues = {
   title: '',
@@ -144,9 +145,7 @@ export function Form() {
           />
         </div> */}
 
-        <button onClick={handleSubmit}>
-          <h2>Submit</h2>
-        </button>
+        <Button onClick={handleSubmit}>Submit</Button>
       </form>
     </div>
   )

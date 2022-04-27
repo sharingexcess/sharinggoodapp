@@ -10,12 +10,14 @@
   z-index: 1;
   color: #4a4a4a;
   background-color: white;
-  border: 3px solid black;
-  border-bottom: none;
+
+  a {
+    text-decoration: none;
+  }
 }
 
 #green {
-  color: #27aa9f;
+  color: #4ea528;
 }
 
 @media (max-width: 600px) {
@@ -48,10 +50,9 @@
   align-items: center;
 
   img {
-    width: 48px;
-    height: 48px;
-    object-fit: cover;
-    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
   }
 
   .menu {

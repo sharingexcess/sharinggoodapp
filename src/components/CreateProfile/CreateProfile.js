@@ -19,7 +19,7 @@ export function CreateProfile() {
         ...values,
         id: user.uid,
         email: user.email,
-        photoURL: user.photoURL,
+        photoURL: user.photoURL || '/profile_placeholder.png',
         timestamp_created: createTimestamp(),
         timestamp_updated: createTimestamp(),
       }

@@ -1,20 +1,8 @@
-#request-container {
-  border-bottom: 1px solid black;
-  margin-bottom: 5px;
-  padding: 5px;
-
-  h3 {
-    color: #4a4a4a;
-  }
-
-  p {
-    color: #c5c5c4;
-  }
-  aside {
-    color: #4ea528;
-  }
-  #school {
-    display: flex;
-    justify-content: space-between;
+#request-details {
+  img {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 50%;
   }
 }
