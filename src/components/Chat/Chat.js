@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+import { faArrowLeft, faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import {
   Button,
   FlexContainer,
@@ -32,6 +32,10 @@ export function Chat() {
   const [inputValue, setInputValue] = useState('')
   const { profile } = useAuth()
 
+  useEffect(() => {
+    document.getElementById('Chat-messages').scrollTop = 9999
+  }, [messages])
+
   function Message({ message }) {
     const className =
       message.sender_id === profile.id ? 'Message sent' : 'Message received'
@@ -59,7 +63,7 @@ export function Chat() {
   return (
     <main id="Chat" className="page">
       <FlexContainer primaryAlign="space-between">
-        <Link to="/requests">
+        <Link to={`/requests/${request_id}`}>
           <FontAwesomeIcon icon={faArrowLeft} id="green" />
         </Link>
         <Spacer />
@@ -80,12 +84,22 @@ export function Chat() {
           ))
         )}
       </FlexContainer>
-      <Input
-        id="Chat-new-message"
-        value={inputValue}
-        onChange={e => setInputValue(e.target.value)}
-      />
-      <Button handler={send}>send</Button>
+      <FlexContainer id="Chat-new-message" primaryAlign="space-between">
+        <Input
+          label="Your message..."
+          value={inputValue}
+          onChange={e => setInputValue(e.target.value)}
+        />
+        <Spacer width={16} />
+        <Button
+          id="Chat-send"
+          disabled={!inputValue}
+          handler={send}
+          color="blue"
+        >
+          <FontAwesomeIcon icon={faArrowUp} />
+        </Button>
+      </FlexContainer>
     </main>
   )
 }
