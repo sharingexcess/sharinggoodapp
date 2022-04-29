@@ -2,7 +2,13 @@ import { initializeApp } from 'firebase/app'
 import { getAnalytics } from 'firebase/analytics'
 import { getAuth } from 'firebase/auth'
 import { nanoid } from 'nanoid'
-import { getFirestore } from 'firebase/firestore'
+import {
+  collection,
+  doc,
+  getDoc,
+  getFirestore,
+  setDoc,
+} from 'firebase/firestore'
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAmhJZM1KFTNre0aKJ06y_rfP43e3FMjFA',
@@ -26,12 +32,8 @@ export async function generateUniqueId(collection) {
 }
 
 export async function isExistingId(id, collection) {
-  const snapshot = await firebase
-    .firestore()
-    .collection(collection)
-    .doc(id)
-    .get()
-  return snapshot.exists
+  const snapshot = await getDoc(doc(firestore, collection, id))
+  return snapshot.exists()
 }
 
 export function getCollection(name) {
@@ -57,19 +59,8 @@ export async function getFirestoreData(identifier) {
     )
 }
 
-export async function setFirestoreData(identifier, value) {
-  let next = 'doc'
-  let query = getCollection(identifier.shift())
-  while (identifier.length) {
-    if (next === 'doc') {
-      query = query.doc(identifier.shift())
-      next = 'collection'
-    } else {
-      query = query.collection(identifier.shift())
-      next = 'doc'
-    }
-  }
-  return await query.set(value, { merge: true })
+export async function setFirestoreData(collection, id, value) {
+  return await setDoc(doc(firestore, collection, id), value, { merge: true })
 }
 
 export async function deleteFirestoreData(identifier) {

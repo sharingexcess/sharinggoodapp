@@ -1,0 +1,13 @@
+#Chat {
+  #Chat-messages {
+    .Message {
+      width: 100%;
+      &.sent {
+        text-align: right;
+      }
+      &.received {
+        text-align: left;
+      }
+    }
+  }
+}
