@@ -105,13 +105,13 @@ export function Request() {
               Accept
             </Button>
             <Spacer height={16} />
-            <Button type="secondary" fullWidth>
-              <FlexContainer direction="horizontal">
+            <Link to={`/requests/${request_id}/chat`}>
+              <Button type="secondary" fullWidth>
                 <Text bold>
                   Message <GetProfile r={r} />
                 </Text>
-              </FlexContainer>
-            </Button>
+              </Button>
+            </Link>
           </FlexContainer>
         </FlexContainer>
       )}
