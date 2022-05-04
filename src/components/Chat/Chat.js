@@ -19,7 +19,7 @@ import {
 } from 'helpers'
 import { collection, query, where } from 'firebase/firestore'
 import { Loading } from 'components'
-import { useAuth } from 'hooks'
+import { useAuth, useFirestore } from 'hooks'
 
 export function Chat() {
   const { request_id } = useParams()
@@ -36,10 +36,21 @@ export function Chat() {
     document.getElementById('Chat-messages').scrollTop = 9999
   }, [messages])
 
+  function ReceivedMessagePhoto({ m }) {
+    const p = useFirestore('profiles', m.sender_id)
+    return (
+      <div className="Sender-profile">
+        {!p ? <Loading /> : <img src={p.photoURL} alt={p.name} />}
+      </div>
+    )
+  }
+
   function Message({ message }) {
-    const className =
-      message.sender_id === profile.id ? 'Message sent' : 'Message received'
-    return <div className={className}>{message.text}</div>
+    return (
+      <div>
+        <p>{message.text}</p>
+      </div>
+    )
   }
 
   async function send() {
@@ -80,7 +91,19 @@ export function Chat() {
           <Loading />
         ) : (
           sortMessages(messages).map(message => (
-            <Message message={message} key={message.id} />
+            <div
+              key={message.id}
+              className={
+                message.sender_id === profile.id
+                  ? 'Message sent'
+                  : 'Message received'
+              }
+            >
+              {message.sender_id !== profile.id && (
+                <ReceivedMessagePhoto m={message} />
+              )}
+              <Message message={message} />
+            </div>
           ))
         )}
       </FlexContainer>

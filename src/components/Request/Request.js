@@ -52,11 +52,12 @@ export function Request() {
   const { request_id } = useParams()
   const r = useFirestore('requests', request_id)
   return (
-    <div id="request-details" className="page">
+    <main id="request-details" className="page">
       {!r ? (
         <Loading />
       ) : (
         <FlexContainer
+          id="request-details-container"
           direction="vertical"
           primaryAlign="space-between"
           fullWidth
@@ -101,13 +102,13 @@ export function Request() {
 
           <FlexContainer direction="vertical">
             <Spacer height={16} />
-            <Button size="large" fullWidth color="green">
+            <Button size="large" color="green">
               Accept
             </Button>
             <Spacer height={16} />
             <Link to={`/requests/${request_id}/chat`}>
-              <Button type="secondary" fullWidth>
-                <Text bold>
+              <Button type="secondary" color="green" fullWidth>
+                <Text bold color="green">
                   Message <GetProfile r={r} />
                 </Text>
               </Button>
@@ -115,6 +116,6 @@ export function Request() {
           </FlexContainer>
         </FlexContainer>
       )}
-    </div>
+    </main>
   )
 }

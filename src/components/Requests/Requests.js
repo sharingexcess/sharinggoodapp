@@ -2,7 +2,7 @@ import React from 'react'
 import { useFirestore } from 'hooks/useFirestore'
 import { FlexContainer, Text, Spacer } from '@sharingexcess/designsystem'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLocationDot } from '@fortawesome/free-solid-svg-icons'
+import { faLocationDot, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 
 export function Requests() {
@@ -44,9 +44,14 @@ export function Requests() {
   return (
     <div id="requests-container" className="page">
       <FlexContainer direction="vertical" secondaryAlign="start" fullWidth>
-        <Text type="primary-header" align="left" bold>
-          Open Requests
-        </Text>
+        <FlexContainer primaryAlign="space-between">
+          <Text type="primary-header" align="left" bold>
+            Open Requests
+          </Text>
+          <Link to="/create-request">
+            <FontAwesomeIcon icon={faPlusCircle} id="green" size="2x" />
+          </Link>
+        </FlexContainer>
         {requests &&
           requests.map(request => <Request key={request.id} r={request} />)}
       </FlexContainer>

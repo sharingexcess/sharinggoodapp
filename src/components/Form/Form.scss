@@ -2,33 +2,28 @@
   * {
     font-family: 'Montserrat', sans-serif;
   }
-  .request-creation-form-field {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 
-    input {
-      border: none;
-      border-bottom: 1px solid black;
-      margin-bottom: 10px;
-      width: 60%;
-    }
-
-    textarea {
-      -webkit-box-sizing: border-box;
-      -moz-box-sizing: border-box;
-      box-sizing: border-box;
-
-      border: none;
-      outline: none;
-      resize: none;
-      border-bottom: 1px solid black;
-      width: 60%;
-      margin-bottom: 10px;
-    }
+  #title {
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    box-shadow: inset 2px 2px 2px 2px var(--se-black-transparent);
+    padding: 8px;
+    margin: 16px 0;
+  }
+  #description {
+    width: 100%;
+    border: none;
+    border-radius: 5px;
+    resize: none;
+    box-shadow: inset 2px 2px 2px 2px var(--se-black-transparent);
+    padding: 8px;
+    margin-bottom: 16px;
   }
 
   button {
-    width: 90vw;
     border-radius: 45px;
     color: white;
     border: none;
