@@ -1,13 +1,19 @@
-import { useState } from 'react'
-import { createTimestamp, firestore } from 'helpers'
+import { useEffect, useState } from 'react'
+import { createTimestamp, firestore, upload } from 'helpers'
 import { collection, doc, setDoc } from 'firebase/firestore'
 import { useAuth } from 'hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faPen } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
+// storage
+import { getStorage, storageRef } from 'firebase/storage'
+import { useUploadFile } from 'react-firebase-hooks/storage'
 
 export function EditProfile() {
-  const { profile } = useAuth()
+  const { profile, user } = useAuth()
+  const [photo, setPhoto] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [photoURL, setPhotoURL] = useState(user.photoURL)
 
   const initialValues = {
     name: profile.name,
@@ -39,8 +45,18 @@ export function EditProfile() {
     })
   }
 
-  function handleChange() {}
-  function handleClick() {}
+  function handleChange(e) {
+    if (e.target.files[0]) setPhoto(e.target.files[0])
+  }
+  function handleClick() {
+    upload(photo, user, setLoading)
+  }
+
+  useEffect(() => {
+    if (user?.photoURL) {
+      setPhotoURL(user.photoURL)
+    }
+  }, [user])
 
   return (
     <div id="profile-edit" className="page">
@@ -52,11 +68,7 @@ export function EditProfile() {
       </div>
       <div className="profile-image-container">
         <input type="file" onChange={handleChange} />
-        <img
-          src={'/profile_placeholder.png'}
-          alt={profile.name}
-          onClick={handleClick}
-        />
+        <img src={photoURL} alt={profile.name} onClick={handleClick} />
         <FontAwesomeIcon
           icon={faPen}
           size="2x"

@@ -36,19 +36,36 @@ export function Chat() {
     document.getElementById('Chat-messages').scrollTop = 9999
   }, [messages])
 
-  function ReceivedMessagePhoto({ m }) {
+  function MessagePhoto({ m }) {
     const p = useFirestore('profiles', m.sender_id)
+    const handleFallback = e => {
+      console.log(e)
+      if (e.target.src !== '/profile_placeholder.png') {
+        e.target.src = '/profile_placeholder.png'
+      }
+    }
     return (
-      <div className="Sender-profile">
-        {!p ? <Loading /> : <img src={p.photoURL} alt={p.name} />}
+      <div className="MessagePhoto">
+        {!p ? (
+          <Loading />
+        ) : (
+          <img
+            src={p.photoURL || './profile_placeholder.png'}
+            alt={p.name}
+            onError={handleFallback}
+          />
+        )}
       </div>
     )
   }
 
   function Message({ message }) {
+    const className =
+      message.sender_id === profile.id ? 'Message sent' : 'Message received'
     return (
-      <div>
-        <p>{message.text}</p>
+      <div className={className}>
+        <MessagePhoto m={message} />
+        <Text>{message.text}</Text>
       </div>
     )
   }
@@ -91,19 +108,7 @@ export function Chat() {
           <Loading />
         ) : (
           sortMessages(messages).map(message => (
-            <div
-              key={message.id}
-              className={
-                message.sender_id === profile.id
-                  ? 'Message sent'
-                  : 'Message received'
-              }
-            >
-              {message.sender_id !== profile.id && (
-                <ReceivedMessagePhoto m={message} />
-              )}
-              <Message message={message} />
-            </div>
+            <Message message={message} key={message.id} />
           ))
         )}
       </FlexContainer>

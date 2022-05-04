@@ -1,9 +1,10 @@
 import { initializeApp } from 'firebase/app'
 import { getAnalytics } from 'firebase/analytics'
-import { getAuth } from 'firebase/auth'
+import { getAuth, updateProfile } from 'firebase/auth'
 import { nanoid } from 'nanoid'
+import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 import {
-  collection,
+  // collection,
   doc,
   getDoc,
   getFirestore,
@@ -24,6 +25,7 @@ export const firebase = initializeApp(firebaseConfig)
 export const analytics = getAnalytics(firebase)
 export const auth = getAuth(firebase)
 export const firestore = getFirestore(firebase)
+export const storage = getStorage()
 
 export async function generateUniqueId(collection) {
   const id = nanoid()
@@ -76,4 +78,17 @@ export async function deleteFirestoreData(identifier) {
     }
   }
   return await query.delete()
+}
+
+// storage
+export async function upload(file, currentUser, setLoading) {
+  const fileRef = ref(storage, currentUser.uid + '.png')
+  setLoading(true)
+
+  const snapshot = await uploadBytes(fileRef, file)
+  const photoURL = await getDownloadURL(fileRef)
+
+  updateProfile(currentUser, { photoURL })
+  setLoading(false)
+  alert('Uploaded file')
 }
