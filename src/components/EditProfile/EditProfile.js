@@ -39,6 +39,9 @@ export function EditProfile() {
     })
   }
 
+  function handleChange() {}
+  function handleClick() {}
+
   return (
     <div id="profile-edit" className="page">
       <div id="edit-header">
@@ -48,10 +51,11 @@ export function EditProfile() {
         <h2>Edit Profile</h2>
       </div>
       <div className="profile-image-container">
+        <input type="file" onChange={handleChange} />
         <img
           src={'/profile_placeholder.png'}
           alt={profile.name}
-          className="rightbarProfileImg"
+          onClick={handleClick}
         />
         <FontAwesomeIcon
           icon={faPen}
