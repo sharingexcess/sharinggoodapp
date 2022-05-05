@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@formspree/react": "^2.2.4",
     "@fortawesome/fontawesome-svg-core": "^6.1.1",
     "@fortawesome/free-solid-svg-icons": "^6.1.1",
     "@fortawesome/react-fontawesome": "^0.1.18",
@@ -12,7 +13,9 @@
     "@testing-library/user-event": "^13.5.0",
     "firebase": "^9.6.9",
     "font-awesome": "^4.7.0",
+    "moment": "^2.29.3",
     "react": "^17.0.2",
+    "react-apple-emojis": "^2.2.1",
     "react-dom": "^17.0.2",
     "react-firebase-hooks": "^5.0.3",
     "react-router": "^6.2.2",

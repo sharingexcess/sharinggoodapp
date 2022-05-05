@@ -1,14 +1,18 @@
-#requests-container {
-  height: max(100%, 100vw);
-  overflow: auto;
-}
+#Requests {
+  @include page;
 
-#request-container {
-  border-bottom: 1px solid black;
-  margin-bottom: 5px;
-  padding: 5px;
+  .Request {
+    background: #efefefbb;
+    margin-bottom: 12px;
+    padding: 16px 12px;
+    border-radius: 8px;
 
-  a {
-    text-decoration: none;
+    .Request-description,
+    .Request-title {
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
   }
 }

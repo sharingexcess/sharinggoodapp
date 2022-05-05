@@ -1,7 +1,5 @@
-#profile-edit {
-  * {
-    font-family: 'Montserrat', sans-serif;
-  }
+#Profile {
+  @include page;
 
   button {
     width: 90vw;

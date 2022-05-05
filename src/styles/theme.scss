@@ -7,6 +7,7 @@
 
 * {
   box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
 }
 
 body {
@@ -22,20 +23,25 @@ body {
   color: #4ea528;
 }
 
-.page {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
+@mixin page {
+  padding: 64px 16px 16px 16px;
   min-height: 100vh;
-  padding: 96px 64px;
-}
+  @media all and (display-mode: standalone) {
+    padding: 174px 16px 108px 16px;
+    min-height: calc(100vh + 54px);
+  }
+  width: 100%;
+  max-width: 800px;
+  margin: auto;
+  z-index: 1;
+  overflow-x: hidden;
+  opacity: 1;
+  animation: fade-in 0.32s ease forwards;
+  height: 100vh;
+  overflow-y: auto;
 
-@media (max-width: 600px) {
-  .page {
-    padding: 64px 16px 0 16px;
+  @include desktop {
+    padding: 84px 32px 16px 314px;
+    max-width: 1100px;
   }
 }

@@ -7,10 +7,8 @@ import {
 import isEmail from 'validator/lib/isEmail'
 import { auth } from 'helpers'
 import { useNavigate } from 'react-router'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { Header } from 'components/Header/Header'
-import { Link } from 'react-router-dom'
+import { Button, Spacer, Text } from '@sharingexcess/designsystem'
 
 export function Login() {
   const [submitted, setSubmitted] = useState(false)
@@ -55,7 +53,7 @@ export function Login() {
       // use Google Firebase Auth to send an email to the user
       // containing a link with a authentication key in the URL
       sendSignInLinkToEmail(auth, email, {
-        url: window.location.origin,
+        url: window.location.origin + '/login',
         handleCodeInApp: true,
       })
         // once the email is sent, update the state to change the UI
@@ -76,45 +74,56 @@ export function Login() {
 
   function LoginConfirmation() {
     return (
-      <main id="Login-Confirmation" className="page">
+      <main id="Login-Confirmation">
         <Header />
-        <Link to="/">
-          <FontAwesomeIcon
-            icon={faArrowLeft}
-            size="2x"
-            onClick={handleReset}
-            id="green"
-            style={{ marginTop: '32px' }}
-          />
-        </Link>
-        <h1>Check your email!</h1>
-        <aside>
-          We sent a magic link to <b>{email}.</b> <br />
-          Click the link to log in or sign up.
-        </aside>
-        <p>
-          Want to try again?{' '}
-          <b>
-            <a href="login" id="green" onClick={handleReset}>
-              Resend link.
-            </a>
-          </b>
-        </p>
+        <Spacer height={48} />
+        <Text type="primary-header">Check your email!</Text>
+        <Spacer height={16} />
+        <Text type="small" color="grey">
+          We sent a magic link to <b>{email}</b> <br />
+          Click the link to log in.
+        </Text>
+        <Spacer height={48} />
+        <Text>
+          Click here to try a{' '}
+          <Button
+            size="large"
+            type="tertiary"
+            color="green"
+            handler={handleReset}
+          >
+            different email
+          </Button>
+          .
+        </Text>
       </main>
     )
+  }
+
+  function handleKeyPress(e) {
+    if (e.key === 'Enter' && email) {
+      handleSubmit()
+    }
   }
 
   if (submitted) return <LoginConfirmation />
   else
     return (
-      <main id="Login" className="page">
+      <main id="Login">
         <Header />
-        <h1>Login</h1>
-        <p>Enter your email to receive a sign in link.</p>
+        <Spacer height={48} />
+        <Text type="primary-header">Login</Text>
+        <Spacer height={4} />
+        <Text type="small" color="grey">
+          Use an email that you can access on this device.
+          <br />
+          We'll send you a magic link to sign in automatically.
+        </Text>
 
         <div id="form-field">
           <label htmlFor="email">EMAIL</label>
           <input
+            onKeyPress={handleKeyPress}
             type="email"
             name="email"
             value={email}
@@ -122,9 +131,9 @@ export function Login() {
           />
         </div>
 
-        <button onClick={handleSubmit}>
-          <h2>Login</h2>
-        </button>
+        <Button color="green" size="large" fullWidth handler={handleSubmit}>
+          Login
+        </Button>
       </main>
     )
 }

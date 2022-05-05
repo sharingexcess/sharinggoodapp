@@ -1,7 +1,7 @@
-import { Loading, Login, Header, CreateProfile } from 'components'
+import { Loading, Header, CreateProfile } from 'components'
 import { onAuthStateChanged } from 'firebase/auth'
 import { collection, doc, onSnapshot } from 'firebase/firestore'
-import { auth, firestore } from 'helpers'
+import { auth, firestore, handleLogout } from 'helpers'
 import React, { createContext, useEffect, useState } from 'react'
 
 export const AuthContext = createContext()
@@ -12,10 +12,13 @@ export function Auth({ children }) {
 
   useEffect(() => {
     if (user) {
+      setProfile(null)
       const userRef = doc(collection(firestore, 'profiles'), user.uid)
-      onSnapshot(userRef, doc => {
-        setProfile(doc.data())
-      })
+      onSnapshot(
+        userRef,
+        doc => setProfile(doc.data()),
+        error => console.error(error)
+      )
     }
   }, [user])
 
@@ -29,11 +32,10 @@ export function Auth({ children }) {
     })
   }, [])
 
-  if (user === undefined) return <Loading text={'Signing in...'} />
+  if (user === undefined || profile === null)
+    return <Loading text={'Signing in...'} />
 
-  if (!user) return <Login />
-
-  if (!profile)
+  if (user && !profile && profile !== null)
     return (
       <AuthContext.Provider value={{ user }}>
         <Header />
@@ -42,7 +44,7 @@ export function Auth({ children }) {
     )
 
   return (
-    <AuthContext.Provider value={{ user, profile }}>
+    <AuthContext.Provider value={{ user, profile, handleLogout }}>
       {children}
     </AuthContext.Provider>
   )

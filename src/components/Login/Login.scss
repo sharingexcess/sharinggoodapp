@@ -1,5 +1,5 @@
 #Login {
-  font-family: 'Montserrat', sans-serif;
+  @include page;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -21,35 +21,10 @@
       width: 100%;
     }
   }
-
-  button {
-    font-family: 'Montserrat', sans-serif;
-    width: 90vw;
-    border-radius: 45px;
-    color: white;
-    border: none;
-    background-color: #27aa9f; // for good accent
-  }
-
-  a {
-    text-decoration: none;
-    cursor: pointer;
-  }
-  h1 {
-    padding-top: 64px;
-    color: #4a4a4a; // se-grey
-  }
-  p {
-    color: #b4b4b4; // grey
-    margin-top: 0;
-  }
-  aside {
-    color: #4a4a4a; // se-grey
-  }
 }
 
 #Login-Confirmation {
-  font-family: 'Montserrat', sans-serif;
+  @include page;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
