@@ -1,13 +1,20 @@
 import { useEffect, useState } from 'react'
-import { createTimestamp, firestore, upload } from 'helpers'
+import {
+  createTimestamp,
+  firestore,
+  upload,
+  storage,
+  setFirestoreData,
+} from 'helpers'
 import { collection, doc, setDoc } from 'firebase/firestore'
 import { useAuth } from 'hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faPen } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 // storage
-import { getStorage, storageRef } from 'firebase/storage'
+import { ref } from 'firebase/storage'
 import { useUploadFile } from 'react-firebase-hooks/storage'
+import { Loading } from 'components'
 
 export function EditProfile() {
   const { profile, user } = useAuth()
@@ -52,6 +59,25 @@ export function EditProfile() {
     upload(photo, user, setLoading)
   }
 
+  // STORAGE
+  const [uploadFile, uploading, snapshot, error] = useUploadFile()
+  const fileRef = ref(storage, 'photos/' + user.uid + '.png') // pull file extension from os
+  console.log(fileRef)
+  const [selectedFile, setSelectedFile] = useState()
+
+  useEffect(() => console.log(error), [error])
+
+  const upload = async () => {
+    if (selectedFile) {
+      const result = await uploadFile(fileRef, selectedFile, {
+        contentType: 'image/png', // pull content type from file
+      })
+      console.log(result)
+      // setFirestoreData('profiles', profile.id, { uploaded_photo_path: result.ROGHE_FILL_THIS_OUT })
+    }
+  }
+  // STORAGE
+
   useEffect(() => {
     if (user?.photoURL) {
       setPhotoURL(user.photoURL)
@@ -64,8 +90,25 @@ export function EditProfile() {
         <Link to="/">
           <FontAwesomeIcon icon={faArrowLeft} size="2x" id="green" />
         </Link>
-        <h2>Edit Profile</h2>
+        {/* UPLOAD */}
+        {error && <strong>Error: {error.message}</strong>}
+        {uploading && <span>Uploading file...</span>}
+        {snapshot && console.log(snapshot)}
+        {selectedFile && <span>Selected file: {selectedFile.name}</span>}
+        <input
+          type="file"
+          accept=".png, .jpeg, .jpg" // add extension for apple and look for other extensions
+          onChange={e => {
+            const file = e.target.files ? e.target.files[0] : undefined
+            setSelectedFile(file)
+          }}
+        />
+        <button style={{ cursor: 'pointer' }} onClick={upload}>
+          Upload file
+        </button>
+        {/* UPLOAD */}
       </div>
+      <h2>Edit Profile</h2>
       <div className="profile-image-container">
         <input type="file" onChange={handleChange} />
         <img src={photoURL} alt={profile.name} onClick={handleClick} />
