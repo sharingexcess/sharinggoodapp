@@ -1,22 +1,22 @@
 import { useAuth } from 'hooks'
 import { Form } from 'components/Form/Form'
-import { Requests } from 'components/Requests/Requests'
 import { Link } from 'react-router-dom'
-import { Button, Spacer } from '@sharingexcess/designsystem'
+import { Button, Spacer, Text } from '@sharingexcess/designsystem'
 
 export function Home() {
   const { profile } = useAuth()
   return (
-    <div id="Home" className="page">
-      <h2>Sucessfully logged in {profile.name}</h2>
-      <Button>
-        <Link to="/profile">Edit Profile</Link>
-      </Button>
+    <div id="Home">
+      <Text type="primary-header">Welcome to Sharing Good</Text>
+      <Link to="/profile">
+        <Button color="green">Edit Profile</Button>
+      </Link>
       <Spacer height={16} />
-      <Button>
-        <Link to="/requests">Requests</Link>
-      </Button>
-      <Form />
+      <Link to="/requests">
+        <Button size="large" color="green" fullWidth>
+          Browse Requests
+        </Button>
+      </Link>
     </div>
   )
 }

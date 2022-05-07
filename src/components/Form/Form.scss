@@ -1,16 +1,12 @@
-#request-creation-form {
-  * {
-    font-family: 'Montserrat', sans-serif;
-  }
-  display: flex;
-  justify-content: space-between;
+#CreateRequest {
+  @include page;
 
   #title {
     width: 100%;
     border: none;
     border-radius: 5px;
     box-shadow: inset 2px 2px 2px 2px var(--se-black-transparent);
-    padding: 8px;
+    padding: 16px 12px;
     margin: 16px 0;
   }
   #description {
@@ -19,7 +15,7 @@
     border-radius: 5px;
     resize: none;
     box-shadow: inset 2px 2px 2px 2px var(--se-black-transparent);
-    padding: 8px;
+    padding: 16px 12px;
     margin-bottom: 16px;
   }
 

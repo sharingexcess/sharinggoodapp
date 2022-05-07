@@ -7,81 +7,35 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 64px;
+  padding: 0 32px;
   z-index: 1;
   color: #4a4a4a;
-  background-color: white;
+  background: linear-gradient(
+    rgba(255, 255, 255, 1) 0,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+
+  @include mobile {
+    padding: 0 16px;
+  }
+
+  img {
+    width: 24px;
+  }
 
   a {
     text-decoration: none;
+  }
+
+  .secondary-header {
+    font-size: 24px;
+    @include mobile {
+      font-size: 20px;
+    }
   }
 }
 
 #green {
   color: #4ea528;
-}
-
-@media (max-width: 600px) {
-  #Header {
-    padding: 16px;
-  }
-}
-
-#Header-banner {
-  align-items: center;
-  h2 {
-    margin: 2px 0;
-    padding-top: 16px;
-  }
-
-  aside {
-    font-size: 8px;
-    opacity: 0.6;
-  }
-
-  a {
-    text-decoration: none;
-    color: #4a4a4a;
-  }
-}
-
-#Header-profile {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-
-  img {
-    width: 32px;
-    height: 32px;
-    cursor: pointer;
-  }
-
-  .menu {
-    cursor: pointer;
-  }
-}
-
-#Header-user-info {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;
-
-  * {
-    margin: 0;
-    padding: 2px 8px;
-  }
-
-  aside {
-    font-size: 10px;
-  }
-
-  button {
-    border: none;
-    background: none;
-    font-size: 10px;
-    color: blue;
-    text-decoration: underline;
-    cursor: pointer;
-  }
 }

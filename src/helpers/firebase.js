@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import { getAnalytics } from 'firebase/analytics'
-import { getAuth, updateProfile } from 'firebase/auth'
+import { getAuth, signOut, updateProfile } from 'firebase/auth'
 import { nanoid } from 'nanoid'
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
 import {
@@ -27,6 +27,11 @@ export const auth = getAuth(firebase)
 export const firestore = getFirestore(firebase)
 export const storage = getStorage()
 
+export function handleLogout() {
+  signOut(auth)
+  window.location.reload()
+}
+
 export async function generateUniqueId(collection) {
   const id = nanoid()
   const exists = await isExistingId(id, collection)
@@ -42,42 +47,8 @@ export function getCollection(name) {
   return firebase.firestore().collection(name)
 }
 
-export async function getFirestoreData(identifier) {
-  let next = 'doc'
-  let query = getCollection(identifier.shift())
-  while (identifier.length) {
-    if (next === 'doc') {
-      query = query.doc(identifier.shift())
-      next = 'collection'
-    } else {
-      query = query.collection(identifier.shift())
-      next = 'doc'
-    }
-  }
-  return await query
-    .get()
-    .then(res =>
-      res.data ? res.data() : res.docs ? res.docs.map(doc => doc.data()) : res
-    )
-}
-
 export async function setFirestoreData(collection, id, value) {
   return await setDoc(doc(firestore, collection, id), value, { merge: true })
-}
-
-export async function deleteFirestoreData(identifier) {
-  let next = 'doc'
-  let query = getCollection(identifier.shift())
-  while (identifier.length) {
-    if (next === 'doc') {
-      query = query.doc(identifier.shift())
-      next = 'collection'
-    } else {
-      query = query.collection(identifier.shift())
-      next = 'doc'
-    }
-  }
-  return await query.delete()
 }
 
 // storage

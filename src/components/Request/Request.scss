@@ -1,4 +1,6 @@
-#request-details {
+#Request {
+  @include page;
+
   #request-details-container {
     height: 100%;
     display: flex;

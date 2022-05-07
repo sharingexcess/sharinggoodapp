@@ -40,7 +40,7 @@ export function EditProfile() {
       const profileRef = doc(collection(firestore, 'profiles'), profile.id)
       await setDoc(profileRef, payload, { merge: true })
     } catch (error) {
-      console.log('Error writing new profile to Firestore Database', error)
+      console.error('Error writing new profile to Firestore Database', error)
     }
   }
 
@@ -85,7 +85,7 @@ export function EditProfile() {
   }, [user])
 
   return (
-    <div id="profile-edit" className="page">
+    <div id="Profile">
       <div id="edit-header">
         <Link to="/">
           <FontAwesomeIcon icon={faArrowLeft} size="2x" id="green" />

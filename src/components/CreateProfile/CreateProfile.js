@@ -26,7 +26,7 @@ export function CreateProfile() {
       const profileRef = doc(collection(firestore, 'profiles'), user.uid)
       await setDoc(profileRef, payload)
     } catch (error) {
-      console.log('Error writing new profile to Firestore Database', error)
+      console.error('Error writing new profile to Firestore Database', error)
     }
   }
 

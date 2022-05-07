@@ -1,9 +1,3 @@
 #Home {
-  Link {
-    color: #c5c5c4;
-  }
-  a {
-    color: #4ea528;
-    text-decoration: none;
-  }
+  @include page;
 }

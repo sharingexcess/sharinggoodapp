@@ -4,6 +4,7 @@ import { useAuth } from 'hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router'
 import {
   Button,
   FlexContainer,
@@ -12,6 +13,7 @@ import {
 } from '@sharingexcess/designsystem'
 
 export function Form() {
+  const navigate = useNavigate()
   const [titleValue, setTitleValue] = useState('')
   const [descriptionValue, setDescriptionValue] = useState('')
   const { profile } = useAuth()
@@ -33,13 +35,14 @@ export function Form() {
       setFirestoreData('requests', id, payload)
       setTitleValue('')
       setDescriptionValue('')
+      navigate(`/requests/${id}`)
     } catch (error) {
-      console.log('Error writing new request to Firestore Database', error)
+      console.error('Error writing new request to Firestore Database', error)
     }
   }
 
   return (
-    <div className="request-creation page">
+    <div id="CreateRequest">
       <form id="request-creation-form">
         <FlexContainer direction="vertical">
           <FlexContainer primaryAlign="space-between">
@@ -47,7 +50,7 @@ export function Form() {
               <FontAwesomeIcon icon={faArrowLeft} id="green" />
             </Link>
             <Spacer />
-            <Text>Create A Request</Text>
+            <Text type="section-header">Create A Request</Text>
             <Spacer />
             <Spacer />
           </FlexContainer>
@@ -77,7 +80,9 @@ export function Form() {
           />
 
           <Spacer height={16} />
-          <Button handler={handleSubmit}>Share</Button>
+          <Button size="large" fullWidth handler={handleSubmit}>
+            Create Request
+          </Button>
         </FlexContainer>
       </form>
     </div>
