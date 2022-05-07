@@ -1,7 +1,8 @@
 import { Loading, Header, CreateProfile } from 'components'
 import { onAuthStateChanged } from 'firebase/auth'
 import { collection, doc, onSnapshot } from 'firebase/firestore'
-import { auth, firestore, handleLogout } from 'helpers'
+import { getDownloadURL, ref } from 'firebase/storage'
+import { auth, firestore, handleLogout, storage } from 'helpers'
 import React, { createContext, useEffect, useState } from 'react'
 
 export const AuthContext = createContext()
@@ -16,7 +17,16 @@ export function Auth({ children }) {
       const userRef = doc(collection(firestore, 'profiles'), user.uid)
       onSnapshot(
         userRef,
-        doc => setProfile(doc.data()),
+        async doc => {
+          const profile = doc.data()
+          if (profile.uploaded_photo_path) {
+            const url = await getDownloadURL(
+              ref(storage, profile.uploaded_photo_path)
+            )
+            profile.photoURL = url
+            setProfile(profile)
+          }
+        },
         error => console.error(error)
       )
     }

@@ -8,7 +8,7 @@ import {
   Text,
 } from '@sharingexcess/designsystem'
 import { Link } from 'react-router-dom'
-import { useParams } from 'react-router'
+import { Navigate, useParams } from 'react-router'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import {
   createTimestamp,
@@ -20,10 +20,11 @@ import {
   DEFAULT_PROFILE_IMG,
 } from 'helpers'
 import { collection, query, where } from 'firebase/firestore'
-import { Loading } from 'components'
+import { Loading, Error } from 'components'
 import { useAuth, useFirestore } from 'hooks'
 
 export function Chat() {
+  const { user } = useAuth()
   const { request_id } = useParams()
   const request = useFirestore('requests', request_id)
   const [messages = [], loading] = useCollectionData(
@@ -53,7 +54,8 @@ export function Chat() {
   }, [messages, profile, recipientId])
 
   useEffect(() => {
-    document.getElementById('Chat-messages').scrollTop = 9999
+    const chat = document.getElementById('Chat-messages')
+    if (chat) chat.scrollTop = 9999
   }, [messages])
 
   function updateActiveMessage(message_id) {
@@ -82,6 +84,18 @@ export function Chat() {
     if (e.key === 'Enter' && inputValue) {
       send()
     }
+  }
+
+  if (
+    request &&
+    profile &&
+    !(request.donor_id === profile.id || request.owner_id === profile.id)
+  ) {
+    return <Navigate to={`requests/${request_id}`} />
+  }
+
+  if (!user) {
+    return <Error message="You do not have permission to view this chat" />
   }
 
   return (

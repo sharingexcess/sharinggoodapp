@@ -24,7 +24,7 @@ body {
 }
 
 @mixin page {
-  padding: 64px 16px 16px 16px;
+  padding: 92px 16px 16px 16px;
   min-height: 100vh;
   @media all and (display-mode: standalone) {
     padding: 174px 16px 108px 16px;

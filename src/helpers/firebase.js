@@ -1,15 +1,11 @@
 import { initializeApp } from 'firebase/app'
 import { getAnalytics } from 'firebase/analytics'
 import { getAuth, signOut, updateProfile } from 'firebase/auth'
-import { nanoid } from 'nanoid'
+import { customAlphabet } from 'nanoid'
 import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
-import {
-  // collection,
-  doc,
-  getDoc,
-  getFirestore,
-  setDoc,
-} from 'firebase/firestore'
+import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore'
+
+const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwqyz', 8)
 
 const firebaseConfig = {
   apiKey: 'AIzaSyAmhJZM1KFTNre0aKJ06y_rfP43e3FMjFA',
@@ -29,6 +25,7 @@ export const storage = getStorage()
 
 export function handleLogout() {
   signOut(auth)
+  window.location.replace('/')
   window.location.reload()
 }
 

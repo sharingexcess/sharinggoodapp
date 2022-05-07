@@ -11,6 +11,7 @@ import {
   Help,
   Login,
   Home,
+  Error,
 } from 'components'
 import { Auth, Firestore } from './providers'
 import { EmojiProvider } from 'react-apple-emojis'
@@ -24,7 +25,8 @@ ReactDOM.render(
         <Firestore>
           <Header />
           <Routes>
-            <Route path="/" element={<Requests />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/requests" element={<Requests />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<EditProfile />} />
             <Route path="/requests" element={<Requests />} />
@@ -32,6 +34,7 @@ ReactDOM.render(
             <Route path="/requests/:request_id" element={<Request />} />
             <Route path="/requests/:request_id/chat" element={<Chat />} />
             <Route path="/help" element={<Help />} />
+            <Route path="/error" element={<Error />} />
           </Routes>
         </Firestore>
       </Auth>

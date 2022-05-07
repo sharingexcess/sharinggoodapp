@@ -1,11 +1,5 @@
 import { useEffect, useState } from 'react'
-import {
-  createTimestamp,
-  firestore,
-  upload,
-  storage,
-  setFirestoreData,
-} from 'helpers'
+import { createTimestamp, firestore, storage } from 'helpers'
 import { collection, doc, setDoc } from 'firebase/firestore'
 import { useAuth } from 'hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -14,7 +8,6 @@ import { Link } from 'react-router-dom'
 // storage
 import { ref } from 'firebase/storage'
 import { useUploadFile } from 'react-firebase-hooks/storage'
-import { Loading } from 'components'
 
 export function EditProfile() {
   const { profile, user } = useAuth()
@@ -62,17 +55,13 @@ export function EditProfile() {
   // STORAGE
   const [uploadFile, uploading, snapshot, error] = useUploadFile()
   const fileRef = ref(storage, 'photos/' + user.uid + '.png') // pull file extension from os
-  console.log(fileRef)
   const [selectedFile, setSelectedFile] = useState()
-
-  useEffect(() => console.log(error), [error])
 
   const upload = async () => {
     if (selectedFile) {
-      const result = await uploadFile(fileRef, selectedFile, {
+      await uploadFile(fileRef, selectedFile, {
         contentType: 'image/png', // pull content type from file
       })
-      console.log(result)
       // setFirestoreData('profiles', profile.id, { uploaded_photo_path: result.ROGHE_FILL_THIS_OUT })
     }
   }
@@ -93,7 +82,6 @@ export function EditProfile() {
         {/* UPLOAD */}
         {error && <strong>Error: {error.message}</strong>}
         {uploading && <span>Uploading file...</span>}
-        {snapshot && console.log(snapshot)}
         {selectedFile && <span>Selected file: {selectedFile.name}</span>}
         <input
           type="file"

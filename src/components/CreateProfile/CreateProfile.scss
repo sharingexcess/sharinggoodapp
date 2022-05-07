@@ -1,36 +1,63 @@
-#profile-creation {
-  font-family: 'Montserrat', sans-serif;
+#CreateProfile {
+  @include page;
 
-  button {
-    width: 90vw;
-    border-radius: 45px;
-    color: white;
-    border: none;
-    background-color: #00ad9f;
-  }
+  #CreateProfile-photo {
+    position: relative;
 
-  textarea {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
+    #CreateProfile-curr-photo {
+      height: 150px;
+      width: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
 
-    border: none;
-    outline: none;
-    resize: none;
-    border-bottom: 1px solid black;
-    width: 80%;
+    #CreateProfile-edit-photo {
+      position: absolute;
+      padding: 12px;
+      border-radius: 50%;
+      bottom: 0;
+      left: calc(50% + 32px);
+      border: 2px solid var(--se-white);
+      background: var(--se-green-primary);
+      color: var(--se-white);
+    }
   }
 
   .profile-creation-form-field {
     display: flex;
     padding: 32px 0;
     justify-content: space-between;
+    align-items: flex-start;
     text-align: end;
+
+    .se-flex-container {
+      margin-top: -8px;
+      width: 70%;
+
+      .se-button {
+        flex-grow: 1;
+        margin: 0 4px;
+      }
+    }
 
     input {
       border: none;
       border-bottom: 1px solid black;
-      width: 80%;
+      width: 70%;
+      font-size: 16px;
+    }
+
+    textarea {
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+
+      border: none;
+      outline: none;
+      resize: none;
+      border-bottom: 1px solid black;
+      width: 70%;
+      font-size: 16px;
     }
   }
 }

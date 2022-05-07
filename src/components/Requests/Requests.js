@@ -34,11 +34,15 @@ export function Requests() {
       return requests.filter(r => r.status === STATUSES.OPEN)
     } else if (filter === STATUSES.PENDING) {
       return requests.filter(
-        r => r.status === STATUSES.PENDING && r.donor_id === profile.id
+        r =>
+          r.status === STATUSES.PENDING &&
+          (r.donor_id === profile.id || r.owner_id === profile.id)
       )
     } else if (filter === STATUSES.COMPLETED) {
       return requests.filter(
-        r => r.status === STATUSES.COMPLETED && r.donor_id === profile.id
+        r =>
+          r.status === STATUSES.COMPLETED &&
+          (r.donor_id === profile.id || r.owner_id === profile.id)
       )
     }
   }

@@ -2,6 +2,7 @@
   @include page;
 
   #Chat-header {
+    position: relative;
     padding-bottom: 24px;
     z-index: 2;
     background: linear-gradient(

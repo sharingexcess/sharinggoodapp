@@ -31,10 +31,10 @@ import {
 
 export function Request() {
   const { request_id } = useParams()
+  const { profile } = useAuth()
   const r = useFirestore('requests', request_id)
   const owner = useFirestore('profiles', r ? r.owner_id : null)
   const donor = useFirestore('profiles', r ? r.donor_id : null)
-  const { profile } = useAuth()
   const [working, setWorking] = useState(false)
 
   const is_owner = r && profile && profile.id === r.owner_id
@@ -215,7 +215,7 @@ export function Request() {
               </>
             )}
             <Spacer height={8} />
-            {donor && (
+            {donor && !is_owner && (
               <Link
                 to={`/requests/${request_id}/chat`}
                 style={{ width: ' 100%' }}

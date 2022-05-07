@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { Menu } from 'components'
 
 export function Header() {
-  const { profile } = useAuth()
+  const { user, profile } = useAuth()
   const isMobile = useIsMobile()
   const [menuOpen, setMenuOpen] = useState(!isMobile)
 
@@ -18,15 +18,15 @@ export function Header() {
       <Menu isOpen={menuOpen} setIsOpen={setMenuOpen} />
       <Link to="/">
         <Text type="secondary-header">
-          Sharing <span id="green">Good</span>
+          💚 Sharing <span id="green">Good</span>
         </Text>
       </Link>
-      {profile && isMobile && (
+      {user && profile && isMobile && (
         <Button type="tertiary" handler={() => setMenuOpen(true)}>
           <img src="/hamburger.png" alt="request owner" />
         </Button>
       )}
-      {!profile && (
+      {!user && (
         <Link to="/login">
           <Button color="green" size="small">
             Login

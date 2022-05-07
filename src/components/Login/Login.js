@@ -9,39 +9,46 @@ import { auth } from 'helpers'
 import { useNavigate } from 'react-router'
 import { Header } from 'components/Header/Header'
 import { Button, Spacer, Text } from '@sharingexcess/designsystem'
+import { useAuth } from 'hooks'
 
 export function Login() {
+  const { user } = useAuth()
   const [submitted, setSubmitted] = useState(false)
   const [email, setEmail] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
-    const url = window.location.href
-    const email = window.localStorage.getItem('firebase_auth_email')
+    if (!user) {
+      const url = window.location.href
+      const email = window.localStorage.getItem('firebase_auth_email')
 
-    if (!isSignInWithEmailLink(auth, url)) {
-      // handle if login redirect url is invalid
-      return
+      if (!isSignInWithEmailLink(auth, url)) {
+        // handle if login redirect url is invalid
+        return
+      }
+      if (!email) {
+        // handle if no email is stored in local storage
+        console.error(
+          'Unable to login with redirect: no email in localstorage.'
+        )
+        navigate('/error')
+      } else {
+        signInWithEmailLink(auth, email, url)
+          .then(() => {
+            // clear the temp storage with the signin email address
+            window.localStorage.removeItem('firebase_auth_email')
+            window.location.href = '/requests'
+          })
+          .catch(error => {
+            console.error(
+              'Unable to login with redirect: invalid response from firebase auth,',
+              error
+            )
+            navigate('/error')
+          })
+      }
     }
-    if (!email) {
-      // handle if no email is stored in local storage
-      console.error('Unable to login with redirect: no email in localstorage.')
-      navigate('/error')
-    } else {
-      signInWithEmailLink(auth, email, url)
-        .then(() => {
-          // clear the temp storage with the signin email address
-          window.localStorage.removeItem('firebase_auth_email')
-        })
-        .catch(error => {
-          console.error(
-            'Unable to login with redirect: invalid response from firebase auth,',
-            error
-          )
-          navigate('/error')
-        })
-    }
-  }, [navigate])
+  }, [navigate, user])
 
   function handleSubmit() {
     // handle if the user input is not a valid email
