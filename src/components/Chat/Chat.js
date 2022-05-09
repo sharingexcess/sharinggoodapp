@@ -40,18 +40,12 @@ export function Chat() {
   const [activeMessage, setActiveMessage] = useState(null)
 
   useEffect(() => {
-    function findRecipientId() {
-      for (const i of messages) {
-        if (i.sender_id !== profile.id) {
-          setRecipientId(i.sender_id)
-          break
-        }
-      }
+    if (request && profile && !recipientId) {
+      if (request.owner_id !== profile.id) {
+        setRecipientId(request.owner_id)
+      } else setRecipientId(request.donor_id)
     }
-    if (messages && profile && !recipientId) {
-      findRecipientId()
-    }
-  }, [messages, profile, recipientId])
+  }, [request, profile, recipientId])
 
   useEffect(() => {
     const chat = document.getElementById('Chat-messages')
@@ -68,8 +62,10 @@ export function Chat() {
       id,
       request_id,
       sender_id: profile.id,
+      recipient_id: recipientId,
       text: inputValue,
       timestamp_created: createTimestamp(),
+      timestamp_seen: null,
     })
     setInputValue('')
   }

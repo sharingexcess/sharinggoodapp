@@ -8,9 +8,18 @@ import {
   Button,
 } from '@sharingexcess/designsystem'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLocationDot, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import {
+  faBuilding,
+  faLocationDot,
+  faPlusCircle,
+} from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
-import { COLLECTIONS, STATUSES } from 'helpers'
+import {
+  COLLECTIONS,
+  generateUniqueId,
+  setFirestoreData,
+  STATUSES,
+} from 'helpers'
 import { useAuth } from 'hooks'
 
 export function Requests() {
@@ -48,7 +57,8 @@ export function Requests() {
   }
 
   function Request({ r }) {
-    return (
+    const owner = useFirestore(COLLECTIONS.PROFILES, r.owner_id)
+    return r && owner ? (
       <Link
         to={`/requests/${r.id}`}
         key={r.id}
@@ -64,15 +74,22 @@ export function Requests() {
           <Text type="section-header" classList={['Request-title']}>
             {r.title}
           </Text>
-          <FlexContainer direction="horizontal" primaryAlign="start">
-            <FontAwesomeIcon
-              icon={faLocationDot}
-              style={{ color: '#4EA528', fontSize: 12 }}
-            />
-            <Spacer width={8}></Spacer>
-            <Text type="subheader" color="green">
-              {r.school}
-            </Text>
+          <Spacer height={4} />
+          <FlexContainer primaryAlign="start">
+            {owner.location && (
+              <Text color="green" classList={['Request-location']}>
+                <FontAwesomeIcon icon={faLocationDot} />
+                <Spacer width={8} />
+                {owner.location}
+              </Text>
+            )}
+            {owner.school && (
+              <Text color="black" classList={['Request-school']}>
+                <FontAwesomeIcon icon={faBuilding} />
+                <Spacer width={8} />
+                {owner.school}
+              </Text>
+            )}
           </FlexContainer>
           <Spacer height={4} />
           <Text type="small" color="grey" classList={['Request-description']}>
@@ -80,13 +97,23 @@ export function Requests() {
           </Text>
         </FlexContainer>
       </Link>
-    )
+    ) : null
+  }
+
+  async function sendTestEmail() {
+    const id = await generateUniqueId('notifications')
+    setFirestoreData('notifications', id, {
+      to: 'ryan@sharingexcess.com',
+      message: {
+        subject: 'Test Email',
+        text: 'hello world!',
+      },
+    })
   }
 
   return (
     <div id="Requests">
       <FlexContainer direction="vertical" secondaryAlign="start" fullWidth>
-        <Spacer height={24} />
         <FlexContainer primaryAlign="space-between">
           <Text type="primary-header" align="left">
             Requests
@@ -96,6 +123,7 @@ export function Requests() {
               <FontAwesomeIcon icon={faPlusCircle} id="green" size="2x" />
             </Link>
           )}
+          <Button handler={sendTestEmail}>Test Email</Button>
         </FlexContainer>
         <Spacer height={8} />
         <FlexContainer primaryAlign="start" id="Requests-filters">

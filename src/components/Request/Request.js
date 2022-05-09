@@ -145,7 +145,8 @@ export function Request() {
                 </Text>
                 <Text bold>{owner.name}</Text>
                 <Text type="small" color="grey">
-                  {owner.school}
+                  {owner.location || 'no listed location'} -{' '}
+                  {owner.school || 'no listed school'}
                 </Text>
               </FlexContainer>
             </FlexContainer>
