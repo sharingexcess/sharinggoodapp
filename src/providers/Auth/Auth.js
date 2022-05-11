@@ -13,7 +13,7 @@ export function Auth({ children }) {
 
   useEffect(() => {
     if (user) {
-      setProfile(null)
+      // setProfile(null)
       const userRef = doc(collection(firestore, 'profiles'), user.uid)
       onSnapshot(
         userRef,
@@ -24,8 +24,8 @@ export function Auth({ children }) {
               ref(storage, profile.uploaded_photo_path)
             )
             profile.photoURL = url
-            setProfile(profile)
           }
+          setProfile(profile)
         },
         error => console.error(error)
       )
