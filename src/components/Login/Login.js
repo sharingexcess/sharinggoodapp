@@ -1,45 +1,61 @@
 import { useState, useEffect } from 'react'
-import {
-  isSignInWithEmailLink,
-  sendSignInLinkToEmail,
-  signInWithEmailLink,
-} from 'firebase/auth'
+import { signInWithEmailAndPassword } from 'firebase/auth'
 import isEmail from 'validator/lib/isEmail'
 import { auth } from 'helpers'
 import { useNavigate } from 'react-router'
 import { Header } from 'components/Header/Header'
-import { Button, Spacer, Text } from '@sharingexcess/designsystem'
-import { useAuth } from 'hooks'
+import {
+  Button,
+  FlexContainer,
+  Spacer,
+  Text,
+} from '@sharingexcess/designsystem'
+import { useAuth, useFirestore } from 'hooks'
+// import { SignUp } from 'components/SignUp/SignUp'
+// orogheneSHARES2!
 
 export function Login() {
   const { user } = useAuth()
-  const [submitted, setSubmitted] = useState(false)
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const profiles = useFirestore('profiles')
   const navigate = useNavigate()
+  const [signedUp, setSignedUp] = useState(false)
 
   useEffect(() => {
     if (!user) {
-      const url = window.location.href
-      const email = window.localStorage.getItem('firebase_auth_email')
+      if (!email) return
+      if (!password) return
+      signInWithEmailAndPassword(auth, email, password)
+        .then(userCredential => {
+          window.location.href = '/requests'
+          console.log(userCredential.user)
+        })
+        .catch(error => {
+          console.error(`[${error.code}]: ${error.message}`)
+          console.error(
+            'Unable to login with redirect: invalid response from firebase auth,',
+            error
+          )
+          navigate('/error')
+        })
+    }
+  }, [navigate, user, email])
 
-      if (!isSignInWithEmailLink(auth, url)) {
-        // handle if login redirect url is invalid
-        return
-      }
-      if (!email) {
-        // handle if no email is stored in local storage
-        console.error(
-          'Unable to login with redirect: no email in localstorage.'
-        )
-        navigate('/error')
-      } else {
-        signInWithEmailLink(auth, email, url)
-          .then(() => {
-            // clear the temp storage with the signin email address
-            window.localStorage.removeItem('firebase_auth_email')
+  function handleSubmit() {
+    if (!isEmail(email)) {
+      window.alert('Please enter a valid email address!')
+    } else if (isSignedUp(email)) {
+      setSignedUp(true)
+      // need to find a way to render password, sign in separately
+      if (password) {
+        signInWithEmailAndPassword(auth, email, password)
+          .then(userCredential => {
             window.location.href = '/requests'
+            console.log(userCredential.user)
           })
           .catch(error => {
+            console.error(`[${error.code}]: ${error.message}`)
             console.error(
               'Unable to login with redirect: invalid response from firebase auth,',
               error
@@ -47,64 +63,10 @@ export function Login() {
             navigate('/error')
           })
       }
-    }
-  }, [navigate, user])
-
-  function handleSubmit() {
-    // handle if the user input is not a valid email
-    if (!isEmail(email)) {
-      window.alert('Please enter a valid email address!')
     } else {
-      // store email in localstorage to recover later
-      window.localStorage.setItem('firebase_auth_email', email)
-      // use Google Firebase Auth to send an email to the user
-      // containing a link with a authentication key in the URL
-      sendSignInLinkToEmail(auth, email, {
-        url: window.location.origin + '/login',
-        handleCodeInApp: true,
-      })
-        // once the email is sent, update the state to change the UI
-        .then(() => setSubmitted(true))
-        // if the email fails to send, notify the user that an error has occurred
-        .catch(error =>
-          window.alert(
-            `Uhoh... there was an error sending you a login email! Message: "${error}"`
-          )
-        )
+      // not signed up, go the /signup to create a new account
+      navigate('/signup')
     }
-  }
-
-  function handleReset() {
-    setEmail('')
-    setSubmitted(false)
-  }
-
-  function LoginConfirmation() {
-    return (
-      <main id="Login-Confirmation">
-        <Header />
-        <Spacer height={48} />
-        <Text type="primary-header">Check your email!</Text>
-        <Spacer height={16} />
-        <Text type="small" color="grey">
-          We sent a magic link to <b>{email}</b> <br />
-          Click the link to log in.
-        </Text>
-        <Spacer height={48} />
-        <Text>
-          Click here to try a{' '}
-          <Button
-            size="large"
-            type="tertiary"
-            color="green"
-            handler={handleReset}
-          >
-            different email
-          </Button>
-          .
-        </Text>
-      </main>
-    )
   }
 
   function handleKeyPress(e) {
@@ -113,34 +75,52 @@ export function Login() {
     }
   }
 
-  if (submitted) return <LoginConfirmation />
-  else
-    return (
-      <main id="Login">
-        <Header />
-        <Spacer height={48} />
-        <Text type="primary-header">Login</Text>
-        <Spacer height={4} />
-        <Text type="small" color="grey">
-          Use an email that you can access on this device.
-          <br />
-          We'll send you a magic link to sign in automatically.
-        </Text>
+  function isSignedUp(email) {
+    // const profile = useFirestore('profiles', email)
+    for (const profile of profiles) {
+      if (profile.email === email) return true
+    }
+    return false
+  }
 
-        <div id="form-field">
-          <label htmlFor="email">EMAIL</label>
-          <input
-            onKeyPress={handleKeyPress}
-            type="email"
-            name="email"
-            value={email}
-            onChange={event => setEmail(event.target.value)}
-          />
-        </div>
-
-        <Button color="green" size="large" fullWidth handler={handleSubmit}>
-          Login
-        </Button>
-      </main>
-    )
+  return (
+    <main id="Login">
+      <Header />
+      <Spacer height={48} />
+      <Text type="primary-header">Login</Text>
+      <Spacer height={4} />
+      <Text type="small" color="grey">
+        Use an email that you can access on this device.
+      </Text>
+      <div id="form-field">
+        <FlexContainer direction="vertical" secondaryAlign="start">
+          <Text>
+            <label htmlFor="email">EMAIL</label>
+            <input
+              onKeyPress={handleKeyPress}
+              type="email"
+              name="email"
+              value={email}
+              onChange={event => setEmail(event.target.value)}
+            />
+          </Text>
+          {signedUp && (
+            <Text>
+              <label htmlFor="password">PASSWORD</label>
+              <input
+                onKeyPress={handleKeyPress}
+                type="password"
+                name="password"
+                value={password}
+                onChange={event => setPassword(event.target.value)}
+              />
+            </Text>
+          )}
+        </FlexContainer>
+      </div>
+      <Button color="green" size="large" fullWidth handler={handleSubmit}>
+        Login
+      </Button>
+    </main>
+  )
 }

@@ -12,6 +12,7 @@ import {
   Login,
   Home,
   Error,
+  SignUp,
 } from 'components'
 import { Auth, Firestore } from './providers'
 import { EmojiProvider } from 'react-apple-emojis'
@@ -28,6 +29,7 @@ ReactDOM.render(
             <Route path="/" element={<Home />} />
             <Route path="/requests" element={<Requests />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
             <Route path="/profile" element={<EditProfile />} />
             <Route path="/requests" element={<Requests />} />
             <Route path="/create-request" element={<Form />} />
