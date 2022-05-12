@@ -1,4 +1,4 @@
-import { Loading, Header, CreateProfile } from 'components'
+import { Loading, Header, CreateProfile, Error } from 'components'
 import { onAuthStateChanged } from 'firebase/auth'
 import { collection, doc, onSnapshot } from 'firebase/firestore'
 import { getDownloadURL, ref } from 'firebase/storage'
@@ -13,19 +13,18 @@ export function Auth({ children }) {
 
   useEffect(() => {
     if (user) {
-      // setProfile(null)
       const userRef = doc(collection(firestore, 'profiles'), user.uid)
       onSnapshot(
         userRef,
         async doc => {
           const profile = doc.data()
-          if (profile.uploaded_photo_path) {
+          if (profile && profile.uploaded_photo_path) {
             const url = await getDownloadURL(
               ref(storage, profile.uploaded_photo_path)
             )
             profile.photoURL = url
           }
-          setProfile(profile)
+          setProfile(profile || null)
         },
         error => console.error(error)
       )
@@ -33,19 +32,18 @@ export function Auth({ children }) {
   }, [user])
 
   useEffect(() => {
-    onAuthStateChanged(auth, currentUser => {
-      if (currentUser) {
-        setUser(currentUser)
-      } else {
-        setUser(null)
-      }
-    })
+    onAuthStateChanged(auth, currentUser => setUser(currentUser))
   }, [])
 
-  if (user === undefined || profile === null)
-    return <Loading text={'Signing in...'} />
+  // if there's no user or no profile, show a loading screen
+  if (user === undefined) return <Loading text={'Signing in...'} />
+  if (user && profile === undefined) return <Loading text={'Signing in...'} />
 
-  if (user && !profile && profile !== null)
+  // if there is a user, and the profile is "null",
+  // this means that we've already checked for a profile and there is none
+  // in this case, don't show an infinite loading screen,
+  // instead ask the user to create a profile record
+  if (user && profile === null)
     return (
       <AuthContext.Provider value={{ user }}>
         <Header />
@@ -53,6 +51,12 @@ export function Auth({ children }) {
       </AuthContext.Provider>
     )
 
+  if (profile && profile.is_disabled) {
+    return <Error message="Your account has been disabled." />
+  }
+
+  // once we have both a user and a profile,
+  // render the content of the rest of the app
   return (
     <AuthContext.Provider value={{ user, profile, handleLogout }}>
       {children}

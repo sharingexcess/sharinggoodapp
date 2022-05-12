@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from 'react'
-import { createTimestamp, firestore, storage, upload } from 'helpers'
+import { useMemo, useState } from 'react'
+import { createTimestamp, firestore, storage } from 'helpers'
 import { collection, doc, setDoc } from 'firebase/firestore'
 import { useAuth } from 'hooks'
 import {
@@ -8,18 +8,18 @@ import {
   Spacer,
   Text,
 } from '@sharingexcess/designsystem'
-import { ProfilePhoto } from 'components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit } from '@fortawesome/free-solid-svg-icons'
 import { useUploadFile } from 'react-firebase-hooks/storage'
 import { ref } from 'firebase/storage'
-import { Ellipsis } from 'components/Ellipsis/Ellipsis'
+import { Ellipsis, Page, ProfilePhoto } from 'components'
 
 export function CreateProfile() {
   const { user } = useAuth()
   const [values, setValues] = useState({
     permission_level: 1,
     name: user.displayName || '',
+    pronouns: '',
     location: '',
     school: '',
     bio: '',
@@ -57,7 +57,8 @@ export function CreateProfile() {
         id: user.uid,
         email: user.email,
         photoURL: user.photoURL,
-        uploaded_photo_path,
+        uploaded_photo_path: uploaded_photo_path || null,
+        is_disabled: false,
         timestamp_created: createTimestamp(),
         timestamp_updated: createTimestamp(),
       }
@@ -73,7 +74,7 @@ export function CreateProfile() {
     const { name, value } = event.target
     setValues({
       ...values,
-      [name]: value,
+      [name]: name === 'permission_level' ? parseInt(value) : value,
     })
   }
 
@@ -81,8 +82,18 @@ export function CreateProfile() {
     if (e.target.files[0]) setFileUpload(e.target.files[0])
   }
 
+  function isFormComplete() {
+    return (
+      values.name &&
+      values.pronouns &&
+      values.location &&
+      values.bio &&
+      (values.permission_level < 3 || values.school) // if your permission is less than 3, you don't need a school
+    )
+  }
+
   return (
-    <main id="CreateProfile">
+    <Page id="CreateProfile">
       <Text type="secondary-header" color="black">
         Create Your Profile
       </Text>
@@ -146,6 +157,17 @@ export function CreateProfile() {
         />
       </div>
       <div className="profile-creation-form-field">
+        <label htmlFor="location">PRONOUNS </label>
+        <input
+          type="text"
+          name="pronouns"
+          id="pronouns"
+          value={values.pronouns}
+          label="pronouns"
+          onChange={handleInputChange}
+        />
+      </div>
+      <div className="profile-creation-form-field">
         <label htmlFor="location">LOCATION </label>
         <input
           type="text"
@@ -156,17 +178,19 @@ export function CreateProfile() {
           onChange={handleInputChange}
         />
       </div>
-      <div className="profile-creation-form-field">
-        <label htmlFor="school">SCHOOL </label>
-        <input
-          type="text"
-          name="school"
-          id="school"
-          value={values.school}
-          label="school"
-          onChange={handleInputChange}
-        />
-      </div>
+      {values.permission_level > 1 && (
+        <div className="profile-creation-form-field">
+          <label htmlFor="school">SCHOOL </label>
+          <input
+            type="text"
+            name="school"
+            id="school"
+            value={values.school}
+            label="school"
+            onChange={handleInputChange}
+          />
+        </div>
+      )}
       <div className="profile-creation-form-field">
         <label htmlFor="bio" style={{ textAlign: 'end' }}>
           ABOUT
@@ -187,6 +211,7 @@ export function CreateProfile() {
         fullWidth
         color="green"
         handler={handleSubmit}
+        disabled={working || !isFormComplete()}
       >
         {working ? (
           <>
@@ -197,6 +222,6 @@ export function CreateProfile() {
           'Save Changes'
         )}
       </Button>
-    </main>
+    </Page>
   )
 }

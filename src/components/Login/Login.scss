@@ -1,25 +1,30 @@
 #Login {
-  @include page;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-
-  #form-field {
-    display: flex;
+  label {
+    font-family: 'Poppins', sans-serif;
+    padding-right: 32px;
+    color: var(--se-grey-primary);
+    padding-bottom: 4px;
+  }
+  input {
+    border: none;
+    border-bottom: 1px solid var(--se-grey-primary);
+    padding-bottom: 8px;
     width: 100%;
-    padding: 64px 0;
-    label {
-      font-family: 'Poppins', sans-serif;
-      padding-right: 32px;
-      color: #4a4a4a;
+    font-size: 16px;
+    border-radius: 0;
+    outline: none;
+    transition: border 0.1s ease, padding-bottom 0.1s ease;
+
+    @include focus {
+      border-bottom: 3px solid var(--se-blue-primary);
+      padding-bottom: 6px;
     }
-    input {
-      border: none;
-      border-bottom: 1px solid #b4b4b4;
-      width: 100%;
-      font-size: 16px;
-      border-radius: 0;
+  }
+
+  .se-text {
+    .se-button.type-tertiary {
+      text-decoration: underline;
+      vertical-align: 5%;
     }
   }
 }

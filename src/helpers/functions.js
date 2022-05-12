@@ -29,3 +29,16 @@ export function getPermissionLevel(num) {
   if (num === 5) return 'admin'
   if (num === 9) return 'moderator'
 }
+
+// takes a phone number as a string, removes all formatting and returns in format (***) ***-****
+export function formatPhoneNumber(phoneNumberString) {
+  const cleaned = ('' + phoneNumberString).replace(/\D/g, '')
+  const match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/)
+  if (match) {
+    const intlCode = match[1] ? '+1 ' : ''
+    return [intlCode, '(', match[2], ') ', match[3], '-', match[4]]
+      .join('')
+      .replace('+1 ', '')
+  }
+  return null
+}

@@ -1,13 +1,4 @@
 #Request {
-  @include page;
-
-  #request-details-container {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    padding-bottom: 32px;
-  }
   img {
     width: 48px;
     height: 48px;

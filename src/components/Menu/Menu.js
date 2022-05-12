@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { useLocation } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import { useAuth, useIsMobile } from 'hooks'
 import { Text, Spacer } from '@sharingexcess/designsystem'
@@ -11,6 +11,7 @@ export function Menu({ isOpen, setIsOpen }) {
   const { pathname } = useLocation()
   // get current user state from AuthContext
   const { profile, handleLogout } = useAuth()
+  const navigate = useNavigate()
   const isMobile = useIsMobile()
 
   useEffect(() => {
@@ -98,16 +99,23 @@ export function Menu({ isOpen, setIsOpen }) {
             {profile && (
               <>
                 <MenuLink
-                  emoji="person"
+                  emoji="envelope"
                   num={20}
-                  label="&nbsp;&nbsp;Profile"
-                  url="/profile"
+                  label="&nbsp;&nbsp;Messages"
+                  url="/messages"
+                />
+                <MenuLink
+                  emoji="family"
+                  num={20}
+                  label="&nbsp;&nbsp;Profiles"
+                  url="/profiles"
                 />
 
                 <li
                   onClick={() => {
                     setIsOpen(false)
                     handleLogout()
+                    navigate('/')
                   }}
                 >
                   <Text

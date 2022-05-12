@@ -12,35 +12,21 @@ function Firestore({ children }) {
   const { profile } = useAuth()
 
   const [requests] = useCollectionData(
-    collection(firestore, COLLECTIONS.REQUESTS)
+    query(
+      collection(firestore, COLLECTIONS.REQUESTS),
+      where('is_hidden', '!=', true)
+    )
   )
   const [profiles_raw] = useCollectionData(
     collection(firestore, COLLECTIONS.PROFILES)
   )
   const [profiles, setProfiles] = useState()
-
-  const [unread_messages] = useCollectionData(
+  const [conversations] = useCollectionData(
     query(
-      collection(firestore, COLLECTIONS.MESSAGES),
-      where('recipient_id', '==', profile ? profile.id : null),
-      where('timestamp_seen', '==', null)
+      collection(firestore, COLLECTIONS.CONVERSATIONS),
+      where('profiles', 'array-contains', profile ? profile.id : '')
     )
   )
-
-  useEffect(() => {
-    if (unread_messages) {
-      if ('setAppBadge' in navigator && 'clearAppBadge' in navigator) {
-        console.log('setting badge api')
-        navigator
-          .setAppBadge(unread_messages.length)
-          .catch(error => console.error('Could not set badge count:', error))
-      } else {
-        console.log('no badge api')
-      }
-    }
-  }, [unread_messages])
-
-  console.log(unread_messages)
 
   useEffect(() => {
     async function populateProfiles() {
@@ -59,7 +45,7 @@ function Firestore({ children }) {
   }, [profiles_raw])
 
   return (
-    <FirestoreContext.Provider value={{ requests, profiles }}>
+    <FirestoreContext.Provider value={{ requests, profiles, conversations }}>
       {children}
     </FirestoreContext.Provider>
   )

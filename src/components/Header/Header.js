@@ -1,11 +1,13 @@
 import { useAuth, useIsMobile } from 'hooks'
 import { FlexContainer, Text, Button } from '@sharingexcess/designsystem'
 import { Link } from 'react-router-dom'
+import { useLocation } from 'react-router'
 import { useState } from 'react'
 import { Menu } from 'components'
 
 export function Header() {
   const { user, profile } = useAuth()
+  const { pathname } = useLocation()
   const isMobile = useIsMobile()
   const [menuOpen, setMenuOpen] = useState(!isMobile)
 
@@ -26,7 +28,7 @@ export function Header() {
           <img src="/hamburger.png" alt="request owner" />
         </Button>
       )}
-      {!user && (
+      {!user && !['/login', '/signup'].includes(pathname) && (
         <Link to="/login">
           <Button color="green" size="small">
             Login

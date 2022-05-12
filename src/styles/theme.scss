@@ -1,7 +1,4 @@
 :root {
-  --color-blue: #251f5f;
-  --color-orange: #ffb30e;
-  --color-green: #00ad9f;
   box-sizing: border-box;
 }
 
@@ -19,17 +16,37 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+::-webkit-scrollbar {
+  width: 0 !important; /* Remove scrollbar space */
+  background: transparent !important; /* Optional: just make scrollbar invisible */
+}
+
 .green {
   color: #4ea528;
 }
 
-@mixin page {
-  padding: 92px 16px 16px 16px;
-  min-height: 100vh;
-  @media all and (display-mode: standalone) {
-    padding: 174px 16px 108px 16px;
-    min-height: calc(100vh + 54px);
+input,
+textarea {
+  border: none;
+  padding-left: 0;
+  padding-right: 0;
+  border-bottom: 1px solid var(--se-grey-primary);
+  padding-bottom: 8px;
+  width: 100%;
+  font-size: 16px;
+  border-radius: 0;
+  outline: none;
+  transition: border 0.1s ease, padding-bottom 0.1s ease;
+
+  @include focus {
+    border-bottom: 3px solid var(--se-blue-primary);
+    padding-bottom: 6px;
   }
+}
+
+@mixin page {
+  padding: 92px 16px 48px 16px;
+  min-height: 100vh;
   width: 100%;
   max-width: 800px;
   margin: auto;
@@ -41,7 +58,7 @@ body {
   overflow-y: auto;
 
   @include desktop {
-    padding: 84px 32px 16px 314px;
+    padding: 84px 32px 48px 314px;
     max-width: 1100px;
   }
 }

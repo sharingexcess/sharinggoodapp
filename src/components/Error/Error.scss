@@ -1,5 +1,7 @@
 #Error {
-  @include page;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   h1 {
     font-size: 96px;

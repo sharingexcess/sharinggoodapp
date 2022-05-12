@@ -14,13 +14,9 @@ import {
   faPlusCircle,
 } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
-import {
-  COLLECTIONS,
-  generateUniqueId,
-  setFirestoreData,
-  STATUSES,
-} from 'helpers'
+import { COLLECTIONS, STATUSES } from 'helpers'
 import { useAuth } from 'hooks'
+import { Page } from 'components'
 
 export function Requests() {
   const navigate = useNavigate()
@@ -100,19 +96,8 @@ export function Requests() {
     ) : null
   }
 
-  async function sendTestEmail() {
-    const id = await generateUniqueId('notifications')
-    setFirestoreData('notifications', id, {
-      to: 'ryan@sharingexcess.com',
-      message: {
-        subject: 'Test Email',
-        text: 'hello world!',
-      },
-    })
-  }
-
   return (
-    <div id="Requests">
+    <Page id="Requests">
       <FlexContainer direction="vertical" secondaryAlign="start" fullWidth>
         <FlexContainer primaryAlign="space-between">
           <Text type="primary-header" align="left">
@@ -123,7 +108,6 @@ export function Requests() {
               <FontAwesomeIcon icon={faPlusCircle} id="green" size="2x" />
             </Link>
           )}
-          <Button handler={sendTestEmail}>Test Email</Button>
         </FlexContainer>
         <Spacer height={8} />
         <FlexContainer primaryAlign="start" id="Requests-filters">
@@ -173,6 +157,6 @@ export function Requests() {
             <Request key={request.id} r={request} />
           ))}
       </FlexContainer>
-    </div>
+    </Page>
   )
 }

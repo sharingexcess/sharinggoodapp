@@ -1,126 +1,160 @@
-import { useState, useEffect } from 'react'
-import { signInWithEmailAndPassword } from 'firebase/auth'
-import isEmail from 'validator/lib/isEmail'
+import { useEffect, useState } from 'react'
+import {
+  fetchSignInMethodsForEmail,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+} from 'firebase/auth'
+import { isEmail } from 'validator'
 import { auth } from 'helpers'
 import { useNavigate } from 'react-router'
-import { Header } from 'components/Header/Header'
+import { Header, Page } from 'components'
 import {
   Button,
   FlexContainer,
   Spacer,
   Text,
 } from '@sharingexcess/designsystem'
-import { useAuth, useFirestore } from 'hooks'
-// import { SignUp } from 'components/SignUp/SignUp'
-// orogheneSHARES2!
 
 export function Login() {
-  const { user } = useAuth()
+  const navigate = useNavigate()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const profiles = useFirestore('profiles')
-  const navigate = useNavigate()
-  const [signedUp, setSignedUp] = useState(false)
+  const [emailVerified, setEmailVerified] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState(false)
+  const [resetPassword, setResetPassword] = useState(false)
 
   useEffect(() => {
-    if (!user) {
-      if (!email) return
-      if (!password) return
-      signInWithEmailAndPassword(auth, email, password)
-        .then(userCredential => {
-          window.location.href = '/requests'
-          console.log(userCredential.user)
-        })
-        .catch(error => {
-          console.error(`[${error.code}]: ${error.message}`)
-          console.error(
-            'Unable to login with redirect: invalid response from firebase auth,',
-            error
-          )
-          navigate('/error')
-        })
-    }
-  }, [navigate, user, email])
+    // clear any previous errors when the user changes the email or password
+    setError(false)
+  }, [email, password])
 
-  function handleSubmit() {
-    if (!isEmail(email)) {
-      window.alert('Please enter a valid email address!')
-    } else if (isSignedUp(email)) {
-      setSignedUp(true)
-      // need to find a way to render password, sign in separately
-      if (password) {
-        signInWithEmailAndPassword(auth, email, password)
-          .then(userCredential => {
-            window.location.href = '/requests'
-            console.log(userCredential.user)
-          })
-          .catch(error => {
-            console.error(`[${error.code}]: ${error.message}`)
-            console.error(
-              'Unable to login with redirect: invalid response from firebase auth,',
-              error
-            )
-            navigate('/error')
-          })
-      }
+  async function handleVerifyEmail() {
+    const previous_signins = await fetchSignInMethodsForEmail(auth, email)
+    if (previous_signins && previous_signins.length) {
+      // HANDLE CASE: user has previously signed in, and has a password.
+      setEmailVerified(true)
     } else {
-      // not signed up, go the /signup to create a new account
-      navigate('/signup')
+      // HANDLE CASE: new user, so we redirect to the sign up page
+      navigate(`/signup?email=${encodeURIComponent(email)}`)
     }
+  }
+
+  async function handleLogin() {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => navigate('/requests'))
+      .catch(error => {
+        console.error(error)
+        setError(true)
+      })
   }
 
   function handleKeyPress(e) {
-    if (e.key === 'Enter' && email) {
-      handleSubmit()
+    if (e.key === 'Enter') {
+      if (inputsAreValid()) {
+        emailVerified ? handleLogin() : handleVerifyEmail()
+      } else
+        window.alert(
+          'Invalid login credentials! Please fill out your email and password.'
+        )
     }
   }
 
-  function isSignedUp(email) {
-    // const profile = useFirestore('profiles', email)
-    for (const profile of profiles) {
-      if (profile.email === email) return true
-    }
-    return false
+  function inputsAreValid() {
+    if (emailVerified) {
+      return isEmail(email) && password.length >= 6
+    } else return isEmail(email)
+  }
+
+  function handleResetPassword() {
+    setResetPassword(true)
+    sendPasswordResetEmail(auth, email)
+      .then(res => console.log(res))
+      .catch(e => console.error(e))
   }
 
   return (
-    <main id="Login">
+    <Page id="Login">
       <Header />
       <Spacer height={48} />
-      <Text type="primary-header">Login</Text>
-      <Spacer height={4} />
-      <Text type="small" color="grey">
-        Use an email that you can access on this device.
+      <Text type="primary-header">
+        Sign in to
+        <br />
+        Sharing Good
       </Text>
-      <div id="form-field">
-        <FlexContainer direction="vertical" secondaryAlign="start">
-          <Text>
-            <label htmlFor="email">EMAIL</label>
-            <input
-              onKeyPress={handleKeyPress}
-              type="email"
-              name="email"
-              value={email}
-              onChange={event => setEmail(event.target.value)}
-            />
-          </Text>
-          {signedUp && (
-            <Text>
-              <label htmlFor="password">PASSWORD</label>
+      <Spacer height={8} />
+      <Text type="small" color="grey">
+        Enter your email below, and we'll go check
+        <br />
+        if we've seen you here before.
+      </Text>
+      <Spacer height={24} />
+      <FlexContainer direction="vertical" secondaryAlign="start">
+        <label htmlFor="email">EMAIL</label>
+        <input
+          onKeyPress={handleKeyPress}
+          type="email"
+          name="email"
+          value={email}
+          autoFocus={!emailVerified}
+          onChange={event => setEmail(event.target.value)}
+        />
+        <Spacer height={24} />
+        {emailVerified && (
+          <>
+            <label htmlFor="password">PASSWORD</label>
+            <FlexContainer secondaryAlign="start">
               <input
                 onKeyPress={handleKeyPress}
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 name="password"
                 value={password}
                 onChange={event => setPassword(event.target.value)}
+                autoFocus
               />
-            </Text>
-          )}
-        </FlexContainer>
-      </div>
-      <Button color="green" size="large" fullWidth handler={handleSubmit}>
-        Login
+              <Button
+                type="tertiary"
+                color="blue"
+                handler={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? 'hide' : 'show'}
+              </Button>
+            </FlexContainer>
+          </>
+        )}
+      </FlexContainer>
+      {error && (
+        <>
+          <Spacer height={16} />
+          <Text color="red">
+            {resetPassword ? (
+              'Reset link sent! Check your email, then return to the app to log in.'
+            ) : (
+              <>
+                Invalid password! Click{' '}
+                <Button
+                  type="tertiary"
+                  color="blue"
+                  handler={handleResetPassword}
+                >
+                  here
+                </Button>{' '}
+                to reset your password
+              </>
+            )}
+          </Text>
+        </>
+      )}
+      <Spacer height={24} />
+      <Button
+        disabled={!inputsAreValid()}
+        color="green"
+        size="large"
+        fullWidth
+        handler={emailVerified ? handleLogin : handleVerifyEmail}
+      >
+        {emailVerified ? 'Sign In' : 'Continue'}
       </Button>
-    </main>
+    </Page>
   )
 }

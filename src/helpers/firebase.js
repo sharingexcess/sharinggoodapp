@@ -25,8 +25,6 @@ export const storage = getStorage()
 
 export function handleLogout() {
   signOut(auth)
-  window.location.replace('/')
-  window.location.reload()
 }
 
 export async function generateUniqueId(collection) {

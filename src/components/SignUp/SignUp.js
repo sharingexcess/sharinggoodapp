@@ -1,33 +1,23 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { createUserWithEmailAndPassword } from 'firebase/auth'
 import isEmail from 'validator/lib/isEmail'
 import { auth } from 'helpers'
 import { useNavigate } from 'react-router'
-import { Header } from 'components/Header/Header'
+import { Header, Page } from 'components'
 import {
   Button,
   FlexContainer,
   Spacer,
   Text,
 } from '@sharingexcess/designsystem'
-import { useAuth } from 'hooks'
 
 export function SignUp() {
-  const { user } = useAuth()
-  const [email, setEmail] = useState('')
+  const init_email = new URLSearchParams(window.location.search).get('email')
+  const [email, setEmail] = useState(init_email || '')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState(false)
   const navigate = useNavigate()
-
-  useEffect(() => {
-    if (!user) {
-      if (!email) {
-        return
-      }
-      if (!password) {
-        return
-      }
-    }
-  }, [navigate, user, email])
 
   function handleSubmit() {
     if (!isEmail(email)) {
@@ -35,64 +25,94 @@ export function SignUp() {
     } else {
       // create user with email and password
       createUserWithEmailAndPassword(auth, email, password)
-        .then(userCredential => {
-          // Signed in
-          window.location.href = '/requests'
-          console.log(userCredential.user)
-        })
+        .then(() => navigate('/requests'))
         .catch(error => {
-          console.error(`[${error.code}]: ${error.message}`)
-          console.error(
-            'Unable to login with redirect: invalid response from firebase auth,',
-            error
-          )
-          navigate('/error')
+          console.error(error)
+          setError(true)
         })
     }
   }
 
   function handleKeyPress(e) {
-    if (e.key === 'Enter' && email) {
-      handleSubmit()
+    if (e.key === 'Enter') {
+      if (inputsAreValid()) {
+        handleSubmit()
+      } else
+        window.alert(
+          'Invalid credentials! Please enter a valid email and password.'
+        )
     }
   }
 
+  function inputsAreValid() {
+    return isEmail(email) && password.length >= 6
+  }
+
   return (
-    <main id="SignUp">
+    <Page id="SignUp">
       <Header />
       <Spacer height={48} />
-      <Text type="primary-header">SignUp</Text>
+      <Text type="primary-header">
+        Woohoo!
+        <br />A new user 🎉
+      </Text>
       <Spacer height={4} />
       <Text type="small" color="grey">
-        Use an email that you can access on this device.
+        Create a password below to start Sharing Good :)
       </Text>
-      <div id="form-field">
-        <FlexContainer direction="vertical" secondaryAlign="start">
-          <Text>
-            <label htmlFor="email">EMAIL</label>
-            <input
-              onKeyPress={handleKeyPress}
-              type="email"
-              name="email"
-              value={email}
-              onChange={event => setEmail(event.target.value)}
-            />
-          </Text>
-          <Text>
-            <label htmlFor="password">PASSWORD</label>
-            <input
-              onKeyPress={handleKeyPress}
-              type="password"
-              name="password"
-              value={password}
-              onChange={event => setPassword(event.target.value)}
-            />
-          </Text>
+      <Spacer height={24} />
+      <FlexContainer direction="vertical" secondaryAlign="start">
+        <label htmlFor="email">EMAIL</label>
+        <input
+          onKeyPress={handleKeyPress}
+          type="email"
+          name="email"
+          value={email}
+          onChange={event => setEmail(event.target.value)}
+        />
+        <Spacer height={24} />
+        <label htmlFor="password">PASSWORD</label>
+        <FlexContainer secondaryAlign="start">
+          <input
+            onKeyPress={handleKeyPress}
+            type={showPassword ? 'text' : 'password'}
+            name="password"
+            value={password}
+            onChange={event => setPassword(event.target.value)}
+            autoFocus
+          />
+          <Button
+            type="tertiary"
+            color="blue"
+            handler={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? 'hide' : 'show'}
+          </Button>
         </FlexContainer>
-      </div>
-      <Button color="green" size="large" fullWidth handler={handleSubmit}>
+        <Text type="small" color="grey">
+          Your password must be more than 6 characters.
+        </Text>
+      </FlexContainer>
+
+      {error && (
+        <>
+          <Spacer height={16} />
+          <Text color="red">
+            Whoops, looks like our database didn't like that password 😬 Please
+            try a different one!
+          </Text>
+        </>
+      )}
+      <Spacer height={24} />
+      <Button
+        disabled={!inputsAreValid()}
+        color="green"
+        size="large"
+        fullWidth
+        handler={handleSubmit}
+      >
         Sign Up
       </Button>
-    </main>
+    </Page>
   )
 }

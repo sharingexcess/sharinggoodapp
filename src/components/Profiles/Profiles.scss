@@ -1,0 +1,67 @@
+#Profiles {
+  label {
+    font-family: 'Poppins', sans-serif;
+    padding-right: 32px;
+    color: var(--se-grey-primary);
+    padding-bottom: 4px;
+  }
+  input {
+    border: none;
+    border-bottom: 1px solid var(--se-grey-primary);
+    padding-bottom: 8px;
+    width: 100%;
+    font-size: 16px;
+    border-radius: 0;
+    outline: none;
+    transition: border 0.1s ease, padding-bottom 0.1s ease;
+
+    @include focus {
+      border-bottom: 3px solid var(--se-blue-primary);
+      padding-bottom: 6px;
+    }
+  }
+
+  .wrapper {
+    width: 100%;
+    display: inline;
+    text-decoration: none;
+  }
+
+  .Profile {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: row;
+    margin-bottom: 8px;
+    padding: 16px 12px;
+    background: #efefefbb;
+    box-shadow: none;
+
+    .section-header {
+      padding-right: 32px;
+      @include mobile {
+        font-size: 18px;
+      }
+    }
+
+    div {
+      width: 100%;
+      overflow: hidden;
+      * {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+    }
+
+    .Profile-icon {
+      width: 48px;
+      height: 48px;
+      object-fit: cover;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-right: 16px;
+      background: var(--se-white);
+    }
+  }
+}

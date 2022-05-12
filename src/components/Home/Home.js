@@ -1,6 +1,7 @@
 import { useAuth } from 'hooks'
 import { Link, Navigate } from 'react-router-dom'
 import { Button, Spacer, Text } from '@sharingexcess/designsystem'
+import { Page } from 'components/Page/Page'
 
 export function Home() {
   const { user } = useAuth()
@@ -8,7 +9,7 @@ export function Home() {
     return <Navigate to="/requests" />
   }
   return (
-    <div id="Home">
+    <Page id="Home">
       <Spacer height={48} />
       <Text type="primary-header">
         Welcome to
@@ -32,6 +33,6 @@ export function Home() {
           Browse Requests
         </Button>
       </Link>
-    </div>
+    </Page>
   )
 }
