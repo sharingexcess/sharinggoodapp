@@ -1,7 +1,7 @@
 import { createContext, useEffect, useState } from 'react'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
-import { COLLECTIONS, firebase, firestore, storage } from 'helpers'
-import { collection, query, where, getDocs } from 'firebase/firestore'
+import { COLLECTIONS, firestore, storage } from 'helpers'
+import { collection, query, where } from 'firebase/firestore'
 import { getDownloadURL, ref } from 'firebase/storage'
 import { useAuth } from 'hooks'
 
