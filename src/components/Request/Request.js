@@ -31,6 +31,10 @@ export function Request() {
   const is_owner = r && profile && profile.id === r.owner_id
 
   async function handleAccept() {
+    if (!profile) {
+      navigate('/login')
+      return
+    }
     await setFirestoreData(COLLECTIONS.REQUESTS, request_id, {
       status: STATUSES.PENDING,
       donor_id: profile.id,
@@ -129,6 +133,10 @@ export function Request() {
   }
 
   async function handleOpenMessages() {
+    if (!profile) {
+      navigate('/login')
+      return
+    }
     const recipient = is_owner ? donor : owner
     const existing_conversation = conversations.find(i =>
       i.profiles.includes(recipient.id)
@@ -267,7 +275,7 @@ export function Request() {
                 </Button>
               </>
             )}
-            {profile.permission_level >= 5 && (
+            {profile && profile.permission_level >= 5 && (
               <>
                 <Spacer height={32} />
                 <Text type="section-header" color="grey">
