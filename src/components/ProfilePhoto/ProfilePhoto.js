@@ -6,6 +6,8 @@ export function ProfilePhoto({ profile = {}, className, id }) {
   const navigate = useNavigate()
   const src = profile.photoURL ? profile.photoURL : DEFAULT_PROFILE_IMG
 
+  className = className ? 'ProfilePhoto ' + className : 'ProfilePhoto'
+
   return (
     <img
       src={src}
