@@ -8,10 +8,15 @@ import {
   Button,
 } from '@sharingexcess/designsystem'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faLocationDot, faPlusCircle } from '@fortawesome/free-solid-svg-icons'
+import {
+  faBuilding,
+  faLocationDot,
+  faPlusCircle,
+} from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import { COLLECTIONS, STATUSES } from 'helpers'
 import { useAuth } from 'hooks'
+import { Page } from 'components'
 
 export function Requests() {
   const navigate = useNavigate()
@@ -34,17 +39,22 @@ export function Requests() {
       return requests.filter(r => r.status === STATUSES.OPEN)
     } else if (filter === STATUSES.PENDING) {
       return requests.filter(
-        r => r.status === STATUSES.PENDING && r.donor_id === profile.id
+        r =>
+          r.status === STATUSES.PENDING &&
+          (r.donor_id === profile.id || r.owner_id === profile.id)
       )
     } else if (filter === STATUSES.COMPLETED) {
       return requests.filter(
-        r => r.status === STATUSES.COMPLETED && r.donor_id === profile.id
+        r =>
+          r.status === STATUSES.COMPLETED &&
+          (r.donor_id === profile.id || r.owner_id === profile.id)
       )
     }
   }
 
   function Request({ r }) {
-    return (
+    const owner = useFirestore(COLLECTIONS.PROFILES, r.owner_id)
+    return r && owner ? (
       <Link
         to={`/requests/${r.id}`}
         key={r.id}
@@ -60,15 +70,22 @@ export function Requests() {
           <Text type="section-header" classList={['Request-title']}>
             {r.title}
           </Text>
-          <FlexContainer direction="horizontal" primaryAlign="start">
-            <FontAwesomeIcon
-              icon={faLocationDot}
-              style={{ color: '#4EA528', fontSize: 12 }}
-            />
-            <Spacer width={8}></Spacer>
-            <Text type="subheader" color="green">
-              {r.school}
-            </Text>
+          <Spacer height={4} />
+          <FlexContainer primaryAlign="start">
+            {owner.location && (
+              <Text color="green" classList={['Request-location']}>
+                <FontAwesomeIcon icon={faLocationDot} />
+                <Spacer width={8} />
+                {owner.location}
+              </Text>
+            )}
+            {owner.school && (
+              <Text color="black" classList={['Request-school']}>
+                <FontAwesomeIcon icon={faBuilding} />
+                <Spacer width={8} />
+                {owner.school}
+              </Text>
+            )}
           </FlexContainer>
           <Spacer height={4} />
           <Text type="small" color="grey" classList={['Request-description']}>
@@ -76,13 +93,12 @@ export function Requests() {
           </Text>
         </FlexContainer>
       </Link>
-    )
+    ) : null
   }
 
   return (
-    <div id="Requests">
+    <Page id="Requests">
       <FlexContainer direction="vertical" secondaryAlign="start" fullWidth>
-        <Spacer height={24} />
         <FlexContainer primaryAlign="space-between">
           <Text type="primary-header" align="left">
             Requests
@@ -141,6 +157,6 @@ export function Requests() {
             <Request key={request.id} r={request} />
           ))}
       </FlexContainer>
-    </div>
+    </Page>
   )
 }

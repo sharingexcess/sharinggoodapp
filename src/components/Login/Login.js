@@ -1,139 +1,160 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import {
-  isSignInWithEmailLink,
-  sendSignInLinkToEmail,
-  signInWithEmailLink,
+  fetchSignInMethodsForEmail,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
 } from 'firebase/auth'
-import isEmail from 'validator/lib/isEmail'
+import { isEmail } from 'validator'
 import { auth } from 'helpers'
 import { useNavigate } from 'react-router'
-import { Header } from 'components/Header/Header'
-import { Button, Spacer, Text } from '@sharingexcess/designsystem'
+import { Header, Page } from 'components'
+import {
+  Button,
+  FlexContainer,
+  Spacer,
+  Text,
+} from '@sharingexcess/designsystem'
 
 export function Login() {
-  const [submitted, setSubmitted] = useState(false)
-  const [email, setEmail] = useState('')
   const navigate = useNavigate()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [emailVerified, setEmailVerified] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState(false)
+  const [resetPassword, setResetPassword] = useState(false)
 
   useEffect(() => {
-    const url = window.location.href
-    const email = window.localStorage.getItem('firebase_auth_email')
+    // clear any previous errors when the user changes the email or password
+    setError(false)
+  }, [email, password])
 
-    if (!isSignInWithEmailLink(auth, url)) {
-      // handle if login redirect url is invalid
-      return
-    }
-    if (!email) {
-      // handle if no email is stored in local storage
-      console.error('Unable to login with redirect: no email in localstorage.')
-      navigate('/error')
+  async function handleVerifyEmail() {
+    const previous_signins = await fetchSignInMethodsForEmail(auth, email)
+    if (previous_signins && previous_signins.length) {
+      // HANDLE CASE: user has previously signed in, and has a password.
+      setEmailVerified(true)
     } else {
-      signInWithEmailLink(auth, email, url)
-        .then(() => {
-          // clear the temp storage with the signin email address
-          window.localStorage.removeItem('firebase_auth_email')
-        })
-        .catch(error => {
-          console.error(
-            'Unable to login with redirect: invalid response from firebase auth,',
-            error
-          )
-          navigate('/error')
-        })
+      // HANDLE CASE: new user, so we redirect to the sign up page
+      navigate(`/signup?email=${encodeURIComponent(email)}`)
     }
-  }, [navigate])
+  }
 
-  function handleSubmit() {
-    // handle if the user input is not a valid email
-    if (!isEmail(email)) {
-      window.alert('Please enter a valid email address!')
-    } else {
-      // store email in localstorage to recover later
-      window.localStorage.setItem('firebase_auth_email', email)
-      // use Google Firebase Auth to send an email to the user
-      // containing a link with a authentication key in the URL
-      sendSignInLinkToEmail(auth, email, {
-        url: window.location.origin + '/login',
-        handleCodeInApp: true,
+  async function handleLogin() {
+    signInWithEmailAndPassword(auth, email, password)
+      .then(() => navigate('/requests'))
+      .catch(error => {
+        console.error(error)
+        setError(true)
       })
-        // once the email is sent, update the state to change the UI
-        .then(() => setSubmitted(true))
-        // if the email fails to send, notify the user that an error has occurred
-        .catch(error =>
-          window.alert(
-            `Uhoh... there was an error sending you a login email! Message: "${error}"`
-          )
+  }
+
+  function handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      if (inputsAreValid()) {
+        emailVerified ? handleLogin() : handleVerifyEmail()
+      } else
+        window.alert(
+          'Invalid login credentials! Please fill out your email and password.'
         )
     }
   }
 
-  function handleReset() {
-    setEmail('')
-    setSubmitted(false)
+  function inputsAreValid() {
+    if (emailVerified) {
+      return isEmail(email) && password.length >= 6
+    } else return isEmail(email)
   }
 
-  function LoginConfirmation() {
-    return (
-      <main id="Login-Confirmation">
-        <Header />
-        <Spacer height={48} />
-        <Text type="primary-header">Check your email!</Text>
-        <Spacer height={16} />
-        <Text type="small" color="grey">
-          We sent a magic link to <b>{email}</b> <br />
-          Click the link to log in.
-        </Text>
-        <Spacer height={48} />
-        <Text>
-          Click here to try a{' '}
-          <Button
-            size="large"
-            type="tertiary"
-            color="green"
-            handler={handleReset}
-          >
-            different email
-          </Button>
-          .
-        </Text>
-      </main>
-    )
+  function handleResetPassword() {
+    setResetPassword(true)
+    sendPasswordResetEmail(auth, email)
+      .then(res => console.log(res))
+      .catch(e => console.error(e))
   }
 
-  function handleKeyPress(e) {
-    if (e.key === 'Enter' && email) {
-      handleSubmit()
-    }
-  }
-
-  if (submitted) return <LoginConfirmation />
-  else
-    return (
-      <main id="Login">
-        <Header />
-        <Spacer height={48} />
-        <Text type="primary-header">Login</Text>
-        <Spacer height={4} />
-        <Text type="small" color="grey">
-          Use an email that you can access on this device.
-          <br />
-          We'll send you a magic link to sign in automatically.
-        </Text>
-
-        <div id="form-field">
-          <label htmlFor="email">EMAIL</label>
-          <input
-            onKeyPress={handleKeyPress}
-            type="email"
-            name="email"
-            value={email}
-            onChange={event => setEmail(event.target.value)}
-          />
-        </div>
-
-        <Button color="green" size="large" fullWidth handler={handleSubmit}>
-          Login
-        </Button>
-      </main>
-    )
+  return (
+    <Page id="Login">
+      <Header />
+      <Spacer height={48} />
+      <Text type="primary-header">
+        Sign in to
+        <br />
+        Sharing Good
+      </Text>
+      <Spacer height={8} />
+      <Text type="small" color="grey">
+        Enter your email below, and we'll go check
+        <br />
+        if we've seen you here before.
+      </Text>
+      <Spacer height={24} />
+      <FlexContainer direction="vertical" secondaryAlign="start">
+        <label htmlFor="email">EMAIL</label>
+        <input
+          onKeyPress={handleKeyPress}
+          type="email"
+          name="email"
+          value={email}
+          autoFocus={!emailVerified}
+          onChange={event => setEmail(event.target.value)}
+        />
+        <Spacer height={24} />
+        {emailVerified && (
+          <>
+            <label htmlFor="password">PASSWORD</label>
+            <FlexContainer secondaryAlign="start">
+              <input
+                onKeyPress={handleKeyPress}
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                value={password}
+                onChange={event => setPassword(event.target.value)}
+                autoFocus
+              />
+              <Button
+                type="tertiary"
+                color="blue"
+                handler={() => setShowPassword(!showPassword)}
+              >
+                {showPassword ? 'hide' : 'show'}
+              </Button>
+            </FlexContainer>
+          </>
+        )}
+      </FlexContainer>
+      {error && (
+        <>
+          <Spacer height={16} />
+          <Text color="red">
+            {resetPassword ? (
+              'Reset link sent! Check your email, then return to the app to log in.'
+            ) : (
+              <>
+                Invalid password! Click{' '}
+                <Button
+                  type="tertiary"
+                  color="blue"
+                  handler={handleResetPassword}
+                >
+                  here
+                </Button>{' '}
+                to reset your password
+              </>
+            )}
+          </Text>
+        </>
+      )}
+      <Spacer height={24} />
+      <Button
+        disabled={!inputsAreValid()}
+        color="green"
+        size="large"
+        fullWidth
+        handler={emailVerified ? handleLogin : handleVerifyEmail}
+      >
+        {emailVerified ? 'Sign In' : 'Continue'}
+      </Button>
+    </Page>
+  )
 }

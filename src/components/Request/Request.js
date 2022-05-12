@@ -5,20 +5,19 @@ import {
   Spacer,
   Text,
 } from '@sharingexcess/designsystem'
-import { useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { useAuth, useFirestore } from 'hooks'
-import { Loading } from 'components/Loading/Loading'
+import { Loading, Page } from 'components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
 import {
-  handleImageFallback,
-  DEFAULT_PROFILE_IMG,
   setFirestoreData,
   COLLECTIONS,
   STATUSES,
   createTimestamp,
   firestore,
+  generateUniqueId,
 } from 'helpers'
 import {
   collection,
@@ -28,13 +27,16 @@ import {
   query,
   where,
 } from 'firebase/firestore'
+import { ProfilePhoto } from 'components/ProfilePhoto/ProfilePhoto'
 
 export function Request() {
+  const navigate = useNavigate()
   const { request_id } = useParams()
+  const { profile } = useAuth()
   const r = useFirestore('requests', request_id)
+  const conversations = useFirestore(COLLECTIONS.CONVERSATIONS)
   const owner = useFirestore('profiles', r ? r.owner_id : null)
   const donor = useFirestore('profiles', r ? r.donor_id : null)
-  const { profile } = useAuth()
   const [working, setWorking] = useState(false)
 
   const is_owner = r && profile && profile.id === r.owner_id
@@ -92,17 +94,42 @@ export function Request() {
     }
   }
 
+  function handleHideRequest() {
+    if (
+      window.confirm(
+        'Are you sure you want to hide this request? You will need to contact the tech team to recover a hidden request.'
+      )
+    ) {
+      setFirestoreData(COLLECTIONS.REQUESTS, request_id, {
+        is_hidden: true,
+      }).then(() => navigate('/requests'))
+    }
+  }
+
+  async function handleMessage() {
+    const recipient = is_owner ? owner : donor
+    const existing_conversation = conversations.find(i =>
+      i.profiles.includes(recipient.id)
+    )
+    if (existing_conversation) {
+      navigate(`/messages/${existing_conversation.id}`)
+    } else {
+      const id = await generateUniqueId(COLLECTIONS.CONVERSATIONS)
+      await setFirestoreData(COLLECTIONS.CONVERSATIONS, id, {
+        id,
+        profiles: [recipient.id, profile.id],
+        timestamp_created: createTimestamp(),
+      })
+      navigate(`/messages/${id}`)
+    }
+  }
+
   return (
-    <main id="Request">
-      {!r || !owner || working ? (
+    <Page id="Request">
+      {!r || !owner || (r.donor_id && !donor) || working ? (
         <Loading />
       ) : (
-        <FlexContainer
-          id="request-details-container"
-          direction="vertical"
-          primaryAlign="space-between"
-          fullWidth
-        >
+        <FlexContainer direction="vertical" primaryAlign="start">
           <FlexContainer direction="vertical" secondaryAlign="start">
             <FlexContainer primaryAlign="space-between">
               <Link to="/requests">
@@ -118,6 +145,7 @@ export function Request() {
 
             <FlexContainer direction="vertical" secondaryAlign="start">
               <Text color="green" type="small-header">
+                {is_owner ? 'YOUR ' : ''}
                 {r.status.toUpperCase()} REQUEST
               </Text>
 
@@ -129,15 +157,7 @@ export function Request() {
             <Spacer height={32} />
 
             <FlexContainer primaryAlign="start">
-              <img
-                src={
-                  owner && owner.photoURL
-                    ? owner.photoURL
-                    : '/profile_placeholder.png'
-                }
-                onError={e => handleImageFallback(e, DEFAULT_PROFILE_IMG)}
-                alt=""
-              />
+              <ProfilePhoto profile={owner} />
               <Spacer />
               <FlexContainer direction="vertical" secondaryAlign="start">
                 <Text type="small" color="grey">
@@ -145,7 +165,8 @@ export function Request() {
                 </Text>
                 <Text bold>{owner.name}</Text>
                 <Text type="small" color="grey">
-                  {owner.school}
+                  {owner.location || 'no listed location'} -{' '}
+                  {owner.school || 'no listed school'}
                 </Text>
               </FlexContainer>
             </FlexContainer>
@@ -153,15 +174,7 @@ export function Request() {
               <>
                 <Spacer height={24} />
                 <FlexContainer primaryAlign="start">
-                  <img
-                    src={
-                      donor && donor.photoURL
-                        ? donor.photoURL
-                        : '/profile_placeholder.png'
-                    }
-                    onError={e => handleImageFallback(e, DEFAULT_PROFILE_IMG)}
-                    alt=""
-                  />
+                  <ProfilePhoto profile={donor} />
                   <Spacer />
                   <FlexContainer direction="vertical" secondaryAlign="start">
                     <Text type="small" color="grey">
@@ -192,21 +205,35 @@ export function Request() {
                 Accept Request
               </Button>
             )}
+            <Spacer height={24} />
+            {((donor && is_owner) || (owner && !is_owner)) && (
+              <Button
+                size="large"
+                type="primary"
+                color="green"
+                fullWidth
+                handler={handleMessage}
+              >
+                Open Messages
+              </Button>
+            )}
+            <Spacer height={8} />
             {r.status === STATUSES.PENDING && is_owner && (
               <>
                 <Button
                   size="large"
                   color="green"
+                  type="secondary"
                   fullWidth
                   handler={handleComplete}
                 >
                   Mark Completed{' '}
                 </Button>
-                <Spacer height={8} />
+                <Spacer height={24} />
                 <Button
                   size="large"
                   color="green"
-                  type="secondary"
+                  type="tertiary"
                   fullWidth
                   handler={handleReopen}
                 >
@@ -214,25 +241,30 @@ export function Request() {
                 </Button>
               </>
             )}
-            <Spacer height={8} />
-            {donor && (
-              <Link
-                to={`/requests/${request_id}/chat`}
-                style={{ width: ' 100%' }}
-              >
-                <Button size="large" type="secondary" color="green" fullWidth>
-                  Message{' '}
-                  {is_owner && donor && donor.name
-                    ? donor.name.split(' ')[0]
-                    : owner && owner.name
-                    ? owner.name.split(' ')[0]
-                    : 'Teacher'}
+            {profile.permission_level >= 5 && (
+              <>
+                <Spacer height={32} />
+                <Text type="section-header" color="grey">
+                  Admin Actions
+                </Text>
+                <Spacer height={4} />
+                <Text type="small" color="grey" align="center">
+                  Only admins can see the following options.
+                </Text>
+                <Spacer height={24} />
+                <Button size="large" color="black" handler={handleHideRequest}>
+                  Hide Request
                 </Button>
-              </Link>
+                <Spacer height={8} />
+                <Text type="small" color="grey" align="center">
+                  Hiding a request will hide it from public view, but keep it in
+                  the database to be reviewed later.
+                </Text>
+              </>
             )}
           </FlexContainer>
         </FlexContainer>
       )}
-    </main>
+    </Page>
   )
 }

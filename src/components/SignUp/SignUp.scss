@@ -1,4 +1,9 @@
-#Login {
+#SignUp {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+
   label {
     font-family: 'Poppins', sans-serif;
     padding-right: 32px;
@@ -18,13 +23,6 @@
     @include focus {
       border-bottom: 3px solid var(--se-blue-primary);
       padding-bottom: 6px;
-    }
-  }
-
-  .se-text {
-    .se-button.type-tertiary {
-      text-decoration: underline;
-      vertical-align: 5%;
     }
   }
 }

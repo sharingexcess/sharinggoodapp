@@ -1,22 +1,38 @@
 import { useAuth } from 'hooks'
-import { Form } from 'components/Form/Form'
-import { Link } from 'react-router-dom'
+import { Link, Navigate } from 'react-router-dom'
 import { Button, Spacer, Text } from '@sharingexcess/designsystem'
+import { Page } from 'components/Page/Page'
 
 export function Home() {
-  const { profile } = useAuth()
+  const { user } = useAuth()
+  if (user) {
+    return <Navigate to="/requests" />
+  }
   return (
-    <div id="Home">
-      <Text type="primary-header">Welcome to Sharing Good</Text>
-      <Link to="/profile">
-        <Button color="green">Edit Profile</Button>
+    <Page id="Home">
+      <Spacer height={48} />
+      <Text type="primary-header">
+        Welcome to
+        <br />
+        Sharing Good
+      </Text>
+      <Spacer height={16} />
+      <Text color="grey">
+        We help connect teachers and social workers with the volunteers and
+        supplies students need to succeed.
+      </Text>
+      <Spacer height={32} />
+      <Link to="/login">
+        <Button size="large" color="green" fullWidth>
+          Login
+        </Button>
       </Link>
       <Spacer height={16} />
       <Link to="/requests">
-        <Button size="large" color="green" fullWidth>
+        <Button size="large" color="green" type="secondary" fullWidth>
           Browse Requests
         </Button>
       </Link>
-    </div>
+    </Page>
   )
 }

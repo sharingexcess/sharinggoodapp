@@ -1,14 +1,44 @@
+import {
+  Button,
+  FlexContainer,
+  Spacer,
+  Text,
+} from '@sharingexcess/designsystem'
+import { Page } from 'components'
 import { useNavigate } from 'react-router'
 
 export function Error({ message }) {
   const navigate = useNavigate()
+
   return (
-    <div id="Error" className="page">
-      <h1 role="img">🚨</h1>
-      <h2>Whoops!</h2>
-      <p>Looks like this page isn't working, or doesn't exist.</p>
-      <button onClick={() => navigate('/')}>return home</button>
-      {message && <aside>Error Message: {message}</aside>}
-    </div>
+    <Page id="Error">
+      <FlexContainer direction="vertical">
+        <h1 role="img">🚨</h1>
+
+        <Text type="primary-header">Whoops!</Text>
+
+        <Text color="grey" align="center">
+          Looks like there's something wrong with this page.
+        </Text>
+
+        <Spacer height={32} />
+
+        <Button color="green" handler={() => window.location.reload()}>
+          Reload Current Page
+        </Button>
+
+        <Spacer height={8} />
+
+        <Button color="green" handler={() => navigate('/')}>
+          Return Home
+        </Button>
+        <Spacer height={32} />
+        {message && (
+          <Text type="small" color="grey" align="center">
+            Message: {message}
+          </Text>
+        )}
+      </FlexContainer>
+    </Page>
   )
 }

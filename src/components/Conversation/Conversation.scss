@@ -1,7 +1,6 @@
-#Chat {
-  @include page;
-
-  #Chat-header {
+#Conversation {
+  #Conversation-header {
+    position: relative;
     padding-bottom: 24px;
     z-index: 2;
     background: linear-gradient(
@@ -10,7 +9,7 @@
       rgba(255, 255, 255, 0) 100%
     );
 
-    #Chat-request-title {
+    #Conversation-request-title {
       padding: 0 24px;
       white-space: nowrap;
       overflow: hidden;
@@ -18,7 +17,7 @@
     }
   }
 
-  #Chat-messages {
+  #Conversation-messages {
     position: relative;
     height: calc(100% - 32px);
     overflow-y: auto;
@@ -59,11 +58,12 @@
         transition: all 0.32s ease;
         height: 0;
         opacity: 0;
+        white-space: pre-wrap;
       }
 
       &.active {
         .Message-timestamp {
-          height: 24px;
+          height: 48px;
           opacity: 1;
         }
       }
@@ -123,7 +123,7 @@
     }
   }
 
-  #Chat-new-message {
+  #Conversation-new-message {
     position: fixed;
     left: 0;
     bottom: 0;
@@ -141,7 +141,7 @@
       border-radius: 32px;
     }
 
-    #Chat-send {
+    #Conversation-send {
       height: 32px;
       width: 32px;
       padding: 0;

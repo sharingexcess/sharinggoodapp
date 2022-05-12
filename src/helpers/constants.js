@@ -4,7 +4,7 @@ export const COLLECTIONS = {
   REQUESTS: 'requests',
   PROFILES: 'profiles',
   MESSAGES: 'messages',
-  ARCHIVED_MESSAGES: 'archived_messages',
+  CONVERSATIONS: 'conversations',
 }
 
 export const STATUSES = {

@@ -7,8 +7,11 @@ import {
   Spacer,
   Text,
 } from '@sharingexcess/designsystem'
+import { collection, query, where } from 'firebase/firestore'
+import { Loading, Error, Page } from 'components'
+import { useAuth, useFirestore } from 'hooks'
 import { Link } from 'react-router-dom'
-import { useParams } from 'react-router'
+import { Navigate, useParams } from 'react-router'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import {
   createTimestamp,
@@ -18,43 +21,39 @@ import {
   handleImageFallback,
   setFirestoreData,
   DEFAULT_PROFILE_IMG,
+  COLLECTIONS,
 } from 'helpers'
-import { collection, query, where } from 'firebase/firestore'
-import { Loading } from 'components'
-import { useAuth, useFirestore } from 'hooks'
 
-export function Chat() {
-  const { request_id } = useParams()
-  const request = useFirestore('requests', request_id)
+export function Conversation() {
+  const { user, profile } = useAuth()
+  const { conversation_id } = useParams()
+  const conversation = useFirestore(COLLECTIONS.CONVERSATIONS, conversation_id)
   const [messages = [], loading] = useCollectionData(
     query(
       collection(firestore, 'messages'),
-      where('request_id', '==', request_id)
+      where('conversation_id', '==', conversation_id)
     )
   )
+  const recipient = useFirestore(
+    'profiles',
+    conversation ? conversation.profiles.find(i => i !== profile.id) : null
+  )
   const [inputValue, setInputValue] = useState('')
-  const { profile } = useAuth()
-  const [recipientId, setRecipientId] = useState()
-  const recipient = useFirestore('profiles', recipientId)
   const [activeMessage, setActiveMessage] = useState(null)
 
   useEffect(() => {
-    function findRecipientId() {
-      for (const i of messages) {
-        if (i.sender_id !== profile.id) {
-          setRecipientId(i.sender_id)
-          break
-        }
+    const chat = document.getElementById('Conversation-messages')
+    if (chat) chat.scrollTop = 9999
+
+    // handle sending read receipts
+    for (const message of messages.filter(m => m.sender_id !== profile.id)) {
+      if (!message.timestamp_seen) {
+        setFirestoreData(COLLECTIONS.MESSAGES, message.id, {
+          timestamp_seen: createTimestamp(),
+        })
       }
     }
-    if (messages && profile && !recipientId) {
-      findRecipientId()
-    }
-  }, [messages, profile, recipientId])
-
-  useEffect(() => {
-    document.getElementById('Chat-messages').scrollTop = 9999
-  }, [messages])
+  }, [messages, profile])
 
   function updateActiveMessage(message_id) {
     setActiveMessage(curr => (message_id === curr ? null : message_id))
@@ -64,10 +63,11 @@ export function Chat() {
     const id = await generateUniqueId('messages')
     setFirestoreData('messages', id, {
       id,
-      request_id,
+      conversation_id,
       sender_id: profile.id,
       text: inputValue,
       timestamp_created: createTimestamp(),
+      timestamp_seen: null,
     })
     setInputValue('')
   }
@@ -84,15 +84,29 @@ export function Chat() {
     }
   }
 
+  if (conversation && profile && !conversation.profiles.includes(profile.id)) {
+    return <Navigate to="/messages" />
+  }
+
+  if (!user) {
+    return <Error message="You do not have permission to view this chat" />
+  }
+
   return (
-    <main id="Chat">
-      <FlexContainer id="Chat-header" primaryAlign="space-between">
-        <Link to={`/requests/${request_id}`}>
+    <Page id="Conversation">
+      <FlexContainer id="Conversation-header" primaryAlign="space-between">
+        <Link to={`/messages`}>
           <FontAwesomeIcon icon={faArrowLeft} id="green" />
         </Link>
         <Spacer />
-        <Text id="Chat-request-title" type="section-header" align="center">
-          {request ? request.title : 'Loading...'}
+        <Text
+          id="Conversation-request-title"
+          type="section-header"
+          align="center"
+        >
+          {recipient
+            ? `Chat with ${recipient.name.split(' ')[0]}`
+            : 'Loading...'}
         </Text>
         <Spacer />
         <Spacer />
@@ -100,7 +114,7 @@ export function Chat() {
       <FlexContainer
         direction="vertical"
         primaryAlign="start"
-        id="Chat-messages"
+        id="Conversation-messages"
       >
         {loading ? (
           <Loading />
@@ -137,17 +151,23 @@ export function Chat() {
                   type="small"
                   color="grey"
                 >
+                  Sent
                   {formatTimestamp(
                     message.timestamp_created,
-                    'dddd M/D, h:mma'
+                    ' ddd M/D, h:mma'
                   )}
+                  <br />
+                  {message.timestamp_seen
+                    ? 'Seen ' +
+                      formatTimestamp(message.timestamp_seen, ' ddd M/D, h:mma')
+                    : 'Not Seen'}
                 </Text>
               </div>
             )
           })
         )}
       </FlexContainer>
-      <FlexContainer id="Chat-new-message" primaryAlign="space-between">
+      <FlexContainer id="Conversation-new-message" primaryAlign="space-between">
         <input
           value={inputValue}
           onChange={e => setInputValue(e.target.value)}
@@ -155,7 +175,7 @@ export function Chat() {
         />
         <Spacer width={16} />
         <Button
-          id="Chat-send"
+          id="Conversation-send"
           disabled={!inputValue}
           handler={send}
           color="blue"
@@ -163,6 +183,6 @@ export function Chat() {
           <FontAwesomeIcon icon={faArrowUp} />
         </Button>
       </FlexContainer>
-    </main>
+    </Page>
   )
 }

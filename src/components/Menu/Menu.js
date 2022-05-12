@@ -1,19 +1,17 @@
 import React, { useEffect } from 'react'
-import { useLocation } from 'react-router'
+import { useLocation, useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import { useAuth, useIsMobile } from 'hooks'
 import { Text, Spacer } from '@sharingexcess/designsystem'
-import {
-  DEFAULT_PROFILE_IMG,
-  getPermissionLevel,
-  handleImageFallback,
-} from 'helpers'
+import { getPermissionLevel } from 'helpers'
 import { Emoji } from 'react-apple-emojis'
+import { ProfilePhoto } from 'components/ProfilePhoto/ProfilePhoto'
 
 export function Menu({ isOpen, setIsOpen }) {
   const { pathname } = useLocation()
   // get current user state from AuthContext
   const { profile, handleLogout } = useAuth()
+  const navigate = useNavigate()
   const isMobile = useIsMobile()
 
   useEffect(() => {
@@ -52,13 +50,7 @@ export function Menu({ isOpen, setIsOpen }) {
     return profile ? (
       <div id="UserProfile">
         <Link to="/profile" onClick={() => setIsOpen(false)}>
-          <img
-            src={profile ? profile.photoURL : DEFAULT_PROFILE_IMG}
-            id="ProfileImg"
-            alt="User"
-            onError={e => handleImageFallback(e, DEFAULT_PROFILE_IMG)}
-            onClick={() => setIsOpen(true)}
-          />
+          <ProfilePhoto profile={profile} id="ProfileImg" />
           <div>
             <Text type="section-header" id="UserName">
               {profile && profile.name}
@@ -88,7 +80,7 @@ export function Menu({ isOpen, setIsOpen }) {
               emoji="question-mark"
               num={20}
               label="&nbsp;&nbsp;Requests"
-              url="/"
+              url="/requests"
             />
             <MenuLink
               emoji="person-raising-hand"
@@ -107,16 +99,23 @@ export function Menu({ isOpen, setIsOpen }) {
             {profile && (
               <>
                 <MenuLink
-                  emoji="person"
+                  emoji="envelope"
                   num={20}
-                  label="&nbsp;&nbsp;Profile"
-                  url="/profile"
+                  label="&nbsp;&nbsp;Messages"
+                  url="/messages"
+                />
+                <MenuLink
+                  emoji="family"
+                  num={20}
+                  label="&nbsp;&nbsp;Profiles"
+                  url="/profiles"
                 />
 
                 <li
                   onClick={() => {
                     setIsOpen(false)
                     handleLogout()
+                    navigate('/')
                   }}
                 >
                   <Text

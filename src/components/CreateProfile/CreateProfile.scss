@@ -1,36 +1,55 @@
-#profile-creation {
-  font-family: 'Montserrat', sans-serif;
+#CreateProfile {
+  #CreateProfile-photo {
+    position: relative;
 
-  button {
-    width: 90vw;
-    border-radius: 45px;
-    color: white;
-    border: none;
-    background-color: #00ad9f;
-  }
+    #CreateProfile-curr-photo {
+      height: 150px;
+      width: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
 
-  textarea {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-
-    border: none;
-    outline: none;
-    resize: none;
-    border-bottom: 1px solid black;
-    width: 80%;
+    #CreateProfile-edit-photo {
+      position: absolute;
+      padding: 12px;
+      border-radius: 50%;
+      height: 48px;
+      width: 48px;
+      bottom: 0;
+      left: calc(50% + 32px);
+      border: 2px solid var(--se-white);
+      background: var(--se-green-primary);
+      color: var(--se-white);
+      flex-shrink: 0;
+      flex-grow: 0;
+    }
   }
 
   .profile-creation-form-field {
     display: flex;
-    padding: 32px 0;
+    padding: 24px 0;
     justify-content: space-between;
+    align-items: flex-start;
     text-align: end;
 
+    .se-flex-container {
+      margin-top: -8px;
+      width: 64%;
+
+      .se-button {
+        flex-grow: 1;
+        margin: 0 4px;
+      }
+    }
+
     input {
-      border: none;
-      border-bottom: 1px solid black;
-      width: 80%;
+      width: 64%;
+      font-size: 16px;
+    }
+
+    textarea {
+      resize: none;
+      width: 70%;
     }
   }
 }

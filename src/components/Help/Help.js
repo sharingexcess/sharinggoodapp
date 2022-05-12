@@ -1,5 +1,6 @@
 import { useForm } from '@formspree/react'
 import { ExternalLink, Spacer, Text } from '@sharingexcess/designsystem'
+import { Page } from 'components'
 import { FORMSPREE_FORM_ID } from 'helpers'
 import { useAuth } from 'hooks'
 import { useEffect, useState } from 'react'
@@ -40,7 +41,7 @@ export function Help() {
   }
 
   return (
-    <main id="Help">
+    <Page id="Help">
       <Text type="section-header">Reach out for help!</Text>
       <Spacer height={8} />
       <Text type="paragraph">
@@ -81,6 +82,6 @@ export function Help() {
           will get back to you ASAP.
         </Text>
       )}
-    </main>
+    </Page>
   )
 }
