@@ -52,7 +52,7 @@ export function Profiles() {
 
               {profile.permission_level > 3 && (
                 <Text type="small" color="blue">
-                  {profile.email}
+                  {i.email}
                 </Text>
               )}
               {i.permission_level > 1 && (
