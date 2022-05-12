@@ -59,11 +59,7 @@ export function Request() {
   }
 
   async function handleReopen() {
-    if (
-      window.confirm(
-        `Are you sure you want to reopen this request? You will lose your chat history with ${donor.name}.`
-      )
-    ) {
+    if (window.confirm(`Are you sure you want to reopen this request?`)) {
       setWorking(true)
       await setFirestoreData(COLLECTIONS.REQUESTS, request_id, {
         status: STATUSES.OPEN,
