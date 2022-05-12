@@ -1,0 +1,27 @@
+#CreateRequest {
+  label {
+    font-family: 'Poppins', sans-serif;
+    padding-right: 32px;
+    color: var(--se-grey-primary);
+  }
+  input,
+  textarea {
+    border: none;
+    border-bottom: 1px solid var(--se-grey-primary);
+    padding-bottom: 8px;
+    padding-top: 8px;
+    width: 100%;
+    font-size: 16px;
+    border-radius: 0;
+    outline: none;
+    transition: border 0.1s ease, padding-bottom 0.1s ease;
+
+    @include focus {
+      border-bottom: 3px solid var(--se-blue-primary);
+      padding-bottom: 6px;
+    }
+  }
+  textarea {
+    line-height: 1.6;
+  }
+}

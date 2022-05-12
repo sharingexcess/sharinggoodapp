@@ -18,7 +18,7 @@ export function Conversations() {
 
   function sortMessages(array) {
     return array.sort(
-      (a, b) => a.timestamp_created.toDate() - b.timestamp_created.toDate()
+      (a, b) => b.timestamp_created.toDate() - a.timestamp_created.toDate()
     )
   }
 
@@ -37,6 +37,9 @@ export function Conversations() {
 
     if (!last_message) return null
 
+    const new_messages =
+      last_message.sender_id !== profile.id && !last_message.timestamp_seen
+
     return recipient &&
       (!search ||
         recipient.name.toLowerCase().includes(search.toLowerCase())) ? (
@@ -49,14 +52,14 @@ export function Conversations() {
           <ProfilePhoto profile={recipient} className="Profile-icon" />
           <div>
             <Text type="section-header" color="black">
-              {!last_message.timestamp_seen && <Text type="small">🟢</Text>}
+              {new_messages && <Text type="small">🟢</Text>}
               {recipient.name}
             </Text>
             {last_message && (
               <Text
                 type="small"
-                color={last_message.timestamp_seen ? 'black' : 'grey'}
-                bold={!last_message.timestamp_seen}
+                color={new_messages ? 'black' : 'grey'}
+                bold={new_messages}
               >
                 {last_message.sender_id === profile.id
                   ? 'You'

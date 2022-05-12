@@ -57,7 +57,6 @@ export function Menu({ isOpen, setIsOpen }) {
             </Text>
             <h3 id="UserEmail">{profile && profile.email}</h3>
             <Text type="small" color="grey" id="UserProfile-permission">
-              Sharing Good{' '}
               {profile && getPermissionLevel(profile.permission_level)}
             </Text>
           </div>
@@ -76,18 +75,6 @@ export function Menu({ isOpen, setIsOpen }) {
         <UserProfile />
         <div id="MenuContent">
           <ul>
-            <MenuLink
-              emoji="question-mark"
-              num={20}
-              label="&nbsp;&nbsp;Requests"
-              url="/requests"
-            />
-            <MenuLink
-              emoji="person-raising-hand"
-              num={20}
-              label="&nbsp;&nbsp;Help"
-              url="/help"
-            />
             {!profile && (
               <MenuLink
                 emoji="check-mark-button"
@@ -96,8 +83,22 @@ export function Menu({ isOpen, setIsOpen }) {
                 url="/login"
               />
             )}
+            <MenuLink
+              emoji="question-mark"
+              num={20}
+              label="&nbsp;&nbsp;Requests"
+              url="/requests"
+            />
             {profile && (
               <>
+                {profile.permission_level >= 3 && (
+                  <MenuLink
+                    emoji="plus"
+                    num={20}
+                    label="&nbsp;&nbsp;Create Request"
+                    url="/create-request"
+                  />
+                )}
                 <MenuLink
                   emoji="envelope"
                   num={20}
@@ -109,6 +110,12 @@ export function Menu({ isOpen, setIsOpen }) {
                   num={20}
                   label="&nbsp;&nbsp;Profiles"
                   url="/profiles"
+                />
+                <MenuLink
+                  emoji="person-raising-hand"
+                  num={20}
+                  label="&nbsp;&nbsp;Help"
+                  url="/help"
                 />
 
                 <li

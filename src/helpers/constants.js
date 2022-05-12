@@ -18,7 +18,7 @@ export const MOBILE_THRESHOLD = 600
 export const PERMISSION_LEVELS = {
   NONE: 0,
   BASIC: 1,
-  CREATOR: 3,
+  TEACHER: 3,
   ADMIN: 5,
   MODERATOR: 9,
 }

@@ -37,16 +37,12 @@
         margin-top: 8px;
         overflow: hidden;
         flex-shrink: 0;
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          border-radius: 50%;
-        }
+        object-fit: cover;
+        border-radius: 50%;
       }
       .Message-text {
-        border-radius: 32px;
-        padding: 8px 12px;
+        border-radius: 24px;
+        padding: 8px 16px;
         font-size: 14px;
         font-weight: 500;
         max-width: calc(100% - 32px);
@@ -59,6 +55,33 @@
         height: 0;
         opacity: 0;
         white-space: pre-wrap;
+      }
+
+      &.notification {
+        margin: auto;
+        background: none;
+        width: 100%;
+        max-width: 100%;
+        padding: 24px 12px;
+        margin: 0;
+
+        .Message-text {
+          font-size: 12px;
+          color: var(--se-grey-primary);
+          font-style: italic;
+          text-align: center;
+          width: 100%;
+          max-width: 100%;
+        }
+        .Message-timestamp {
+          font-size: 10px;
+          text-align: center;
+        }
+        a {
+          font-size: 12px;
+          color: var(--se-blue-primary);
+          margin: 0 auto 8px auto;
+        }
       }
 
       &.active {
@@ -75,7 +98,7 @@
         margin-left: auto;
 
         & + .sent {
-          margin-top: 4px;
+          margin-top: 0px;
         }
 
         .Message-text {
@@ -101,7 +124,7 @@
         margin-right: auto;
 
         & + .received {
-          margin-top: 4px;
+          margin-top: 0px;
         }
 
         .Message-text {

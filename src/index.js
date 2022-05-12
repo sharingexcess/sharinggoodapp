@@ -7,7 +7,7 @@ import {
   Requests,
   Request,
   Conversation,
-  Form,
+  CreateRequest,
   Help,
   Login,
   Home,
@@ -47,7 +47,7 @@ ReactDOM.render(
               path="/create-request"
               element={
                 <ProtectedRoute permission_level={3}>
-                  <Form />
+                  <CreateRequest />
                 </ProtectedRoute>
               }
             />

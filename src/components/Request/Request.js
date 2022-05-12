@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Button,
   FlexContainer,
@@ -7,7 +7,7 @@ import {
 } from '@sharingexcess/designsystem'
 import { useNavigate, useParams } from 'react-router'
 import { useAuth, useFirestore } from 'hooks'
-import { Loading, Page } from 'components'
+import { Loading, Page, ProfilePhoto } from 'components'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 import { Link } from 'react-router-dom'
@@ -16,18 +16,8 @@ import {
   COLLECTIONS,
   STATUSES,
   createTimestamp,
-  firestore,
   generateUniqueId,
 } from 'helpers'
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  query,
-  where,
-} from 'firebase/firestore'
-import { ProfilePhoto } from 'components/ProfilePhoto/ProfilePhoto'
 
 export function Request() {
   const navigate = useNavigate()
@@ -35,9 +25,8 @@ export function Request() {
   const { profile } = useAuth()
   const r = useFirestore('requests', request_id)
   const conversations = useFirestore(COLLECTIONS.CONVERSATIONS)
-  const owner = useFirestore('profiles', r ? r.owner_id : null)
-  const donor = useFirestore('profiles', r ? r.donor_id : null)
-  const [working, setWorking] = useState(false)
+  const owner = useFirestore('profiles', r ? r.owner_id || null : null)
+  const donor = useFirestore('profiles', r ? r.donor_id || null : null)
 
   const is_owner = r && profile && profile.id === r.owner_id
 
@@ -48,6 +37,19 @@ export function Request() {
       timestamp_accepted: createTimestamp(),
       timestamp_updated: createTimestamp(),
     })
+    const conversation_id = await getConversationId()
+    const message_id = await generateUniqueId(COLLECTIONS.MESSAGES)
+    const message = {
+      id: message_id,
+      conversation_id,
+      sender_id: null,
+      text: `${profile.name} accepted the request "${r.title}". Woohoo! Feel free to use this space to discus details and logistics 😊`,
+      timestamp_created: createTimestamp(),
+      timestamp_seen: null,
+      link_to: `/requests/${request_id}`,
+    }
+    await setFirestoreData(COLLECTIONS.MESSAGES, message_id, message)
+    navigate(`/messages/${conversation_id}`)
   }
 
   async function handleComplete() {
@@ -56,11 +58,23 @@ export function Request() {
       timestamp_completed: createTimestamp(),
       timestamp_updated: createTimestamp(),
     })
+    const conversation_id = await getConversationId()
+    const message_id = await generateUniqueId(COLLECTIONS.MESSAGES)
+    const message = {
+      id: message_id,
+      conversation_id,
+      sender_id: null,
+      text: `${owner.name} marked the request "${r.title}" completed! You did it! Thank you for Sharing Good 💚`,
+      timestamp_created: createTimestamp(),
+      timestamp_seen: null,
+      link_to: `/requests/${request_id}`,
+    }
+    await setFirestoreData(COLLECTIONS.MESSAGES, message_id, message)
+    navigate(`/messages/${conversation_id}`)
   }
 
   async function handleReopen() {
     if (window.confirm(`Are you sure you want to reopen this request?`)) {
-      setWorking(true)
       await setFirestoreData(COLLECTIONS.REQUESTS, request_id, {
         status: STATUSES.OPEN,
         donor_id: null,
@@ -68,25 +82,19 @@ export function Request() {
         timestamp_accepted: null,
         timestamp_updated: createTimestamp(),
       })
-      const messages = await getDocs(
-        query(
-          collection(firestore, 'messages'),
-          where('request_id', '==', request_id)
-        )
-      ).then(res => res.docs.map(doc => doc.data()))
-      await Promise.all(
-        messages
-          .map(message => [
-            setFirestoreData(
-              COLLECTIONS.ARCHIVED_MESSAGES,
-              message.id,
-              message
-            ),
-            deleteDoc(doc(firestore, COLLECTIONS.MESSAGES, message.id)),
-          ])
-          .reduce((total, curr) => [...total, ...curr])
-      )
-      setWorking(false)
+      const conversation_id = await getConversationId()
+      const message_id = await generateUniqueId(COLLECTIONS.MESSAGES)
+      const message = {
+        id: message_id,
+        conversation_id,
+        sender_id: null,
+        text: `${owner.name} reopened the request "${r.title}".`,
+        timestamp_created: createTimestamp(),
+        timestamp_seen: null,
+        link_to: `/requests/${request_id}`,
+      }
+      await setFirestoreData(COLLECTIONS.MESSAGES, message_id, message)
+      navigate(`/messages/${conversation_id}`)
     }
   }
 
@@ -102,8 +110,26 @@ export function Request() {
     }
   }
 
-  async function handleMessage() {
-    const recipient = is_owner ? owner : donor
+  async function getConversationId() {
+    const recipient = is_owner ? donor : owner
+    const existing_conversation = conversations.find(i =>
+      i.profiles.includes(recipient.id)
+    )
+    if (existing_conversation) {
+      return existing_conversation.id
+    } else {
+      const id = await generateUniqueId(COLLECTIONS.CONVERSATIONS)
+      await setFirestoreData(COLLECTIONS.CONVERSATIONS, id, {
+        id,
+        profiles: [recipient.id, profile.id],
+        timestamp_created: createTimestamp(),
+      })
+      return id
+    }
+  }
+
+  async function handleOpenMessages() {
+    const recipient = is_owner ? donor : owner
     const existing_conversation = conversations.find(i =>
       i.profiles.includes(recipient.id)
     )
@@ -122,7 +148,7 @@ export function Request() {
 
   return (
     <Page id="Request">
-      {!r || !owner || (r.donor_id && !donor) || working ? (
+      {!r || !owner || (r.donor_id && !donor) ? (
         <Loading />
       ) : (
         <FlexContainer direction="vertical" primaryAlign="start">
@@ -208,7 +234,7 @@ export function Request() {
                 type="primary"
                 color="green"
                 fullWidth
-                handler={handleMessage}
+                handler={handleOpenMessages}
               >
                 Open Messages
               </Button>

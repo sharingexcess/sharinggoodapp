@@ -25,7 +25,7 @@ export const handleImageFallback = (e, fallback) => {
 export function getPermissionLevel(num) {
   if (num === 0) return 'none'
   if (num === 1) return 'basic'
-  if (num === 3) return 'creator'
+  if (num === 3) return 'verified teacher'
   if (num === 5) return 'admin'
   if (num === 9) return 'moderator'
 }

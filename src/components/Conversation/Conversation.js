@@ -18,11 +18,10 @@ import {
   firestore,
   formatTimestamp,
   generateUniqueId,
-  handleImageFallback,
   setFirestoreData,
-  DEFAULT_PROFILE_IMG,
   COLLECTIONS,
 } from 'helpers'
+import { ProfilePhoto } from 'components/ProfilePhoto/ProfilePhoto'
 
 export function Conversation() {
   const { user, profile } = useAuth()
@@ -46,7 +45,9 @@ export function Conversation() {
     if (chat) chat.scrollTop = 9999
 
     // handle sending read receipts
-    for (const message of messages.filter(m => m.sender_id !== profile.id)) {
+    for (const message of messages.filter(
+      m => m.sender_id && m.sender_id !== profile.id
+    )) {
       if (!message.timestamp_seen) {
         setFirestoreData(COLLECTIONS.MESSAGES, message.id, {
           timestamp_seen: createTimestamp(),
@@ -120,47 +121,43 @@ export function Conversation() {
           <Loading />
         ) : (
           sortMessages(messages).map(message => {
-            let className =
-              message.sender_id === profile.id
+            let className = message.sender_id
+              ? message.sender_id === profile.id
                 ? 'Message sent'
                 : 'Message received'
+              : 'Message notification'
             const is_active = activeMessage === message.id
             className += is_active ? ' active' : ' inactive'
+            const sender = message.sender_id
+              ? message.sender_id === profile.id
+                ? profile
+                : recipient
+              : null
             return (
               <div
                 key={message.id}
                 className={className}
                 onClick={() => updateActiveMessage(message.id)}
               >
-                <div className="MessagePhoto">
-                  <img
-                    src={
-                      message.sender_id === profile.id
-                        ? profile.photoURL
-                        : (recipient
-                            ? recipient.photoURL
-                            : DEFAULT_PROFILE_IMG) || DEFAULT_PROFILE_IMG
-                    }
-                    alt=""
-                    onError={e => handleImageFallback(e, DEFAULT_PROFILE_IMG)}
-                  />
-                </div>
+                {sender && (
+                  <ProfilePhoto profile={sender} className="MessagePhoto" />
+                )}
                 <Text classList={['Message-text']}>{message.text}</Text>
+                {message.link_to && <Link to={message.link_to}>Open Link</Link>}
                 <Text
                   classList={['Message-timestamp']}
                   type="small"
                   color="grey"
                 >
-                  Sent
-                  {formatTimestamp(
-                    message.timestamp_created,
-                    ' ddd M/D, h:mma'
-                  )}
+                  {message.sender_id ? 'Sent ' : ''}
+                  {formatTimestamp(message.timestamp_created, 'ddd M/D, h:mma')}
                   <br />
                   {message.timestamp_seen
                     ? 'Seen ' +
                       formatTimestamp(message.timestamp_seen, ' ddd M/D, h:mma')
-                    : 'Not Seen'}
+                    : message.sender_id
+                    ? 'Not Seen'
+                    : ''}
                 </Text>
               </div>
             )
