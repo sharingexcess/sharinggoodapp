@@ -52,7 +52,7 @@ export function Profile() {
     <Page id="Profile">
       <FlexContainer primaryAlign="space-between">
         <Link to="/profiles">
-          <FontAwesomeIcon icon={faArrowLeft} id="green" />
+          <FontAwesomeIcon className='Profile-back' icon={faArrowLeft} id="green" />
         </Link>
         <Spacer />
         <Text type="section-header">Profile</Text>
@@ -86,7 +86,7 @@ export function Profile() {
       <Spacer height={24} />
       {profile.id !== auth_profile.id && (
         <>
-          <Button color="green" handler={handleMessage}>
+          <Button size="large" fullWidth color="green" handler={handleMessage}>
             Message {profile.name.split(' ')[0]}
           </Button>
           <Spacer height={32} />

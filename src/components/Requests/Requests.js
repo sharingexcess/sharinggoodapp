@@ -105,7 +105,7 @@ export function Requests() {
           </Text>
           {profile && profile.permission_level >= 3 && (
             <Link to="/create-request">
-              <FontAwesomeIcon icon={faPlusCircle} id="green" size="2x" />
+              <FontAwesomeIcon className='Requests-plus'icon={faPlusCircle} id="green" size="2x" />
             </Link>
           )}
         </FlexContainer>
