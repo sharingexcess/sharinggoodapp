@@ -6,19 +6,27 @@
   &.primary-header {
     font-weight: 700;
   }
+
   &.subheader {
     font-weight: 600;
   }
+
   &.section-header {
     font-size: 18px;
   }
+
   &.paragraph {
     font-weight: 400;
     line-height: 1.6;
   }
+
   &.bold {
     font-weight: 700;
   }
+}
+
+.se-text.small {
+  font-size: 14px;
 }
 
 .se-button {
@@ -29,16 +37,21 @@
     background: var(--se-white) !important;
 
     &.size-small {
-      border: 1px solid var(--se-green-primary);
-      font-size: 10px;
       font-weight: 600 !important;
     }
+
     &.size-medium {
       border: 2px solid var(--se-green-primary);
     }
+
     &.size-large {
       border: 3px solid var(--se-green-primary);
-      font-size: 0.95rem;
+      /* font-size: 0.95rem; */
     }
+  }
+
+  &.size-small {
+    font-size: 14px;
+    border: 1px solid var(--se-green-primary);
   }
 }
