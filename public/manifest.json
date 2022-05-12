@@ -1,7 +1,19 @@
 {
   "short_name": "Sharing Good",
-  "name": "Sharing Good",
-  "icons": [],
+  "name": "Sharing Good | Crowd sourcing donations for local public schools",
+  "icons": [
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
   "start_url": ".",
+  "theme_color": "#4ea568",
   "display": "standalone"
 }
