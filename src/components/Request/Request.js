@@ -155,7 +155,11 @@ export function Request() {
           <FlexContainer direction="vertical" secondaryAlign="start">
             <FlexContainer primaryAlign="space-between">
               <Link to="/requests">
-                <FontAwesomeIcon className='Request-back' icon={faArrowLeft} id="green" />
+                <FontAwesomeIcon
+                  className="Request-back"
+                  icon={faArrowLeft}
+                  id="green"
+                />
               </Link>
               <Spacer />
               <Text type="section-header">Request</Text>

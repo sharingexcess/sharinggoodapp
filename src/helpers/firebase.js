@@ -1,8 +1,8 @@
 import { initializeApp } from 'firebase/app'
 import { getAnalytics } from 'firebase/analytics'
-import { getAuth, signOut, updateProfile } from 'firebase/auth'
+import { getAuth, signOut } from 'firebase/auth'
 import { customAlphabet } from 'nanoid'
-import { getDownloadURL, getStorage, ref, uploadBytes } from 'firebase/storage'
+import { getStorage } from 'firebase/storage'
 import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore'
 
 const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwqyz', 8)
@@ -44,17 +44,4 @@ export function getCollection(name) {
 
 export async function setFirestoreData(collection, id, value) {
   return await setDoc(doc(firestore, collection, id), value, { merge: true })
-}
-
-// storage
-export async function upload(file, currentUser, setLoading) {
-  const fileRef = ref(storage, currentUser.uid + '.png')
-  setLoading(true)
-
-  const snapshot = await uploadBytes(fileRef, file)
-  const photoURL = await getDownloadURL(fileRef)
-
-  updateProfile(currentUser, { photoURL })
-  setLoading(false)
-  alert('Uploaded file')
 }

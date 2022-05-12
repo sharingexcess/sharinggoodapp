@@ -97,7 +97,11 @@ export function Conversation() {
     <Page id="Conversation">
       <FlexContainer id="Conversation-header" primaryAlign="space-between">
         <Link to={`/messages`}>
-          <FontAwesomeIcon className='Conversation-back' icon={faArrowLeft} id="green" />
+          <FontAwesomeIcon
+            className="Conversation-back"
+            icon={faArrowLeft}
+            id="green"
+          />
         </Link>
         <Spacer />
         <Text

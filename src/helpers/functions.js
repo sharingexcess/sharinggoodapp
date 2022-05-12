@@ -1,5 +1,4 @@
 import moment from 'moment'
-import { firebase, messaging } from './firebase'
 
 export function parseUserFromFirebaseResponse(firebaseUser) {
   return {

@@ -1,5 +1,10 @@
 import { useAuth, useIsMobile } from 'hooks'
-import { FlexContainer, Text, Button, Spacer } from '@sharingexcess/designsystem'
+import {
+  FlexContainer,
+  Text,
+  Button,
+  Spacer,
+} from '@sharingexcess/designsystem'
 import { Link } from 'react-router-dom'
 import { useLocation } from 'react-router'
 import { useState } from 'react'
@@ -20,11 +25,11 @@ export function Header() {
       <Menu isOpen={menuOpen} setIsOpen={setMenuOpen} />
       <Link to="/">
         <FlexContainer>
-        <img id = "Header-icon" src="/icon.png" />
-        <Spacer height={8}></Spacer>
-        <Text type="secondary-header">
-          Sharing <span id="green">Good</span>
-        </Text>
+          <img id="Header-icon" src="/icon.png" alt="Sharing Good" />
+          <Spacer height={8}></Spacer>
+          <Text type="secondary-header">
+            Sharing <span id="green">Good</span>
+          </Text>
         </FlexContainer>
       </Link>
       {user && profile && isMobile && (

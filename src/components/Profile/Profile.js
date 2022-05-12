@@ -52,7 +52,11 @@ export function Profile() {
     <Page id="Profile">
       <FlexContainer primaryAlign="space-between">
         <Link to="/profiles">
-          <FontAwesomeIcon className='Profile-back' icon={faArrowLeft} id="green" />
+          <FontAwesomeIcon
+            className="Profile-back"
+            icon={faArrowLeft}
+            id="green"
+          />
         </Link>
         <Spacer />
         <Text type="section-header">Profile</Text>
