@@ -37,7 +37,7 @@ export function Request() {
     }
     await setFirestoreData(COLLECTIONS.REQUESTS, request_id, {
       status: STATUSES.PENDING,
-      donor_id: profile.id,
+      donor_id: profile?.id,
       timestamp_accepted: createTimestamp(),
       timestamp_updated: createTimestamp(),
     })
