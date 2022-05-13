@@ -123,9 +123,15 @@ export function Request() {
       return existing_conversation.id
     } else {
       // make an ID that will be consistent between 2 people e.g profile1_profile2
-      // make sure it does not alsoo do profile2_profile1
+      // make sure it does not also do profile2_profile1
       // e.g. always put in alphabetical order
-      const id = await generateUniqueId(COLLECTIONS.CONVERSATIONS)
+      const alphabetic_order = recipient.id.localCompare(profile.id)
+      const [first_id, second_id] =
+        alphabetic_order === -1
+          ? [recipient.id, profile.id]
+          : [profile.id, recipient.id]
+      const id = first_id + '_' + second_id
+      // const id = await generateUniqueId(COLLECTIONS.CONVERSATIONS)
       await setFirestoreData(COLLECTIONS.CONVERSATIONS, id, {
         id,
         profiles: [recipient.id, profile.id],
@@ -147,7 +153,13 @@ export function Request() {
     if (existing_conversation) {
       navigate(`/messages/${existing_conversation.id}`)
     } else {
-      const id = await generateUniqueId(COLLECTIONS.CONVERSATIONS)
+      const alphabetic_order = recipient.id.localCompare(profile.id)
+      const [first_id, second_id] =
+        alphabetic_order === -1
+          ? [recipient.id, profile.id]
+          : [profile.id, recipient.id]
+      const id = first_id + '_' + second_id
+      // const id = await generateUniqueId(COLLECTIONS.CONVERSATIONS)
       await setFirestoreData(COLLECTIONS.CONVERSATIONS, id, {
         id,
         profiles: [recipient.id, profile.id],
