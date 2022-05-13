@@ -122,6 +122,9 @@ export function Request() {
     if (existing_conversation) {
       return existing_conversation.id
     } else {
+      // make an ID that will be consistent between 2 people e.g profile1_profile2
+      // make sure it does not alsoo do profile2_profile1
+      // e.g. always put in alphabetical order
       const id = await generateUniqueId(COLLECTIONS.CONVERSATIONS)
       await setFirestoreData(COLLECTIONS.CONVERSATIONS, id, {
         id,
@@ -275,7 +278,7 @@ export function Request() {
                 </Button>
               </>
             )}
-            {profile && profile.permission_level >= 5 && (
+            {profile?.permission_level >= 5 && (
               <>
                 <Spacer height={32} />
                 <Text type="section-header" color="grey">

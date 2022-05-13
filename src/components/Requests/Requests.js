@@ -33,7 +33,7 @@ export function Requests() {
   function filterRequests(requests) {
     if (filter === 'created') {
       return requests.filter(
-        r => r.owner_id === profile.id && r.status !== STATUSES.COMPLETED
+        r => r.owner_id === profile?.id && r.status !== STATUSES.COMPLETED
       )
     } else if (filter === STATUSES.OPEN) {
       return requests.filter(r => r.status === STATUSES.OPEN)
@@ -41,13 +41,13 @@ export function Requests() {
       return requests.filter(
         r =>
           r.status === STATUSES.PENDING &&
-          (r.donor_id === profile.id || r.owner_id === profile.id)
+          (r.donor_id === profile?.id || r.owner_id === profile?.id)
       )
     } else if (filter === STATUSES.COMPLETED) {
       return requests.filter(
         r =>
           r.status === STATUSES.COMPLETED &&
-          (r.donor_id === profile.id || r.owner_id === profile.id)
+          (r.donor_id === profile?.id || r.owner_id === profile?.id)
       )
     }
   }
