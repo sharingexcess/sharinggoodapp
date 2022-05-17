@@ -17,6 +17,7 @@ import {
   STATUSES,
   createTimestamp,
   generateUniqueId,
+  generateConversationId,
 } from 'helpers'
 
 export function Request() {
@@ -41,7 +42,18 @@ export function Request() {
       timestamp_accepted: createTimestamp(),
       timestamp_updated: createTimestamp(),
     })
-    const conversation_id = await getConversationId()
+    const recipient = is_owner ? donor : owner
+    const conversation_id = await generateConversationId(
+      recipient.id,
+      profile.id
+    )
+    if (!conversations.find(i => i.id === conversation_id)) {
+      await setFirestoreData(COLLECTIONS.CONVERSATIONS, conversation_id, {
+        id: conversation_id,
+        profiles: [recipient.id, profile.id],
+        timestamp_created: createTimestamp(),
+      })
+    }
     const message_id = await generateUniqueId(COLLECTIONS.MESSAGES)
     const message = {
       id: message_id,
@@ -62,7 +74,18 @@ export function Request() {
       timestamp_completed: createTimestamp(),
       timestamp_updated: createTimestamp(),
     })
-    const conversation_id = await getConversationId()
+    const recipient = is_owner ? donor : owner
+    const conversation_id = await generateConversationId(
+      recipient.id,
+      profile.id
+    )
+    if (!conversations.find(i => i.id === conversation_id)) {
+      await setFirestoreData(COLLECTIONS.CONVERSATIONS, conversation_id, {
+        id: conversation_id,
+        profiles: [recipient.id, profile.id],
+        timestamp_created: createTimestamp(),
+      })
+    }
     const message_id = await generateUniqueId(COLLECTIONS.MESSAGES)
     const message = {
       id: message_id,
@@ -86,7 +109,18 @@ export function Request() {
         timestamp_accepted: null,
         timestamp_updated: createTimestamp(),
       })
-      const conversation_id = await getConversationId()
+      const recipient = is_owner ? donor : owner
+      const conversation_id = await generateConversationId(
+        recipient.id,
+        profile.id
+      )
+      if (!conversations.find(i => i.id === conversation_id)) {
+        await setFirestoreData(COLLECTIONS.CONVERSATIONS, conversation_id, {
+          id: conversation_id,
+          profiles: [recipient.id, profile.id],
+          timestamp_created: createTimestamp(),
+        })
+      }
       const message_id = await generateUniqueId(COLLECTIONS.MESSAGES)
       const message = {
         id: message_id,
@@ -114,59 +148,24 @@ export function Request() {
     }
   }
 
-  async function getConversationId() {
-    const recipient = is_owner ? donor : owner
-    const existing_conversation = conversations.find(i =>
-      i.profiles.includes(recipient.id)
-    )
-    if (existing_conversation) {
-      return existing_conversation.id
-    } else {
-      // make an ID that will be consistent between 2 people e.g profile1_profile2
-      // make sure it does not also do profile2_profile1
-      // e.g. always put in alphabetical order
-      const alphabetic_order = recipient.id.localCompare(profile.id)
-      const [first_id, second_id] =
-        alphabetic_order === -1
-          ? [recipient.id, profile.id]
-          : [profile.id, recipient.id]
-      const id = first_id + '_' + second_id
-      // const id = await generateUniqueId(COLLECTIONS.CONVERSATIONS)
-      await setFirestoreData(COLLECTIONS.CONVERSATIONS, id, {
-        id,
-        profiles: [recipient.id, profile.id],
-        timestamp_created: createTimestamp(),
-      })
-      return id
-    }
-  }
-
   async function handleOpenMessages() {
     if (!profile) {
       navigate('/login')
       return
     }
     const recipient = is_owner ? donor : owner
-    const existing_conversation = conversations.find(i =>
-      i.profiles.includes(recipient.id)
+    const conversation_id = await generateConversationId(
+      recipient.id,
+      profile.id
     )
-    if (existing_conversation) {
-      navigate(`/messages/${existing_conversation.id}`)
-    } else {
-      const alphabetic_order = recipient.id.localCompare(profile.id)
-      const [first_id, second_id] =
-        alphabetic_order === -1
-          ? [recipient.id, profile.id]
-          : [profile.id, recipient.id]
-      const id = first_id + '_' + second_id
-      // const id = await generateUniqueId(COLLECTIONS.CONVERSATIONS)
-      await setFirestoreData(COLLECTIONS.CONVERSATIONS, id, {
-        id,
+    if (!conversations.find(i => i.id === conversation_id)) {
+      await setFirestoreData(COLLECTIONS.CONVERSATIONS, conversation_id, {
+        id: conversation_id,
         profiles: [recipient.id, profile.id],
         timestamp_created: createTimestamp(),
       })
-      navigate(`/messages/${id}`)
     }
+    navigate(`/messages/${conversation_id}`)
   }
 
   return (

@@ -89,6 +89,7 @@ export function Menu({ isOpen, setIsOpen }) {
               label="&nbsp;&nbsp;Requests"
               url="/requests"
             />
+
             {profile && (
               <>
                 {profile.permission_level >= 3 && (
@@ -111,12 +112,6 @@ export function Menu({ isOpen, setIsOpen }) {
                   label="&nbsp;&nbsp;Profiles"
                   url="/profiles"
                 />
-                <MenuLink
-                  emoji="person-raising-hand"
-                  num={20}
-                  label="&nbsp;&nbsp;Help"
-                  url="/help"
-                />
 
                 <li
                   onClick={() => {
@@ -136,6 +131,14 @@ export function Menu({ isOpen, setIsOpen }) {
                 </li>
               </>
             )}
+            {profile && <Spacer height={16} />}
+
+            <MenuLink
+              emoji="person-raising-hand"
+              num={20}
+              label="&nbsp;&nbsp;Help"
+              url="/help"
+            />
           </ul>
         </div>
       </aside>

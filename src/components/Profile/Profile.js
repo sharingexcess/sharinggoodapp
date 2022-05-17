@@ -11,7 +11,7 @@ import {
 import {
   COLLECTIONS,
   createTimestamp,
-  generateUniqueId,
+  generateConversationId,
   setFirestoreData,
 } from 'helpers'
 import { useNavigate } from 'react-router'
@@ -31,20 +31,18 @@ export function Profile() {
   const conversations = useFirestore(COLLECTIONS.CONVERSATIONS)
 
   async function handleMessage() {
-    const existing_conversation = conversations.find(i =>
-      i.profiles.includes(profile.id)
+    const conversation_id = await generateConversationId(
+      auth_profile.id,
+      profile.id
     )
-    if (existing_conversation) {
-      navigate(`/messages/${existing_conversation.id}`)
-    } else {
-      const id = await generateUniqueId(COLLECTIONS.CONVERSATIONS)
-      await setFirestoreData(COLLECTIONS.CONVERSATIONS, id, {
-        id,
-        profiles: [profile.id, profile.id],
+    if (!conversations.find(i => i.id === conversation_id)) {
+      await setFirestoreData(COLLECTIONS.CONVERSATIONS, conversation_id, {
+        id: conversation_id,
+        profiles: [auth_profile.id, profile.id],
         timestamp_created: createTimestamp(),
       })
-      navigate(`/messages/${id}`)
     }
+    navigate(`/messages/${conversation_id}`)
   }
 
   if (!profile) return <Loading text="Loading user" />

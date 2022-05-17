@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faArrowLeft, faArrowUp } from '@fortawesome/free-solid-svg-icons'
 import {
@@ -25,6 +25,8 @@ import { ProfilePhoto } from 'components/ProfilePhoto/ProfilePhoto'
 
 export function Conversation() {
   const { user, profile } = useAuth()
+  const inputElement = useRef(null)
+
   const { conversation_id } = useParams()
   const conversation = useFirestore(COLLECTIONS.CONVERSATIONS, conversation_id)
   const [messages = [], loading] = useCollectionData(
@@ -39,6 +41,13 @@ export function Conversation() {
   )
   const [inputValue, setInputValue] = useState('')
   const [activeMessage, setActiveMessage] = useState(null)
+
+  useEffect(() => {
+    inputElement.current.onfocus = () => {
+      window.scrollTo(0, 0)
+      document.body.scrollTop = 0
+    }
+  })
 
   useEffect(() => {
     const chat = document.getElementById('Conversation-messages')
@@ -123,6 +132,16 @@ export function Conversation() {
       >
         {loading ? (
           <Loading />
+        ) : !messages.length && !loading ? (
+          <FlexContainer direction="vertical">
+            <Spacer height={96} />
+            <Text type="section-header" color="grey">
+              Start the conversation!
+            </Text>
+            <Text color="grey">
+              Every bit of sharing starts with a message :)
+            </Text>
+          </FlexContainer>
         ) : (
           sortMessages(messages).map(message => {
             let className = message.sender_id
@@ -173,6 +192,7 @@ export function Conversation() {
           value={inputValue}
           onChange={e => setInputValue(e.target.value)}
           onKeyPress={handleKeyPress}
+          ref={inputElement}
         />
         <Spacer width={16} />
         <Button

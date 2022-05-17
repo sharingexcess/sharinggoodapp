@@ -61,7 +61,7 @@ export function CreateRequest() {
           all donations through your school office so no locations need to be
           shared!
         </Text>
-        <Spacer height={24} />
+        <Spacer height={32} />
         <label htmlFor="title">TITLE</label>
         <input
           type="text"
@@ -78,7 +78,7 @@ export function CreateRequest() {
           Click <Link to="/profile">here</Link> if you need to update your
           profile.
         </Text>
-        <Spacer height={24} />
+        <Spacer height={48} />
         <label htmlFor="title">DESCRIPTION</label>
         <textarea
           id="description"
@@ -95,10 +95,17 @@ export function CreateRequest() {
           information!
         </Text>
         <Spacer height={32} />
-        <Button size="large" color="green" fullWidth handler={handleSubmit}>
+        <Button
+          size="large"
+          color="green"
+          fullWidth
+          handler={handleSubmit}
+          disabled={!(titleValue && descriptionValue)}
+        >
           Create Request
         </Button>
       </form>
+      <Spacer height={48} />
     </Page>
   )
 }

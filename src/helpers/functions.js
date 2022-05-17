@@ -1,5 +1,11 @@
 import moment from 'moment'
 
+export async function generateConversationId(id1, id2) {
+  console.log(id1, id2)
+  const id = [id1, id2].sort((a, b) => a.localeCompare(b)).join('_')
+  return id
+}
+
 export function parseUserFromFirebaseResponse(firebaseUser) {
   return {
     id: firebaseUser.uid,

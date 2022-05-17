@@ -8,13 +8,13 @@ import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore'
 const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwqyz', 8)
 
 const firebaseConfig = {
-  apiKey: 'AIzaSyAmhJZM1KFTNre0aKJ06y_rfP43e3FMjFA',
-  authDomain: 'sharinggoodapp.firebaseapp.com',
-  projectId: 'sharinggoodapp',
-  storageBucket: 'sharinggoodapp.appspot.com',
-  messagingSenderId: '368612798165',
-  appId: '1:368612798165:web:e9733cd10f74782aed7c5c',
-  measurementId: 'G-MZ2QL8CFHX',
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 }
 
 export const firebase = initializeApp(firebaseConfig)
