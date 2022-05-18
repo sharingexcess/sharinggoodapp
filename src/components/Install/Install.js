@@ -17,7 +17,7 @@ export function Install() {
     const userAgent = navigator.userAgent || navigator.vendor || window.opera
 
     if (/android/i.test(userAgent)) {
-      return 'Android'
+      return 'android'
     } else if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
       return 'iOS'
     } else {
@@ -106,6 +106,7 @@ export function Install() {
             Back to Home
           </Button>
         </Link>
+        <Spacer height={32} />
       </FlexContainer>
     </Page>
   )
