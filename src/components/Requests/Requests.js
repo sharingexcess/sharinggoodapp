@@ -96,11 +96,13 @@ export function Requests() {
     ) : null
   }
 
+  const filtered_requests = filterRequests(requests)
+
   return (
     <Page id="Requests">
       <FlexContainer direction="vertical" secondaryAlign="start" fullWidth>
         <FlexContainer primaryAlign="space-between">
-          <Text type="primary-header" align="left">
+          <Text type="secondary-header" align="left">
             Requests
           </Text>
           {profile && profile.permission_level >= 3 && (
@@ -114,7 +116,7 @@ export function Requests() {
             </Link>
           )}
         </FlexContainer>
-        <Spacer height={8} />
+        <Spacer height={16} />
         <FlexContainer primaryAlign="start" id="Requests-filters">
           {profile && profile.permission_level >= 3 && (
             <>
@@ -157,10 +159,25 @@ export function Requests() {
           </Button>
         </FlexContainer>
         <Spacer height={16} />
-        {requests &&
-          filterRequests(requests).map(request => (
-            <Request key={request.id} r={request} />
-          ))}
+        {requests ? (
+          filtered_requests.length ? (
+            filtered_requests.map(request => (
+              <Request key={request.id} r={request} />
+            ))
+          ) : (
+            <FlexContainer direction="vertical">
+              <Spacer height={96} />
+              <Text type="section-header" color="grey">
+                All clear!
+              </Text>
+              <Spacer height={8} />
+              <Text type="small" color="grey" align="center">
+                It looks like there are no requests that match your current
+                search.
+              </Text>
+            </FlexContainer>
+          )
+        ) : null}
       </FlexContainer>
     </Page>
   )

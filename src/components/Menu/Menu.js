@@ -3,14 +3,15 @@ import { useLocation, useNavigate } from 'react-router'
 import { Link } from 'react-router-dom'
 import { useAuth, useIsMobile } from 'hooks'
 import { Text, Spacer } from '@sharingexcess/designsystem'
-import { getPermissionLevel } from 'helpers'
+import { auth, getPermissionLevel } from 'helpers'
 import { Emoji } from 'react-apple-emojis'
 import { ProfilePhoto } from 'components/ProfilePhoto/ProfilePhoto'
+import { signOut } from 'firebase/auth'
 
 export function Menu({ isOpen, setIsOpen }) {
   const { pathname } = useLocation()
   // get current user state from AuthContext
-  const { profile, handleLogout } = useAuth()
+  const { profile } = useAuth()
   const navigate = useNavigate()
   const isMobile = useIsMobile()
 
@@ -24,6 +25,15 @@ export function Menu({ isOpen, setIsOpen }) {
 
   function isCurrentRoute(url) {
     return pathname.substring(1, pathname.length).includes(url)
+  }
+
+  async function logout() {
+    if (window.confirm('Are you sure you want to log out?')) {
+      setIsOpen(false)
+      await signOut(auth)
+      navigate('/')
+      window.location.reload()
+    }
   }
 
   function MenuLink({ url, label, emoji, num }) {
@@ -112,26 +122,8 @@ export function Menu({ isOpen, setIsOpen }) {
                   label="&nbsp;&nbsp;Profiles"
                   url="/profiles"
                 />
-
-                <li
-                  onClick={() => {
-                    setIsOpen(false)
-                    handleLogout()
-                    navigate('/')
-                  }}
-                >
-                  <Text
-                    type="subheader"
-                    color="black"
-                    classList={['Menu-link']}
-                  >
-                    <Emoji name="door" width={20} />
-                    &nbsp;&nbsp;Logout
-                  </Text>
-                </li>
               </>
             )}
-            {profile && <Spacer height={16} />}
 
             <MenuLink
               emoji="person-raising-hand"
@@ -139,6 +131,14 @@ export function Menu({ isOpen, setIsOpen }) {
               label="&nbsp;&nbsp;Help"
               url="/help"
             />
+            {profile && (
+              <li onClick={logout}>
+                <Text type="subheader" color="black" classList={['Menu-link']}>
+                  <Emoji name="door" width={20} />
+                  &nbsp;&nbsp;Logout
+                </Text>
+              </li>
+            )}
           </ul>
         </div>
       </aside>

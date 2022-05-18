@@ -23,10 +23,6 @@ export const auth = getAuth(firebase)
 export const firestore = getFirestore(firebase)
 export const storage = getStorage()
 
-export function handleLogout() {
-  signOut(auth)
-}
-
 export async function generateUniqueId(collection) {
   const id = nanoid()
   const exists = await isExistingId(id, collection)

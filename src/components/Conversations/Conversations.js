@@ -2,7 +2,13 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Loading, ProfilePhoto, Page } from 'components'
 import { useAuth, useFirestore } from 'hooks'
-import { Card, Spacer, Text } from '@sharingexcess/designsystem'
+import {
+  Button,
+  Card,
+  FlexContainer,
+  Spacer,
+  Text,
+} from '@sharingexcess/designsystem'
 import { COLLECTIONS, firestore } from 'helpers'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { collection, query, where } from 'firebase/firestore'
@@ -75,7 +81,33 @@ export function Conversations() {
   }
 
   return !conversations.length ? (
-    <Loading text="Loading messages" />
+    <Page id="Conversations">
+      <Text type="secondary-header" color="black">
+        Messages
+      </Text>
+      <Spacer height={96} />
+      <FlexContainer direction="vertical">
+        <Text type="section-header" color="grey">
+          All clear!
+        </Text>
+        <Spacer height={8} />
+        <Text type="small" color="grey" align="center">
+          It looks like you don't have any conversations at the moment.
+        </Text>
+        <Spacer height={16} />
+        <Link to="/profiles">
+          <Button type="secondary" color="green">
+            Browse Profiles
+          </Button>
+        </Link>
+        <Spacer height={8} />
+        <Link to="/requests">
+          <Button type="secondary" color="green">
+            Browse Requests
+          </Button>
+        </Link>
+      </FlexContainer>
+    </Page>
   ) : (
     <Page id="Conversations">
       <Text type="secondary-header" color="black">

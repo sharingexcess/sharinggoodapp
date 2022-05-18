@@ -2,7 +2,7 @@ import { Loading, Header, CreateProfile, Error } from 'components'
 import { onAuthStateChanged } from 'firebase/auth'
 import { collection, doc, onSnapshot } from 'firebase/firestore'
 import { getDownloadURL, ref } from 'firebase/storage'
-import { auth, firestore, handleLogout, storage } from 'helpers'
+import { auth, firestore, storage } from 'helpers'
 import React, { createContext, useEffect, useState } from 'react'
 
 export const AuthContext = createContext()
@@ -58,7 +58,7 @@ export function Auth({ children }) {
   // once we have both a user and a profile,
   // render the content of the rest of the app
   return (
-    <AuthContext.Provider value={{ user, profile, handleLogout }}>
+    <AuthContext.Provider value={{ user, profile }}>
       {children}
     </AuthContext.Provider>
   )
