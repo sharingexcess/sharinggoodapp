@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app'
 import { getAnalytics } from 'firebase/analytics'
-import { getAuth, signOut } from 'firebase/auth'
+import { getAuth } from 'firebase/auth'
 import { customAlphabet } from 'nanoid'
 import { getStorage } from 'firebase/storage'
 import { doc, getDoc, getFirestore, setDoc } from 'firebase/firestore'

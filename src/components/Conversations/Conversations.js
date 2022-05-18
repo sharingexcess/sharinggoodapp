@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Loading, ProfilePhoto, Page } from 'components'
+import { ProfilePhoto, Page } from 'components'
 import { useAuth, useFirestore } from 'hooks'
 import {
   Button,
