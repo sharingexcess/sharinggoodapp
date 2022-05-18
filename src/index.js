@@ -17,6 +17,7 @@ import {
   Profiles,
   Profile,
   Conversations,
+  Install,
 } from 'components'
 import { Auth, Firestore } from './providers'
 import { EmojiProvider } from 'react-apple-emojis'
@@ -31,6 +32,7 @@ ReactDOM.render(
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/install" element={<Install />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/requests" element={<Requests />} />

@@ -1,0 +1,28 @@
+#Install {
+  .primary-header {
+    width: 100%;
+  }
+
+  #Install-img {
+    width: 64%;
+    margin: auto;
+  }
+
+  ol {
+    text-align: left;
+    padding-left: 0px;
+
+    li {
+      padding-left: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--se-grey-primary);
+      line-height: 2.5;
+      #Install-share-icon {
+        display: inline;
+        height: 32px;
+        vertical-align: middle;
+      }
+    }
+  }
+}

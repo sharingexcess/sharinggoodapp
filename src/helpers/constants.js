@@ -24,3 +24,5 @@ export const PERMISSION_LEVELS = {
 }
 
 export const FORMSPREE_FORM_ID = process.env.REACT_APP_FORMSPREE_FORM_ID
+
+export const IS_PWA = window.matchMedia('(display-mode: standalone)').matches

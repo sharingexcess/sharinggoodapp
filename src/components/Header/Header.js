@@ -37,7 +37,7 @@ export function Header() {
           <img src="/hamburger.png" alt="request owner" />
         </Button>
       )}
-      {!user && !['/login', '/signup'].includes(pathname) && (
+      {!user && !['/login', '/signup', '/', '/install'].includes(pathname) && (
         <Link to="/login">
           <Button color="green" size="small">
             Login
