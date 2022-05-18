@@ -48,7 +48,7 @@ export function CreateRequest() {
       <form id="request-creation-form">
         <FlexContainer primaryAlign="space-between">
           <Link to="/requests">
-            <FontAwesomeIcon icon={faArrowLeft} id="green" />
+            <FontAwesomeIcon className="CreateRequest-back" icon={faArrowLeft} id="green" />
           </Link>
           <Spacer />
           <Text type="section-header">Create A Request</Text>
