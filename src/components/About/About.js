@@ -113,6 +113,7 @@ export function About() {
       <Text>
         <i>The Sharing Good Team 💚</i>
       </Text>
+      <Spacer height={64} />
     </Page>
   )
 }

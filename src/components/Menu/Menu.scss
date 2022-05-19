@@ -28,10 +28,10 @@
     background 0.32s ease;
 
   @include desktop {
-    top: 112px;
+    top: 84px;
     left: 32px;
     padding: 16px;
-    height: calc(100vh - 144px);
+    height: calc(100vh - 116px);
     border-radius: 8px;
     border: 1px solid var(--se-grey-light);
   }

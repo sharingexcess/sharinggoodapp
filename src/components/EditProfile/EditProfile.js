@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { createTimestamp, firestore, storage } from 'helpers'
+import { auth, createTimestamp, firestore, storage } from 'helpers'
 import { collection, doc, setDoc } from 'firebase/firestore'
 import { useAuth } from 'hooks'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -16,6 +16,7 @@ import {
 import { ProfilePhoto } from 'components/ProfilePhoto/ProfilePhoto'
 import { Page } from 'components/Page/Page'
 import { useNavigate } from 'react-router'
+import { sendPasswordResetEmail } from 'firebase/auth'
 
 export function EditProfile() {
   const navigate = useNavigate()
@@ -82,6 +83,18 @@ export function EditProfile() {
     if (e.target.files[0]) setFileUpload(e.target.files[0])
   }
 
+  function handleResetPassword() {
+    if (window.confirm('Are you sure you want to reset your password?')) {
+      sendPasswordResetEmail(auth, profile.email)
+        .then(() =>
+          window.alert(
+            `An email has been sent to ${profile.email} with instructions on how to reset your password.`
+          )
+        )
+        .catch(e => console.error(e))
+    }
+  }
+
   return (
     <Page id="EditProfile">
       <Text type="secondary-header" color="black">
@@ -107,10 +120,19 @@ export function EditProfile() {
         </label>
       </FlexContainer>
       <Spacer height={16} />
-      <Text type="section-header" color="black" align="center" fullWidth>
+      <Text type="section-header" color="black" align="center">
         {user.email}
       </Text>
-      <Spacer height={16} />
+      <Spacer height={8} />
+      <Button
+        type="tertiary"
+        color="green"
+        fullWidth
+        handler={handleResetPassword}
+      >
+        Change Password
+      </Button>
+      <Spacer height={32} />
       <div className="profile-creation-form-field">
         <label htmlFor="name">NAME </label>
         <input

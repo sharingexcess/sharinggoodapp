@@ -138,7 +138,7 @@ export function Conversation() {
             <Text type="section-header" color="grey">
               Start the conversation!
             </Text>
-            <Text color="grey">
+            <Text color="grey" align="center">
               Every bit of sharing starts with a message :)
             </Text>
           </FlexContainer>

@@ -68,9 +68,7 @@ export function Login() {
 
   function handleResetPassword() {
     setResetPassword(true)
-    sendPasswordResetEmail(auth, email)
-      .then(res => console.log(res))
-      .catch(e => console.error(e))
+    sendPasswordResetEmail(auth, email).catch(e => console.error(e))
   }
 
   return (
