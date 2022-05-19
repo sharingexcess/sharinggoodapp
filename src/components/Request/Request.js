@@ -289,6 +289,20 @@ export function Request() {
                 </Button>
               </>
             )}
+            <Spacer height={8} />
+            {(r.status === STATUSES.OPEN || r.status === STATUSES.PENDING) &&
+              profile?.permission_level >= 3 &&
+              is_owner && (
+                <Button
+                  size="large"
+                  color="green"
+                  type="secondary"
+                  fullWidth
+                  handler={() => navigate(`/requests/${request_id}/edit`)}
+                >
+                  Edit Request{' '}
+                </Button>
+              )}
             {profile?.permission_level >= 5 && (
               <>
                 <Spacer height={32} />

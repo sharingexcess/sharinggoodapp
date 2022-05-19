@@ -8,6 +8,7 @@ import {
   Request,
   Conversation,
   CreateRequest,
+  EditRequest,
   Help,
   Login,
   Home,
@@ -52,6 +53,14 @@ ReactDOM.render(
               element={
                 <ProtectedRoute permission_level={3}>
                   <CreateRequest />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/requests/:request_id/edit"
+              element={
+                <ProtectedRoute permission_level={3}>
+                  <EditRequest />
                 </ProtectedRoute>
               }
             />
