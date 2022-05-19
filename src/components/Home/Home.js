@@ -14,7 +14,7 @@ export function Home() {
   const { user } = useAuth()
   const isMobile = useIsMobile()
   // we'll show install instructions if they're running this in the mobile browser
-  const [bypassInstall, setBypassInstall] = useState(!isMobile || IS_PWA)
+  const bypassInstall = !isMobile || IS_PWA
 
   if (user) {
     return <Navigate to="/requests" />
@@ -35,14 +35,14 @@ export function Home() {
         />
         <Spacer height={48} />
         <Text type="primary-header" color="white">
-          Welcome to
+          Find what you
           <br />
-          Sharing Good
+          can give.
         </Text>
         <Spacer height={12} />
         <Text color="white">
-          We help connect teachers and social workers with the volunteers and
-          supplies students need to succeed.
+          <b>Sharing Good</b> helps connect teachers and social workers with the
+          volunteers and supplies students need to succeed.
         </Text>
         <Spacer height={48} />
       </FlexContainer>
@@ -54,10 +54,17 @@ export function Home() {
               Login
             </Button>
           </Link>
-          <Spacer height={16} />
+          <Spacer height={24} />
+
           <Link to="/requests">
-            <Button size="large" color="green" type="secondary" fullWidth>
+            <Button size="medium" color="green" type="secondary" fullWidth>
               Browse Requests
+            </Button>
+          </Link>
+          <Spacer height={16} />
+          <Link to="/about">
+            <Button size="medium" color="green" type="tertiary" fullWidth>
+              Learn More
             </Button>
           </Link>
         </>
@@ -68,15 +75,18 @@ export function Home() {
               Click Here to Install
             </Button>
           </Link>
-          <Spacer height={32} />
-          <Button
-            color="green"
-            type="tertiary"
-            handler={() => setBypassInstall(true)}
-            fullWidth
-          >
-            Continue in the Browser
-          </Button>
+          <Spacer height={16} />
+          <Link to="/requests">
+            <Button color="green" type="secondary" fullWidth>
+              Continue in the Browser
+            </Button>
+          </Link>
+          <Spacer height={24} />
+          <Link to="/about">
+            <Button size="medium" color="green" type="tertiary" fullWidth>
+              Learn More
+            </Button>
+          </Link>
         </>
       )}
       <footer>

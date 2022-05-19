@@ -127,6 +127,12 @@ export function Menu({ isOpen, setIsOpen }) {
                 />
               </>
             )}
+            <MenuLink
+              emoji="information"
+              num={20}
+              label="&nbsp;&nbsp;About"
+              url="/about"
+            />
 
             <MenuLink
               emoji="person-raising-hand"

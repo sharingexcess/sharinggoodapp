@@ -1,5 +1,6 @@
 #Home {
   padding: 0;
+  max-width: unset;
 
   #Home-banner {
     padding: 0 16px;
@@ -35,6 +36,7 @@
     @include desktop {
       width: calc(100% - 64px);
       margin-left: 32px;
+      max-width: 250px;
     }
   }
 

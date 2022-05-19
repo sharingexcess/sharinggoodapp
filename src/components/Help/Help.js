@@ -9,18 +9,18 @@ export function Help() {
   const { profile } = useAuth()
   const [state, handleSubmit] = useForm(FORMSPREE_FORM_ID)
   const [formData, setFormData] = useState({
-    name: profile.name,
-    email: profile.email,
-    phone: profile.phone,
+    name: profile?.name,
+    email: profile?.email,
+    phone: profile?.phone,
     message: '',
   })
 
   useEffect(() => {
     if (state.succeeded) {
       setFormData({
-        name: profile.name,
-        email: profile.email,
-        phone: profile.phone,
+        name: profile?.name,
+        email: profile?.email,
+        phone: profile?.phone,
         message: '',
       })
     }
@@ -54,9 +54,30 @@ export function Help() {
       </Text>
       <Spacer height={24} />
       <form onSubmit={handleSubmit}>
-        <input type="hidden" value={profile.name} name="name" />
-        <input type="hidden" value={profile.email} name="email" />
-        <input type="hidden" value={profile.phone} name="phone" />
+        <input
+          type={profile ? 'hidden' : 'text'}
+          value={profile?.name}
+          name="name"
+          id="name"
+          onChange={handleChange}
+          placeholder="Name"
+        />
+        <input
+          type={profile ? 'hidden' : 'email'}
+          value={profile?.email}
+          name="email"
+          id="email"
+          onChange={handleChange}
+          placeholder="Email"
+        />
+        <input
+          type={profile ? 'hidden' : 'tel'}
+          value={profile?.phone}
+          name="phone"
+          id="phone"
+          onChange={handleChange}
+          placeholder="Phone"
+        />
         <textarea
           id="message"
           name="message"
