@@ -20,6 +20,13 @@
     padding: 0 16px;
   }
 
+  &.home {
+    background: transparent;
+    * {
+      color: white;
+    }
+  }
+
   .se-button.size-medium {
     border-radius: 0;
   }
@@ -39,11 +46,7 @@
     }
   }
 
-  #Header-icon{
+  #Header-icon {
     margin-top: 0;
-  }
-
-  #green{
-    color: #4ea528;
   }
 }

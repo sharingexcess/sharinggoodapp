@@ -33,13 +33,13 @@
 
 .se-button {
   box-shadow: none !important;
-  font-weight: 500 !important;
+  font-weight: 700 !important;
 
   &.type-secondary {
     background: var(--se-white) !important;
 
     &.size-small {
-      font-weight: 600 !important;
+      // font-weight: 600 !important;
     }
 
     &.size-medium {

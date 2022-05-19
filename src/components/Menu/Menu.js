@@ -19,6 +19,9 @@ export function Menu({ isOpen, setIsOpen }) {
     if (isMobile) setIsOpen(false)
   }, [isMobile]) // eslint-disable-line
 
+  // don't show the menu on the home screen
+  if (pathname === '/') return null
+
   function closeMenu() {
     setIsOpen(false)
   }

@@ -1,7 +1,12 @@
 import { useState } from 'react'
 import { useAuth, useIsMobile } from 'hooks'
 import { Link, Navigate } from 'react-router-dom'
-import { Button, Spacer, Text } from '@sharingexcess/designsystem'
+import {
+  Button,
+  FlexContainer,
+  Spacer,
+  Text,
+} from '@sharingexcess/designsystem'
 import { Page } from 'components'
 import { IS_PWA } from 'helpers'
 
@@ -14,19 +19,33 @@ export function Home() {
   if (user) {
     return <Navigate to="/requests" />
   }
+
   return (
     <Page id="Home">
-      <Spacer height={48} />
-      <Text type="primary-header">
-        Welcome to
-        <br />
-        Sharing Good
-      </Text>
-      <Spacer height={16} />
-      <Text color="grey">
-        We help connect teachers and social workers with the volunteers and
-        supplies students need to succeed.
-      </Text>
+      <FlexContainer
+        direction="vertical"
+        id="Home-banner"
+        secondaryAlign="start"
+      >
+        <Spacer height={96} />
+        <img
+          id="Home-banner-img"
+          src={isMobile ? '/home_bg_mobile.png' : '/home_bg_desktop.png'}
+          alt="Background"
+        />
+        <Spacer height={48} />
+        <Text type="primary-header" color="white">
+          Welcome to
+          <br />
+          Sharing Good
+        </Text>
+        <Spacer height={12} />
+        <Text color="white">
+          We help connect teachers and social workers with the volunteers and
+          supplies students need to succeed.
+        </Text>
+        <Spacer height={48} />
+      </FlexContainer>
       <Spacer height={32} />
       {bypassInstall ? (
         <>
@@ -60,6 +79,9 @@ export function Home() {
           </Button>
         </>
       )}
+      <footer>
+        © {new Date().getFullYear()} Sharing Excess & For Good PGH
+      </footer>
     </Page>
   )
 }

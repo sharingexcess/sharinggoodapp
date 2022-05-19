@@ -21,14 +21,19 @@ export function Header() {
       id="Header"
       direction="hoizontal"
       primaryAlign="space-between"
+      className={pathname === '/' ? 'home' : null}
     >
       <Menu isOpen={menuOpen} setIsOpen={setMenuOpen} />
       <Link to="/">
         <FlexContainer>
-          <img id="Header-icon" src="/icon.png" alt="Sharing Good" />
+          <img
+            id="Header-icon"
+            src={pathname === '/' ? '/icon_white.png' : '/icon.png'}
+            alt="Sharing Good"
+          />
           <Spacer height={8}></Spacer>
           <Text type="secondary-header">
-            Sharing <span id="green">Good</span>
+            Sharing <span className="green">Good</span>
           </Text>
         </FlexContainer>
       </Link>
